@@ -1,0 +1,51 @@
+01_bingyanstudio:
+  title: BingyanStudio
+  link: https://www.bingyan.net/
+  avatar: /img/avatar.jpg
+  # description: A full-stack developer
+
+02_hustonline:
+  title: Hustonline
+  link: https://www.hustonline.net/
+  avatar: /img/avatar.jpg
+  # description: Another full-stack developer
+
+03_everyblue:
+  title: Everyblue
+  link: http://pmteahouse.cc/
+  avatar: /img/avatar.jpg
+  # description: A interesting developer
+
+04_zhihaojun:
+  title: Zhihaojun
+  link: https://www.zhihaojun.com/
+  avatar: /img/avatar.jpg
+  # description: A crazy developer
+
+05_coordinata35: 
+  title: Coordinate35
+  link: https://blog.coordinate35.cn
+  avatar: /img/avatar.jpg
+
+
+06_maple: 
+  title: Maple
+  link: http://blog.jamiemaple.com
+  avatar: /img/avatar.jpg
+
+  
+07_banshao:
+  title: Banshao   
+  link: https://weathfold.github.io
+  avatar: /img/avatar.jpg
+
+
+08_keeper:
+  title: KEEper
+  link: https://bobobobbbb.github.io
+  avatar: /img/avatar.jpg
+  
+09_mr-win7:
+  title: Mr Win7
+  link: http://blog.tooyoungtoosimple.gq
+  avatar: /img/avatar.jpg
