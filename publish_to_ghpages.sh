@@ -25,3 +25,4 @@ hugo
 echo "Updating gh-pages branch"
 cd public && git add --all && git commit -m "`date`" && cd ..
 git push origin gh-pages
+rm -rf public
