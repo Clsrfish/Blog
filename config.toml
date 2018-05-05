@@ -10,6 +10,9 @@ PygmentsCodeFences = true
 disableHugoGeneratorInject = true
 
 
+# Disqus Username
+disqusShortname = "disqus_shortname"
+
 # Copyright of your post
 copyright = "207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce."
 
@@ -87,8 +90,6 @@ copyright = "207-2018 © This post is licensed under a Creative Commons Attribut
   # ICP Number (China Only)
   # ICP = "苏ICP备16005986号-2"
 
-# Disqus Username
-disqusShortname = "disqus_shortname"
 
 
 # Google Analytics UA number
