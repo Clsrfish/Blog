@@ -33,7 +33,7 @@ disableHugoGeneratorInject = true
   name = "Tags"
   weight = 20
   identifier = "tags"
-  url = "/tags/"
+  url = "/tags.html"
 
 # Add your own params here
 [params]
