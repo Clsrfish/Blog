@@ -5,8 +5,6 @@ comments: true
 tags:
   - Android
   - React Native
-categories:
-  - React Native
 url: "post/dd31da67"
 date: 2018-04-07 16:28:41
 ---
