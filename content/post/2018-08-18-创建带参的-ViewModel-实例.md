@@ -2,7 +2,6 @@
 title: "创建带参的 ViewModel 实例"
 description: "no description available"
 date: 2018-08-18T11:25:06+08:00
-draft: true
 url: "post/f808d7d1d85d91e1bafe989662831582"
 tags : 
     - Android

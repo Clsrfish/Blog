@@ -2,7 +2,6 @@
 title: "TypeScript 实现 Java 匿名内部类"
 description: "no description available"
 date: 2018-08-18T10:56:52+08:00
-draft: true
 url: "post/72c38d2bfe6031c01a67381b1225f007"
 tags : 
     - TypeScript
