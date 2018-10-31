@@ -21,6 +21,11 @@ rm -rf public/*
 
 echo "Generating site"
 hugo
+if [[ ! $? == 0 ]]
+then
+  echo "Failed to Generating site"
+  exit $?
+fi
 
 echo "Updating gh-pages branch"
 cd public && git add --all && git commit -m "`date`" && cd ..
