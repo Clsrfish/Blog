@@ -1,5 +1,5 @@
 ---
-title: "2018 11 06 Flutter Widget Element RenderObject 理解"
+title: "[Flutter] Widget、Element、RenderObject 理解"
 description: "no description available"
 date: 2018-11-06T19:57:06+08:00
 draft: false
@@ -17,7 +17,7 @@ tags :
 
 ## Widget 
 先看看源码注释：
-```
+```dart
 Describes the configuration for an [Element].
 Widgets are the central class hierarchy in the Flutter framework. A widget is an immutable description of part of a user interface. Widgets can be inflated into elements, which manage the underlying render tree.
 ```
@@ -90,7 +90,7 @@ Element
 
 ## RenderObject
 还是先看源码注释：
-```
+```dart
 An object in the render tree.
 
 The [RenderObject] class hierarchy is the core of the rendering library's reason for being.
