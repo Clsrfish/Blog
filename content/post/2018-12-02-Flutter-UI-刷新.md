@@ -1,5 +1,5 @@
 ---
-title: "2018 12 02 Flutter UI 刷新"
+title: "[Flutter] UI 刷新"
 description: "no description available"
 date: 2018-12-02T15:09:37+08:00
 draft: true
