@@ -321,3 +321,7 @@ void markNeedsPaint() {
 
 ## 简单总结
 `setState` 会将 `Element` 设置位 dirty，然后通知引擎需要重新布局等，之后的操作和启动第一帧上屏就是一样的了。看到这里也能理解为什么第一帧上屏和常规的界面更新会有不一样的地方了，因为常规更新只会触发状态位更新而不会立即更新，直到下一次 VSync 信号到来之时才能开始刷新。
+
+
+## References
+https://juejin.im/post/5c0fc3cb5188251da07e09b3
