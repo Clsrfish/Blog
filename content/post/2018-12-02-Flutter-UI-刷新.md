@@ -261,6 +261,13 @@ end
 @enduml 
 -->
 
+源码中使用表格进行表述：
+
+|                     | **newWidget == null**  | **newWidget != null**   |
+| :-----------------: | :--------------------- | :---------------------- |
+|  **child == null**  |  Returns null.         |  Returns new [Element]. |
+|  **child != null**  |  Old child is removed, returns null. | Old child updated if possible, returns child or new [Element]. |
+
 ## PipelineOwner
 回到 `PipelineOwner#drawFrame`：
 ```dart
