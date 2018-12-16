@@ -183,6 +183,84 @@ void finalizeTree() {
 ```
 这里就是将 `_inactiveElements` 进行清理，也就是说使用 `GlobalKeys` 缓存的控件只能被下一帧使用，然后就会被清理。
 
+
+### Element#rebuild
+上面如果点进 `Element.rebuild` 后发现代码实现和重建更新没啥关系，因为能够根据状态重建更新的只能是 **容器组件** 或 **根节点**，根节点的重建更新是由 `runApp` 触发的，容器组件的更新是由 `setState` 触发，所以下面看 `ComponentElement` (它是 `StatefulElement` 的父类) 中的实现：
+```dart
+// Element#rebuild
+void rebuild() {
+    if (!_active || !_dirty)
+        return;
+    performRebuild();
+}
+// ComponentElement#performRebuild
+void performRebuild() {
+    // ...
+    Widget built = build();
+    // ...
+    _dirty = false;
+    // ...
+    _child = updateChild(_child, built, slot);
+    // ...
+}
+
+// Element#updateChild
+Element updateChild(Element child, Widget newWidget, dynamic newSlot) {
+    if (newWidget == null) {
+        if (child != null)
+            deactivateChild(child);
+        return null;
+    }
+    if (child != null) {
+        if (child.widget == newWidget) {
+            if (child.slot != newSlot)
+                updateSlotForChild(child, newSlot);
+            return child;
+        }
+        if (Widget.canUpdate(child.widget, newWidget)) {    // 对 runtimeType 和 key 进行比较，合理使用 key 也能提高性能（列表）
+            if (child.slot != newSlot)
+                updateSlotForChild(child, newSlot);
+            child.update(newWidget);
+            return child;
+        }
+        deactivateChild(child);
+    }
+    return inflateWidget(newWidget, newSlot);   // GlobalKey 的处理在这里
+}
+```
+ 大致的更新逻辑就是这样，简单总结下：
+ 1. newWidget == null，即 widget.build() == null 时返回 null；如果 child == null 则删除子树；流程结束
+ 2. child == null（一般是 runApp 触发），递归地重建子树；结束流程
+ 3. child != null && widget 没变化；不做更新；结束流程
+ 4. child != null && widget 发生变化可以更新；结束流程
+ 5. child != null && widget 发生变化不可更新；卸载子树；递归重建子树；结束流程
+ 
+ ![](http://www.plantuml.com/plantuml/svg/SoWkIImgAStDuG8pk3BJ53JoKil3CrFIKqiKR6qLyafpSZGLIZ9IynGqAbEBDRaKW02aAZaZCoT5GH6R2YYmUjgxuyNUlK_NJdYsOA8rM3WrBoKp3SRYWl086uRXgFoS50W7GodKQ8Hbc0RebLGMf2eeGar1YAYfnUGf85HbfrP25I44i7lpsUpzpteNAPI3bLdZSWPcW40ah5usJ7gwTzBBzjwdktU11RaSW0GmIW00)
+
+<!-- 
+@startuml
+start
+if (newWidget == null) then (yes)
+    if (child != null) then (yes)
+        :卸载子树;
+    endif
+    end
+endif
+if (child != null) then (yes)
+    if (newWidget == oldWidget) then (yes)
+        end
+    endif
+    if (newWidget.type != oldWidget.type &&\n newWidget.key != oldWidget.key) then (yes)
+        :替换 widget;
+        end
+    endif
+    :卸载子树;
+endif
+:递归重建;
+end
+@enduml 
+-->
+
 ## PipelineOwner
 回到 `PipelineOwner#drawFrame`：
 ```dart
