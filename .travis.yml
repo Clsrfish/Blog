@@ -1,0 +1,34 @@
+language: go
+go:
+  - "1.11"
+
+git:
+  submodules: true
+  depth: 1
+
+branchs:
+  only:
+    - master
+
+notifications:
+  email:
+    recipients:
+      - xinliugm@gmail.com
+    on_failure: always
+
+install: 
+  - go get -v github.com/gohugoio/hugo 
+
+script:
+  - hugo 
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: $GP_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep-history: false
+  on:
+    branch: master
+  local-dir: public
+  target-branch: gh-pages
+  verbose: true
