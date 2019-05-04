@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ThreadLocal on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/threadlocal/</link>
+    <description>Recent content in ThreadLocal on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 30 Dec 2017 21:53:30 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/threadlocal/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ThreadLocal</title>
+      <link>https://clsrfish.github.io/Blog/post/151f44ae/</link>
+      <pubDate>Sat, 30 Dec 2017 21:53:30 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/151f44ae/</guid>
+      <description>&lt;p&gt;在并发编程的时候，常常会遇到共享变量，通常为了保证数据的 &lt;strong&gt;一致性&lt;/strong&gt; ，需要对变量加锁，这就导致了执行效率的降低。如果仅仅在线程内部访问，就不需要进行加锁，这时候就体现出了数据的 &lt;strong&gt;独立性&lt;/strong&gt; （这两个名词是随手造的，知道意思就好了）。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

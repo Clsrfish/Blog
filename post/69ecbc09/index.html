@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Jenkins-持续集成搭建</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="平时做开发，关注得比较多的是具体的开发工作，等开发完成进行部署的时候，需要做一系列繁琐的工作，例如上传到测试平台等，这些事情的价值实在是没有多少，而且保不准哪时候就会出叉子；而且这次发版的一些信息也是相对闭塞的，基本上只有参与开发的人员可以得知。所以这些工作的自动化显得尤为必要，而 Jenkins 就是这样的一种工具，当然还有很多其他的，不过它比较流行且开源免费，非常适合团队自建。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Jenkins-持续集成搭建" />
+    <meta name="twitter:description" content="平时做开发，关注得比较多的是具体的开发工作，等开发完成进行部署的时候，需要做一系列繁琐的工作，例如上传到测试平台等，这些事情的价值实在是没有多少，而且保不准哪时候就会出叉子；而且这次发版的一些信息也是相对闭塞的，基本上只有参与开发的人员可以得知。所以这些工作的自动化显得尤为必要，而 Jenkins 就是这样的一种工具，当然还有很多其他的，不过它比较流行且开源免费，非常适合团队自建。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Jenkins-持续集成搭建" />
+  <meta property="og:description" content="平时做开发，关注得比较多的是具体的开发工作，等开发完成进行部署的时候，需要做一系列繁琐的工作，例如上传到测试平台等，这些事情的价值实在是没有多少，而且保不准哪时候就会出叉子；而且这次发版的一些信息也是相对闭塞的，基本上只有参与开发的人员可以得知。所以这些工作的自动化显得尤为必要，而 Jenkins 就是这样的一种工具，当然还有很多其他的，不过它比较流行且开源免费，非常适合团队自建。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/69ecbc09/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/69ecbc09/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Jenkins-持续集成搭建</h1>
+      <p class="post-meta">@Clsrfish · Feb 15, 2018 · 3 min read</p>
+    </header>
+    <article class="post-content"><p>平时做开发，关注得比较多的是具体的开发工作，等开发完成进行部署的时候，需要做一系列繁琐的工作，例如上传到测试平台等，这些事情的价值实在是没有多少，而且保不准哪时候就会出叉子；而且这次发版的一些信息也是相对闭塞的，基本上只有参与开发的人员可以得知。所以这些工作的自动化显得尤为必要，而 Jenkins 就是这样的一种工具，当然还有很多其他的，不过它比较流行且开源免费，非常适合团队自建。</p>
+
+<blockquote>
+<p>这里以 Gitlab、Android 为例来讲解，宿主机为 CentOS，所以关于 GItLab 的安装也就不说明了。</p>
+</blockquote>
+
+<h2 id="准备工作">准备工作</h2>
+
+<p>为了避免在自己机器上配置不必要的环境，造成污染，这里使用 Docker 的来进行安装。关于 Docker 的使用，不是本文的重点。</p>
+
+<p>选一个你喜欢的目录，创建一个 build_jenkins.sh：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker image rm jenkins:android -f
+docker build -t jenkins:android .</code></pre></div>
+<p>接着创建一个 dockerfile：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> jenkins/jenkins:2.107-alpine</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>LABEL maintainer <span style="color:#e6db74">&#34;xinliugm@gmail.com&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>USER root<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apk update <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        <span style="color:#f92672">&amp;&amp;</span> apk upgrade <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#34;Asia/Shanghai&#34;</span> &gt; /etc/timezone <span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>USER jenkins<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span><span style="color:#e6db74"> ANDROID_HOME=/docker-android-home \</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>		 GRADLE_USER_HOME<span style="color:#f92672">=</span>/docker-gradle-home</code></pre></div>
+<p>这里只需要关注最后两行，这里指定了两个环境变量，等会我们会创建相应的目录用于保存 SDK 和 gradle ，通过 Volumn 挂载到 Docker 容器上。</p>
+
+<p>然后再创建一个 run_jenkins.sh：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">docker run <span style="color:#ae81ff">\ </span>
+    --rm -u root -d -p <span style="color:#ae81ff">8080</span>:8080 -p <span style="color:#ae81ff">50000</span>:50000 <span style="color:#ae81ff">\ </span>
+    -v /path2/docker-jenkins-home:/var/jenkins_home  <span style="color:#ae81ff">\ </span>
+    -v /path2/docker-android-home:/docker-android-home <span style="color:#ae81ff">\ </span>
+    -v /path2/docker-gradle-home:/docker-gradle-home <span style="color:#ae81ff">\ </span>
+    jenkins:android</code></pre></div>
+<p>接着几个目录：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir docker-jenkins-home docker-android-home docker-gradle-home</code></pre></div>
+<p>最后创建一个 .dockerignore ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">run_jenkins.sh
+build_jenkins.sh
+docker-gradle-home/
+docker-android-home/
+docker-jenkins-home/</code></pre></div>
+<p>到这里，准备工作应该是已经做完了，不过因为这里是以 Android 为例，所以还要安装 AndroidSDK 到 docker-android-home，执行命令 <code>wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip -O sdk.zip &amp;&amp; unzip sdk.zip -d ./docker-android-home</code>  ，更多的请查看 <a href="http://xinsbackyard.tech/posts/cffbd71.html">Android SDK Manager 命令行工具使用</a> 。</p>
+
+<h2 id="初次启动-jenkins">初次启动 Jenkins</h2>
+
+<p>上一步已经把基本的配置完成了，接着尝试启动 Jenkins。</p>
+
+<h3 id="构建镜像">构建镜像</h3>
+
+<p>执行  <code>./build_jenkins.sh</code> ，可能需要等几分钟，等执行完之后，执行 <code>docker images</code> 就可以看到我们构建好的镜像了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+jenkins             android             ba16d690f728        <span style="color:#ae81ff">5</span> seconds ago       226MB
+jenkins/jenkins     <span style="color:#ae81ff">2</span>.107-alpine        e4a40fbe78e6        <span style="color:#ae81ff">12</span> hours ago        223MB</code></pre></div>
+<h3 id="启动容器">启动容器</h3>
+
+<p>执行 <code>./run_jenkins.sh</code> ，终端输出一段 id 后容器就在后台开始运行了，不过首次启动 jenkins 为了便于解决可能出现的坑，可以去掉脚本中的 <code>-d</code> 参数。</p>
+
+<h3 id="访问-jenkins">访问 Jenkins</h3>
+
+<p>打开浏览器访问 <code>http://localhost:8080</code> ，可以看到下面的界面：</p>
+
+<p><img src="https://i.loli.net/2018/02/15/5a852df08d3cb.jpg" alt="" /></p>
+
+<p>按照提示，填入初始密码，点击 Continue 会让我们安装插件，选择推荐安装，安装好后会让你注册一个管理员账户：</p>
+
+<p><img src="https://i.loli.net/2018/02/15/5a85353ca25f6.png" alt="" /></p>
+
+<p>这里邮件地址到后面还会有用，填的时候稍微认真点。点击 Save and Finish 后就进入到了 Jenkins 的主页了：</p>
+
+<p><img src="https://i.loli.net/2018/02/15/5a85361cbc560.png" alt="" /></p>
+
+<h2 id="安装插件">安装插件</h2>
+
+<p>到这里我们已经成功搭建并启动了 Jenkins，正式开始创建项目之前，除了默认安装的插件外，还有一些其他的插件需要安装。</p>
+
+<p>点击 <code>Manage Jenkins</code> ，然后点击 <code>Manage Plugins</code> ，接着选中 <code>Available</code> Tab，在搜索框中输入 “Gitlab”，选中 “GitLab”、“GitLab Authentication” 以及 “GItLab Hook” 这三个插件，然后点击 <strong>install without restart</strong> 。</p>
+
+<h2 id="ssh-公钥">SSH 公钥</h2>
+
+<p>为了使得每一个新建项目不用重复配置密钥啥的，我们创建一个全局的密钥用来访问 GItLab 上所有的仓库。</p>
+
+<h3 id="创建密钥">创建密钥</h3>
+
+<p>首先需要生成 Jenkins 服务器的密钥，所以就要进入 docker 容器执行命令。</p>
+
+<p>执行 <code>docker ps</code> 查看 jenkins 容器的 id，然后执行 <code>docker exec -it &lt;id&gt; /bin/bash</code> 就进入了容器分配的一个 shell，先执行 <code>su jenkins</code> 切换到 jenkins 用户， 最后就是执行生成密钥的命令了。</p>
+
+<h3 id="部署密钥至-gitlab">部署密钥至 GitLab</h3>
+
+<p>使用管理员账户登录 GitLab，然后点击右上角的小扳手进入 <strong>Admin Area</strong> ，然后选择 <strong>Deploy Keys</strong> ，接下来添加进去就好了。</p>
+
+<blockquote>
+<p>也可以把SSH 公钥添加到自己的账户中，不过权限可能会有问题。</p>
+</blockquote>
+
+<h2 id="创建-job">创建 Job</h2>
+
+<p>插件、密钥准备好后，就可以开始创建一个持续集成的项目了。</p>
+
+<h3 id="配置-gitlab-仓库">配置 GitLab 仓库</h3>
+
+<p>我们前面配置好了 GitLab 上的公钥，不过还不能直接访问所有的项目，所以还要设置一下。进入到你项目的仓库面板，然后进入 <strong>Settings</strong> 界面，选中 <strong>Deploy Keys</strong> ，将上一节中添加的公钥添加（<strong>ENABLE</strong>）到你的项目中就可以了。</p>
+
+<h3 id="创建-jenkin-job">创建 Jenkin Job</h3>
+
+<p>点击 <strong>New Item</strong> ，随便输入个名字，选中 <strong>Freestyle Project</strong> ，点击 <strong>OK</strong> 就创建了一个坑位。</p>
+
+<p><img src="https://i.loli.net/2018/02/16/5a86c657ea17d.png" alt="" /></p>
+
+<h3 id="配置-job">配置 Job</h3>
+
+<p>上一步只是创建了一个坑位，接下来还需要配置源代码地址、触发器等。</p>
+
+<h3 id="源码管理">源码管理</h3>
+
+<p>最重要的是源代码在哪里。选中 <strong>Source Code Managment</strong> ，选中 <strong>Git</strong> 单选按钮🔘。</p>
+
+<p><img src="https://i.loli.net/2018/02/16/5a86cc53e12f4.png" alt="" /></p>
+
+<p><strong>Credential</strong> 选择 jenkins，这是 Jenkins 自带的，默认使用 <code>.ssh/id_rsa</code> 作为私钥，下面的代码分支看自己情况。</p>
+
+<blockquote>
+<p>这里 Jenkins 会自动尝试连接这个仓库，如果连接失败就提示错误，根据提示进行纠正就好了。</p>
+</blockquote>
+
+<h3 id="触发器">触发器</h3>
+
+<p>然后选中 <strong>Build Trigger</strong> 选项卡，选中 <strong>Build when a change is pushed to GitLab.</strong> 。</p>
+
+<p><img src="https://i.loli.net/2018/02/16/5a86ce82b6875.png" alt="" /></p>
+
+<p>提示信息里面指出，我们还需要设置 GitLab 仓库 WebHook，以便在提交代码到仓库的时候，GitLab 可以通知 Jenkins 开始构建。</p>
+
+<p>所以接下来还需要再对 GitLab 项目进行配置，还是进入到 <strong>Settings</strong> ，然后选中 <strong>Web Hooks</strong> ，填入上一张图里面 <strong>URL</strong> 的值。</p>
+
+<p><img src="https://i.loli.net/2018/02/16/5a86d004de28d.png" alt="" /></p>
+
+<p>这样就可以在提交代码到分支的时候进行构建了。</p>
+
+<blockquote>
+<p>因为我这里的 Jenkins 是跑的本地服务，而 GitLab 是已经上线的服务，所以触发器是无法正常工作的。</p>
+</blockquote>
+
+<h3 id="构建配置">构建配置</h3>
+
+<p>上面的算是完成基础配置，真正的构建配置还没有完成。选中 <strong>Build</strong> 选项卡，然后在 <strong>Add Build Step</strong> 下拉菜单中选中 <strong>Invoke Gradle Script</strong> 。</p>
+
+<p><img src="https://i.loli.net/2018/02/16/5a86dadd835f5.png" alt="" /></p>
+
+<p>在 Tasks 框中填入要执行的 task 名称，就跟命令行执行 Gradle 命令差不多。</p>
+
+<p>点击 <strong>Save</strong></p>
+
+<blockquote>
+<p>到这里，一个最简单的 Job 就算是创建好了</p>
+</blockquote>
+
+<h2 id="开始构建">开始构建</h2>
+
+<p>点击 <strong>Build Now</strong> 手动开始构建，然后会在下面看到出现一个构建任务，点击去可以查看更多信息，比如 <strong>Console Output</strong> 。</p>
+
+<p><img src="https://i.loli.net/2018/02/16/5a86e72160612.png" alt="" /></p>
+
+<h3 id="镜像问题">镜像问题</h3>
+
+<p>可能你并没有看到的如上图中的输出，而是得到如下的错误输出：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">* What went wrong:
+Execution failed <span style="color:#66d9ef">for</span> task <span style="color:#e6db74">&#39;:app:mergeDebugResources&#39;</span>.
+&gt; Error: java.util.concurrent.ExecutionException: java.lang.RuntimeException: No server to serve request. Check logs <span style="color:#66d9ef">for</span> details.</code></pre></div>
+<p>这是因为我们的镜像是基于 <strong>Alpine</strong> 的，缺少 aapt2 依赖的一些动态链接库，这些动态链接库本应该是包含在 glibc 里面的，但是 <strong>Alpine Linux</strong> 自带的 glibc 是精简版，所以还需要自己安装一个完整的 glibc。</p>
+
+<p><a href="https://github.com/sgerrand/alpine-pkg-glibc">GitHub</a>  上有打包好的安装包，直接拿来用就好，省得自己编译。按照 README 里面的说明，将 dockerfile 修改成如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dockerfile" data-lang="dockerfile"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> jenkins/jenkins:2.107-alpine</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>LABEL maintainer <span style="color:#e6db74">&#34;xinliugm@gmail.com&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>USER root<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span><span style="color:#e6db74"> GLIBC_VERSION=2.27-r0</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> apk update <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        apk upgrade <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        echo <span style="color:#e6db74">&#34;Asia/Shanghai&#34;</span> &gt; /etc/timezone <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        <span style="color:#75715e"># add curl for download</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>        apk add curl <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        <span style="color:#75715e"># download packages for glibc, see https://github.com/sgerrand/alpine-pkg-glibc for more info</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>        curl -L -o glibc-<span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span>.apk <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        <span style="color:#e6db74">&#34;https://github.com/sgerrand/alpine-pkg-glibc/releases/download/</span><span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span><span style="color:#e6db74">/glibc-</span><span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span><span style="color:#e6db74">.apk&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        curl -L -o glibc-bin-<span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span>.apk <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        <span style="color:#e6db74">&#34;https://github.com/sgerrand/alpine-pkg-glibc/releases/download/</span><span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span><span style="color:#e6db74">/glibc-bin-</span><span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span><span style="color:#e6db74">.apk&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        <span style="color:#75715e"># install them</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>        apk add --allow-untrusted glibc-<span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span>.apk glibc-bin-<span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span>.apk <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        <span style="color:#75715e"># remove curl</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>        apk del curl <span style="color:#f92672">&amp;&amp;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        <span style="color:#75715e"># remove cache and downloaded files</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>        rm -fr glibc-<span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span>.apk glibc-bin-<span style="color:#e6db74">${</span>GLIBC_VERSION<span style="color:#e6db74">}</span>.apk /var/cache/apk/*<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span><span style="color:#e6db74"> ANDROID_HOME=/docker-android-home \</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>		 GRADLE_USER_HOME<span style="color:#f92672">=</span>/docker-gradle-home<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>USER jenkins</code></pre></div>
+<p>如果没什么问题就能够正常编译了。</p>
+
+<blockquote>
+<p>后续配置等有时间了再来补充吧</p>
+</blockquote></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/jenkins"><span class="tag">Jenkins</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/gitlab"><span class="tag">Gitlab</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/ci"><span class="tag">CI</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>443</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

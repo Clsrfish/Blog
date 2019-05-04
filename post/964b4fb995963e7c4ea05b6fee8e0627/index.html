@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>[Flutter] Widget、Element、RenderObject 理解</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="使用 Flutter 开发时，接触最多的就是 Widget，但是 Widget 并不会最终显示在屏幕上。Flutter 大量借鉴 React ，React 中有 Component、Virtual DOM 和 tag，Flutter 中对应地有 Widget、Element 以及 RenderObject，所以这篇文章就简单理解下这三者在视图渲染中的作用。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="[Flutter] Widget、Element、RenderObject 理解" />
+    <meta name="twitter:description" content="使用 Flutter 开发时，接触最多的就是 Widget，但是 Widget 并不会最终显示在屏幕上。Flutter 大量借鉴 React ，React 中有 Component、Virtual DOM 和 tag，Flutter 中对应地有 Widget、Element 以及 RenderObject，所以这篇文章就简单理解下这三者在视图渲染中的作用。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="[Flutter] Widget、Element、RenderObject 理解" />
+  <meta property="og:description" content="使用 Flutter 开发时，接触最多的就是 Widget，但是 Widget 并不会最终显示在屏幕上。Flutter 大量借鉴 React ，React 中有 Component、Virtual DOM 和 tag，Flutter 中对应地有 Widget、Element 以及 RenderObject，所以这篇文章就简单理解下这三者在视图渲染中的作用。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/964b4fb995963e7c4ea05b6fee8e0627/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/964b4fb995963e7c4ea05b6fee8e0627/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">[Flutter] Widget、Element、RenderObject 理解</h1>
+      <p class="post-meta">@Clsrfish · Nov 6, 2018 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>使用 Flutter 开发时，接触最多的就是 Widget，但是 Widget 并不会最终显示在屏幕上。Flutter 大量借鉴 React ，React 中有 Component、Virtual DOM 和 tag，Flutter 中对应地有 Widget、Element 以及 RenderObject，所以这篇文章就简单理解下这三者在视图渲染中的作用。</p>
+
+<h2 id="widget">Widget</h2>
+
+<p>先看看源码注释：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">Describes the configuration <span style="color:#66d9ef">for</span> an [Element].
+Widgets are the central <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">hierarchy</span> <span style="color:#66d9ef">in</span> the Flutter framework. A widget <span style="color:#66d9ef">is</span> an immutable description of <span style="color:#66d9ef">part of</span> a user interface. Widgets can be inflated into elements, which manage the underlying render tree.</code></pre></div>
+<p>大概的意思就是 Widget 只是起到配置的作用的，并且是 imutable 的，所以从 Widget 到屏幕上的像素中间还会经过几次转换。可以把 Widget 当成 Android 开发中的布局文件或 iOS 开发中的 Storyboard。</p>
+
+<p>我们再看下 Widget 的声明：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#960050;background-color:#1e0010">@</span>immutable
+<span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Widget</span> <span style="color:#66d9ef">extends</span> DiagnosticableTree {
+  <span style="color:#66d9ef">const</span> Widget({ <span style="color:#66d9ef">this</span>.key });
+  <span style="color:#66d9ef">final</span> Key key;
+
+  <span style="color:#960050;background-color:#1e0010">@</span>protected
+  Element createElement();
+
+  <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">bool</span> canUpdate(Widget oldWidget, Widget newWidget) {
+    <span style="color:#66d9ef">return</span> oldWidget.runtimeType <span style="color:#f92672">==</span> newWidget.runtimeType
+        <span style="color:#f92672">&amp;&amp;</span> oldWidget.key <span style="color:#f92672">==</span> newWidget.key;
+  }
+}</code></pre></div>
+<p>去掉注释，核心代码十行不到。Widget 只是配置，在真正渲染界面的时候会转换成 Element，也即 <code>createElement</code> 方法；同时一个 Widget 可以在 Widget 树中多次出现，那么相应的，<code>createElement</code> 也会被调用多次。</p>
+
+<h3 id="派生类">派生类</h3>
+
+<p>再看看 Widget 的派生类：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">Widget
+    <span style="color:#960050;background-color:#1e0010">├──</span> ProxyWidget
+    <span style="color:#960050;background-color:#1e0010">├──</span> StatelessWidget
+    <span style="color:#960050;background-color:#1e0010">├──</span> StatefulWidget
+    <span style="color:#960050;background-color:#1e0010">└──</span> RenderObjectWidget</code></pre></div>
+<p><strong>ProxyWidget</strong>
+起组装作用。
+如类名一样，这个类使用了代理模式，它不会自己构建 Widget ，而是直接返回子 Widget 。</p>
+
+<p><strong>StatelessWidget</strong>
+起组装作用。
+这个 Widget 不需要处理内部数据/状态，所以当配置相同时，会有相同构建产物。</p>
+
+<p><strong>StatefulWidget</strong>
+起组装作用。
+当 Widget 需要管理内部数据/状态时，就使用这个。即使配置相同，它当构建产物也可能因为内部数据/状态不同而不同。</p>
+
+<p><strong>RenderObjectWidget</strong>
+Widget 只是配置，所以有些 Widget ，比如 ProxyWidget ，和视图基本没有关系，也即和视图显示相关的 Widget 叫做 RenderObjectWidget。</p>
+
+<p>同时这个类多了一个 <code>RenderObject createRenderObject(BuildContext context)</code> 方法，预示从这个类开始和视图显示有点关系了。</p>
+
+<h2 id="element">Element</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">An instantiation of a [Widget] at a particular location <span style="color:#66d9ef">in</span> the tree.
+
+Widgets describe how to configure a subtree but the same widget can be used to configure multiple subtrees simultaneously because widgets are immutable. An [Element] represents the use of a widget to configure a specific location <span style="color:#66d9ef">in</span> the tree. Over time, the widget associated <span style="color:#66d9ef">with</span> a given element can change, <span style="color:#66d9ef">for</span> example, <span style="color:#66d9ef">if</span> the parent widget rebuilds and creates a <span style="color:#66d9ef">new</span> widget <span style="color:#66d9ef">for</span> <span style="color:#66d9ef">this</span> location.</code></pre></div>
+<p>大概意思是：Element 是 Widget 在视图中的体现，同时 Element 也管理着视图树的构建、更新等。Widget 是 immutable，而 Element 是 mutable，当 Widget 配置有变化时，Element Tree 会采用一种 <strong>diff 算法</strong> 进行增量更新而不是整个重建。</p>
+
+<p>再看看它的派生类：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">Element
+    <span style="color:#960050;background-color:#1e0010">├──</span> ComponentElement
+    <span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">├──</span> ProxyElement
+    <span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">├──</span> StatelessElement
+    <span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">└──</span> StatefulElement
+    <span style="color:#960050;background-color:#1e0010">└──</span> RenderObjectElement</code></pre></div>
+<p>这里和之前的 Widget 是一一对应的，并且这里出现了 <strong>component</strong> 字眼，清楚这个继承关系能够加深 Flutter Framework 层设计的理解。</p>
+
+<h2 id="renderobject">RenderObject</h2>
+
+<p>还是先看源码注释：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">An object <span style="color:#66d9ef">in</span> the render tree.
+
+The [RenderObject] <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">hierarchy</span> <span style="color:#66d9ef">is</span> the core of the rendering <span style="color:#66d9ef">library</span><span style="color:#e6db74">&#39;s reason for being.</span>
+
+[RenderObject]s have a [parent], and have a slot called [parentData] <span style="color:#66d9ef">in</span> which the parent [RenderObject] can store child<span style="color:#f92672">-</span>specific data, <span style="color:#66d9ef">for</span> example,the child position. The [RenderObject] <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">also</span> <span style="color:#66d9ef">implements</span> the basic layout and paint protocols.
+
+The [RenderObject] class, however, does not define a child model. It also doesn<span style="color:#e6db74">&#39;t define a coordinate system or a specific layout protocol.</span></code></pre></div>
+<p>RenderObject 就是负责最后的视图渲染了，视图的测量、布局和绘制都是由它来完成的。不过 RenderObject 本身只是定义了标准，具体的由子类实现，比如一般情况下有线性布局、Flex 布局等，这些都是由 RenderObject 的派生类来实现的。</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>这里简单总结下，Flutter 的视图体系中由三棵树，Widget Tree、Element Tree 以及 RenderObject Tree，Widget Tree 可以产生 Element Tree，并且节点是一一对应的，Element Tree 调用 Widget Tree 创建 RenderObject Tree，但并不是每个 Widget、Element 节点都会有一个 RenderObject 节点与之对应。后续视图的状态、更新等都是由 Element Tree 来进行管控的，而视图显示到屏幕上则是由 RenderObject Tree 负责。</p>
+
+<p>&gt; Flutter 只是一个跨平台 UI 框架，很多系统相关的东西还是由平台提供，所以 Framework 层非常的薄，只有一个加上注释才 4000+ 行的文件</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/flutter"><span class="tag">Flutter</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/widget"><span class="tag">Widget</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/element"><span class="tag">Element</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/renderobject"><span class="tag">RenderObject</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>179</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

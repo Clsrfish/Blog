@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BLoC on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/bloc/</link>
+    <description>Recent content in BLoC on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Wed, 31 Oct 2018 13:11:09 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/bloc/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>[Flutter] BLoC——Flutter 中的 MVP</title>
+      <link>https://clsrfish.github.io/Blog/post/db8412330a33102e25847a876fd66c62/</link>
+      <pubDate>Wed, 31 Oct 2018 13:11:09 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/db8412330a33102e25847a876fd66c62/</guid>
+      <description>&lt;p&gt;写过 Android 的应该都会比较熟悉 MVP 模式，在 Flutter 框架下有着相似的 BLoC（Business Logic Component） 模式，不准确地说，BLoC 就是 MVP 在 Flutter 中的变种。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

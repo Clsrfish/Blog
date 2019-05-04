@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Mac 下 Terminal &#43; zsh 配置</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="之前一直用 Ubuntu 自带的 Bash，没有去配置什么插件，感觉用着也还行，现在换到 MacOS 的 Terminal 下，发现它默认配置真的没有 Ubuntu 的好看，为了能更加快乐的使用终端，还是决定去捣鼓一番。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Mac 下 Terminal &#43; zsh 配置" />
+    <meta name="twitter:description" content="之前一直用 Ubuntu 自带的 Bash，没有去配置什么插件，感觉用着也还行，现在换到 MacOS 的 Terminal 下，发现它默认配置真的没有 Ubuntu 的好看，为了能更加快乐的使用终端，还是决定去捣鼓一番。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Mac 下 Terminal &#43; zsh 配置" />
+  <meta property="og:description" content="之前一直用 Ubuntu 自带的 Bash，没有去配置什么插件，感觉用着也还行，现在换到 MacOS 的 Terminal 下，发现它默认配置真的没有 Ubuntu 的好看，为了能更加快乐的使用终端，还是决定去捣鼓一番。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/ed90638e/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/ed90638e/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Mac 下 Terminal &#43; zsh 配置</h1>
+      <p class="post-meta">@Clsrfish · Jan 25, 2018 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>之前一直用 Ubuntu 自带的 Bash，没有去配置什么插件，感觉用着也还行，现在换到 MacOS 的 Terminal 下，发现它默认配置真的没有 Ubuntu 的好看，为了能更加快乐的使用终端，还是决定去捣鼓一番。</p>
+
+<p>MacOS 自带应用不像 Linux 那样，想删就能删除，又不喜欢安装两个功能相同的应用，就直接使用自带的 Terminal。</p>
+
+<h2 id="效果">效果</h2>
+
+<p><img src="https://i.loli.net/2018/01/25/5a69ac7d978af.png" alt="" /></p>
+
+<p>​</p>
+
+<h2 id="安装-zsh">安装 zsh</h2>
+
+<p>MacOS 自带了 zsh，可能不是最新版本，不过没影响，其它平台使用各自的包管理器进行安装就👌了。</p>
+
+<p>先看看系统都提供哪些 shell：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ cat /etc/shells 
+<span style="color:#75715e"># List of acceptable shells for chpass(1).</span>
+<span style="color:#75715e"># Ftpd will not allow users to connect who are not using</span>
+<span style="color:#75715e"># one of these shells.</span>
+
+/bin/bash
+/bin/csh
+/bin/ksh
+/bin/sh
+/bin/tcsh
+/bin/zsh</code></pre></div>
+<p>这里看到 zsh 已经安装了，接着替换系统默认的 shell：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ chsh -s /bin/zsh</code></pre></div>
+<p>可能会要求输入密码，输入就好了，重启终端就可以看到效果了。</p>
+
+<h2 id="安装-oh-my-zsh">安装 Oh my zsh</h2>
+
+<p>简单替换 zsh 虽然能用，但是还是有点丑，通过 <a href="http://ohmyz.sh/">oh my zsh</a> 来配置。</p>
+
+<p>安装也很简单（也叫不上安装）：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sh -c <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span></code></pre></div>
+<p>执行完后会在用户目录下创建一些默认配置文件，同时也会看到命令提示符发生了变化。</p>
+
+<h2 id="主题">主题</h2>
+
+<p>通过 <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Themes">主题</a> 让它再更好看点。</p>
+
+<h3 id="字体">字体</h3>
+
+<p>这里选用 <code>agnoster</code> 主题的变种 <a href="https://github.com/zakaziko99/agnosterzak-ohmyzsh-theme">agnosterzak</a> ，因为有一些特殊字符显示问题，需要先安装 <code>Powerline compatible</code> 字体：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl https://github.com/powerline/fonts/raw/master/Meslo%20Slashed/Meslo%20LG%20M%20Regular%20for%20Powerline.ttf -o Meslo_LG_M_Regular_for_Powerline.ttf <span style="color:#f92672">&amp;&amp;</span> open Meslo_LG_M_Regular_for_Powerline.ttf</code></pre></div>
+<p>这里只安装一个字体就行了。</p>
+
+<h3 id="配色">配色</h3>
+
+<p>效果图中有色块，所以配色就显得尤为重要，没选好就可能极其辣眼睛，这个 <a href="https://github.com/mbadolato/iTerm2-Color-Schemes">仓库</a> 有很多配色，根据自己的喜好选一种就好了。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-SHELL" data-lang="SHELL">$ curl https://github.com/mbadolato/iTerm2-Color-Schemes/raw/master/terminal/Solarized%20Dark%20Higher%20Contrast.terminal -o Solarized_Dark_Higher_Contrast.terminal</code></pre></div>
+<p>下载好后进入 Terminal 的 Preference（偏好设置）进行导入并设为默认就 👌 了。</p>
+
+<p><img src="https://i.loli.net/2018/01/25/5a69b2abb611d.png" alt="" /></p>
+
+<p>然后把字体改为之前安装好的。</p>
+
+<h3 id="zsh-主题">zsh 主题</h3>
+
+<p>执行命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mkdir -p <span style="color:#e6db74">${</span>ZSH_CUSTOM<span style="color:#66d9ef">:-</span>~/.oh-my-zsh/custom<span style="color:#e6db74">}</span>/themes <span style="color:#f92672">&amp;&amp;</span> curl http://raw.github.com/zakaziko99/agnosterzak-ohmyzsh-theme/master/agnosterzak.zsh-theme -o <span style="color:#e6db74">${</span>ZSH_CUSTOM<span style="color:#66d9ef">:-</span>~/.oh-my-zsh/custom<span style="color:#e6db74">}</span>/themes/agnosterzak.zsh-theme</code></pre></div>
+<p>然后修改 .zshrc 文件，将变量 ZSH_THEME 设为 agnosterzak：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># Set name of the theme to load. Optionally, if you set this to &#34;random&#34;</span>
+<span style="color:#75715e"># it&#39;ll load a random theme each time that oh-my-zsh is loaded.</span>
+<span style="color:#75715e"># See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes</span>
+ZSH_THEME<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;agnosterzak&#34;</span></code></pre></div>
+<p>重启终端，就能看到和文章开头差不多的效果了。</p>
+
+<h2 id="其它定制">其它定制</h2>
+
+<p>到现在效果已经挺棒的了，不过还是根据自己的情况作了一些定制化。主要还是改主题，因为我也不是很喜欢安装太多插件。</p>
+
+<p><strong>隐藏电量</strong></p>
+
+<p>这个是第一眼看上去就觉得没有太多价值的信息，所以应该要去掉。</p>
+
+<p>修改 agnosterzak.zsh-theme 文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ vim <span style="color:#e6db74">${</span>ZSH_CUSTOM<span style="color:#66d9ef">:-</span>~/.oh-my-zsh/custom<span style="color:#e6db74">}</span>/themes/agnosterzak.zsh-theme</code></pre></div>
+<p>滑到底部然后把电池相关的配置注释掉：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">## Main prompt</span>
+build_prompt<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+   RETVAL<span style="color:#f92672">=</span>$?
+   echo -n <span style="color:#e6db74">&#34;\n&#34;</span>
+   prompt_status
+<span style="color:#75715e">#  prompt_battery</span>
+   prompt_time
+   prompt_virtualenv
+   prompt_dir
+   prompt_git
+   prompt_hg
+   prompt_end
+   CURRENT_BG<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;NONE&#39;</span>
+   echo -n <span style="color:#e6db74">&#34;\n&#34;</span>
+   prompt_context
+   prompt_end
+<span style="color:#f92672">}</span></code></pre></div>
+<p><strong>缩短当前工作空间路径</strong></p>
+
+<p>很多情况下，完整路径是没有太多作用，所以只保留最具价值的部分——当前目录名，修改 agnosterzak.zsh-theme 文件，找到：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># Dir: current working directory</span>
+prompt_dir<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+  prompt_segment cyan white <span style="color:#e6db74">&#34;%{</span>$fg_bold<span style="color:#e6db74">[white]%}%~%{</span>$fg_no_bold<span style="color:#e6db74">[white]%}&#34;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>把 <code>%~</code> 改成 <code>%c</code> ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># Dir: current working directory</span>
+prompt_dir<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+  prompt_segment cyan white <span style="color:#e6db74">&#34;%{</span>$fg_bold<span style="color:#e6db74">[white]%}%c%{</span>$fg_no_bold<span style="color:#e6db74">[white]%}&#34;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p><strong>修改用户@设备名配色</strong></p>
+
+<p>打开 agnosterzak.zsh-theme，找到 <code>prompt_context</code> ：然后修改成下面的样子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># Context: user@hostname (who am I and where am I)</span>
+prompt_context<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">[[</span> -n <span style="color:#e6db74">&#34;</span>$SSH_CLIENT<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]]</span>; <span style="color:#66d9ef">then</span>
+    prompt_segment magenta white <span style="color:#e6db74">&#34;%{</span>$fg_bold<span style="color:#e6db74">[white]%(!.%{%F{white}%}.)%}</span>$USER<span style="color:#e6db74">@%m%{</span>$fg_no_bold<span style="color:#e6db74">[white]%}&#34;</span>
+  <span style="color:#66d9ef">else</span>
+    prompt_segment magenta white <span style="color:#e6db74">&#34;%{</span>$fg_bold<span style="color:#e6db74">[white]%(!.%{%F{white}%}.)%}@</span>$USER<span style="color:#e6db74">%{</span>$fg_no_bold<span style="color:#e6db74">[white]%}&#34;</span>
+  <span style="color:#66d9ef">fi</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>其实只是更改了第6行的配色。</p>
+
+<p>改完后执行 <code>source ~/.zshrc</code> 就可以看到效果图中的终端了。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/zsh"><span class="tag">Zsh</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/terminal"><span class="tag">Terminal</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>464</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

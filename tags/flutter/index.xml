@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Flutter on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/flutter/</link>
+    <description>Recent content in Flutter on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sun, 02 Dec 2018 15:09:37 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/flutter/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>[Flutter] UI 刷新</title>
+      <link>https://clsrfish.github.io/Blog/post/975a96b8a4ec2c8a773c4705a43f95dd/</link>
+      <pubDate>Sun, 02 Dec 2018 15:09:37 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/975a96b8a4ec2c8a773c4705a43f95dd/</guid>
+      <description>&lt;p&gt;Flutter 在 Framework 上打设计大量借鉴 React，做到通过声明的方式编写 UI 代码，让开发者围绕 Widget 进行开发。但仅仅这样是不够的，我们知道 Flutter 相比于 React 还多了关于测量、布局以及绘制的逻辑，而这些都是在前端开发中很难触碰到的，既然 Flutter 提供了这样的机会，理解其中的原理就显得尤为必要了。
+这篇文章主要分析 Flutter UI 更新背后的逻辑。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] runApp 流程</title>
+      <link>https://clsrfish.github.io/Blog/post/c988c12393bdb4dc3972fbc32ca87cf6/</link>
+      <pubDate>Fri, 30 Nov 2018 22:34:25 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/c988c12393bdb4dc3972fbc32ca87cf6/</guid>
+      <description>&lt;p&gt;不管是使用 Flutter 开发完整应用还是作为区块嵌入某个页面，都需要调用 &lt;code&gt;runApp&lt;/code&gt; ，而我们需要做的只是传入一个 Widget 实例，那么 &lt;code&gt;runApp&lt;/code&gt; 背后所做的工作就很有趣了，比如触发视图的构建、更新以及绘制等，下面我们就粗略地看一下这个函数到底做了啥。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] Widget、Element、RenderObject 理解</title>
+      <link>https://clsrfish.github.io/Blog/post/964b4fb995963e7c4ea05b6fee8e0627/</link>
+      <pubDate>Tue, 06 Nov 2018 19:57:06 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/964b4fb995963e7c4ea05b6fee8e0627/</guid>
+      <description>&lt;p&gt;使用 Flutter 开发时，接触最多的就是 Widget，但是 Widget 并不会最终显示在屏幕上。Flutter 大量借鉴 React ，React 中有 Component、Virtual DOM 和 tag，Flutter 中对应地有 Widget、Element 以及 RenderObject，所以这篇文章就简单理解下这三者在视图渲染中的作用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] BLoC——Flutter 中的 MVP</title>
+      <link>https://clsrfish.github.io/Blog/post/db8412330a33102e25847a876fd66c62/</link>
+      <pubDate>Wed, 31 Oct 2018 13:11:09 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/db8412330a33102e25847a876fd66c62/</guid>
+      <description>&lt;p&gt;写过 Android 的应该都会比较熟悉 MVP 模式，在 Flutter 框架下有着相似的 BLoC（Business Logic Component） 模式，不准确地说，BLoC 就是 MVP 在 Flutter 中的变种。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

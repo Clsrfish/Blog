@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>OkHttp 拆轮子之连接池</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="OkHttp 内部还维护了一个连接池，用于缓存一定数量的连接，以减少与服务器建立连接时的资源开销。同时，为了保证缓存的连接数在一个合理的水平，连接池有一个最多闲置连接数量和最长连接闲置时长。这里我们还是通过分析一些关键方法来分析它的连接池机制：
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="OkHttp 拆轮子之连接池" />
+    <meta name="twitter:description" content="OkHttp 内部还维护了一个连接池，用于缓存一定数量的连接，以减少与服务器建立连接时的资源开销。同时，为了保证缓存的连接数在一个合理的水平，连接池有一个最多闲置连接数量和最长连接闲置时长。这里我们还是通过分析一些关键方法来分析它的连接池机制：
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="OkHttp 拆轮子之连接池" />
+  <meta property="og:description" content="OkHttp 内部还维护了一个连接池，用于缓存一定数量的连接，以减少与服务器建立连接时的资源开销。同时，为了保证缓存的连接数在一个合理的水平，连接池有一个最多闲置连接数量和最长连接闲置时长。这里我们还是通过分析一些关键方法来分析它的连接池机制：
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/f4a6041/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/f4a6041/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">OkHttp 拆轮子之连接池</h1>
+      <p class="post-meta">@Clsrfish · Dec 30, 2017 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>OkHttp 内部还维护了一个连接池，用于缓存一定数量的连接，以减少与服务器建立连接时的资源开销。同时，为了保证缓存的连接数在一个合理的水平，连接池有一个最多闲置连接数量和最长连接闲置时长。这里我们还是通过分析一些关键方法来分析它的连接池机制：</p>
+
+<h2 id="connectionpool-get">ConnectionPool#get()</h2>
+
+<p>这个方法用于从连接池中获取一个可用的连接。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">RealConnection <span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>Address address<span style="color:#f92672">,</span> StreamAllocation streamAllocation<span style="color:#f92672">,</span> Route route<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>RealConnection connection <span style="color:#f92672">:</span> connections<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>connection<span style="color:#f92672">.</span><span style="color:#a6e22e">isEligible</span><span style="color:#f92672">(</span>address<span style="color:#f92672">,</span> route<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+            streamAllocation<span style="color:#f92672">.</span><span style="color:#a6e22e">acquire</span><span style="color:#f92672">(</span>connection<span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span> connection<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里的实现也很简单，遍历连接池，找到可用的就返回，没找到就返回null。</p>
+
+<h2 id="connectionpool-put">ConnectionPool#put()</h2>
+
+<p>每次新建一个连接，都会往这个连接池里面丢。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>RealConnection connection<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>cleanupRunning<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        cleanupRunning <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        executor<span style="color:#f92672">.</span><span style="color:#a6e22e">execute</span><span style="color:#f92672">(</span>cleanupRunnable<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    connections<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>connection<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里首先会判断有没有正在清理 <strong>多余</strong> 或者 <strong>闲置过久</strong> 的连接，没有的话，就先清理一波，然后把连接丢进去。</p>
+
+<h2 id="连接池的维护">连接池的维护</h2>
+
+<p>连接池内部有一个专门负责清理冗余连接的线程。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Runnable cleanupRunnable <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Runnable<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">long</span> waitNanos <span style="color:#f92672">=</span> cleanup<span style="color:#f92672">(</span>System<span style="color:#f92672">.</span><span style="color:#a6e22e">nanoTime</span><span style="color:#f92672">());</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>waitNanos <span style="color:#f92672">==</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">)</span> <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span><span style="color:#75715e">// 如果连接池为空，直接结束当前线程
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>waitNanos <span style="color:#f92672">&gt;</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">long</span> waitMillis <span style="color:#f92672">=</span> waitNanos <span style="color:#f92672">/</span> 1000000L<span style="color:#f92672">;</span>
+                waitNanos <span style="color:#f92672">-=</span> <span style="color:#f92672">(</span>waitMillis <span style="color:#f92672">*</span> 1000000L<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>ConnectionPool<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                    <span style="color:#75715e">// 暂停当前线程，直到可能有过期的连接出现
+</span><span style="color:#75715e"></span>                        ConnectionPool<span style="color:#f92672">.</span><span style="color:#a6e22e">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">wait</span><span style="color:#f92672">(</span>waitMillis<span style="color:#f92672">,</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span><span style="color:#f92672">)</span> waitNanos<span style="color:#f92672">);</span>
+                    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InterruptedException ignored<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">};</span>
+
+<span style="color:#66d9ef">long</span> <span style="color:#a6e22e">cleanup</span><span style="color:#f92672">(</span><span style="color:#66d9ef">long</span> now<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">int</span> inUseConnectionCount <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">int</span> idleConnectionCount <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span>
+    RealConnection longestIdleConnection <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">long</span> longestIdleDurationNs <span style="color:#f92672">=</span> Long<span style="color:#f92672">.</span><span style="color:#a6e22e">MIN_VALUE</span><span style="color:#f92672">;</span>
+<span style="color:#75715e">//    下面的目的是找出一个需要关闭的连接或计算最短多久会有下一个连接过期
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Iterator<span style="color:#f92672">&lt;</span>RealConnection<span style="color:#f92672">&gt;</span> i <span style="color:#f92672">=</span> connections<span style="color:#f92672">.</span><span style="color:#a6e22e">iterator</span><span style="color:#f92672">();</span> i<span style="color:#f92672">.</span><span style="color:#a6e22e">hasNext</span><span style="color:#f92672">();</span> <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            RealConnection connection <span style="color:#f92672">=</span> i<span style="color:#f92672">.</span><span style="color:#a6e22e">next</span><span style="color:#f92672">();</span>
+<span style="color:#75715e">//    判断这个连接是否正在被使用，是就执行下一次循环
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>pruneAndGetAllocationCount<span style="color:#f92672">(</span>connection<span style="color:#f92672">,</span> now<span style="color:#f92672">)</span> <span style="color:#f92672">&gt;</span> 0<span style="color:#f92672">)</span> <span style="color:#66d9ef">continue</span><span style="color:#f92672">;</span>
+            idleConnectionCount<span style="color:#f92672">++;</span>
+            <span style="color:#75715e">// 找到最先过期的连接
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">long</span> idleDurationNs <span style="color:#f92672">=</span> now <span style="color:#f92672">-</span> connection<span style="color:#f92672">.</span><span style="color:#a6e22e">idleAtNanos</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>idleDurationNs <span style="color:#f92672">&gt;</span> longestIdleDurationNs<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                longestIdleDurationNs <span style="color:#f92672">=</span> idleDurationNs<span style="color:#f92672">;</span>
+                longestIdleConnection <span style="color:#f92672">=</span> connection<span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+<span style="color:#75715e">//    下面一串的判断就是判断目标连接现在是否已经过期，过期就关闭，否则返回距离过期的时间差
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>longestIdleDurationNs <span style="color:#f92672">&gt;=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">keepAliveDurationNs</span>
+                <span style="color:#f92672">||</span> idleConnectionCount <span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maxIdleConnections</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            connections<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>longestIdleConnection<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>idleConnectionCount <span style="color:#f92672">&gt;</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> keepAliveDurationNs <span style="color:#f92672">-</span> longestIdleDurationNs<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>inUseConnectionCount <span style="color:#f92672">&gt;</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> keepAliveDurationNs<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            cleanupRunning <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span>1<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    closeQuietly<span style="color:#f92672">(</span>longestIdleConnection<span style="color:#f92672">.</span><span style="color:#a6e22e">socket</span><span style="color:#f92672">());</span>
+    <span style="color:#66d9ef">return</span> 0<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>大概的意思就是这个清理线程一直运行，它会不断的检查是否有过期的连接并进行关闭，然后暂停特定时间来进行下一次清理。</p>
+
+<h2 id="其他">其他</h2>
+
+<p>OkHttp 内部有一个很重要的类&ndash; <code>StreamAllocation</code> ，这个类协调了 <code>Connection</code> 、<code>Streams</code> 、<code>Calls</code> 之间的关系，作为一次请求（ Call ）的代表，在一个或多个连接（ Connection ）上传输一个或多个数据流（ Stream ）。
+整个请求流程中，这个类最先出现在 <code>RetryAndFollowUpInterceptor</code> 里面，当简单了解这个类的内部实现之后，对请求的逻辑也能更好的理解。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/connection-pool"><span class="tag">Connection Pool</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/okhttp"><span class="tag">OkHttp</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/java"><span class="tag">Java</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>489</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

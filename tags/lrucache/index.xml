@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>LruCache on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/lrucache/</link>
+    <description>Recent content in LruCache on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Tue, 26 Dec 2017 11:15:25 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/lrucache/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>缓存之 MemoryLruCache</title>
+      <link>https://clsrfish.github.io/Blog/post/43a6778d/</link>
+      <pubDate>Tue, 26 Dec 2017 11:15:25 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/43a6778d/</guid>
+      <description>&lt;p&gt;在开发图片加载功能时，既要保证加载速度，又要避免 OOM，特别是在类似于图库这样的场景中，如何处理好这两者关系显得尤为重要。所以最简单的想法就是一共缓存，将那些暂时 “食之无味，弃之可惜”  的对象暂时缓存起来，以备不适之需。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

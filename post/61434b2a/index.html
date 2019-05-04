@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Android Architecture Components 之 Lifecycle</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="现在都流行 MVP &#43; RxJava2 开发，然后 RxJava 带来的一个问题就是需要在适当的时候取消订阅关系以避免 内存泄露 ，最常见的做法就是在 Activity/Fragment#onDestroy() 方法中调用 disposable.dispose() 来解决。然后，官方文档中是用 LocationManager 来举例，这种情况就比较典型，需要重写 Activity/Fragment 的每个生命周期方法来处理它的状态。官方文档中又单独封装了一个类来处理，保持生命周期方法中的代码不会太臃肿。但是这还是没有彻底解决问题，毕竟还是要重写方法，难免不会有一次忘记重写某个生命周期函数。最理想的情况就是，我们封装的类能够 自动察觉 到生命周期的变化。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Android Architecture Components 之 Lifecycle" />
+    <meta name="twitter:description" content="现在都流行 MVP &#43; RxJava2 开发，然后 RxJava 带来的一个问题就是需要在适当的时候取消订阅关系以避免 内存泄露 ，最常见的做法就是在 Activity/Fragment#onDestroy() 方法中调用 disposable.dispose() 来解决。然后，官方文档中是用 LocationManager 来举例，这种情况就比较典型，需要重写 Activity/Fragment 的每个生命周期方法来处理它的状态。官方文档中又单独封装了一个类来处理，保持生命周期方法中的代码不会太臃肿。但是这还是没有彻底解决问题，毕竟还是要重写方法，难免不会有一次忘记重写某个生命周期函数。最理想的情况就是，我们封装的类能够 自动察觉 到生命周期的变化。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Android Architecture Components 之 Lifecycle" />
+  <meta property="og:description" content="现在都流行 MVP &#43; RxJava2 开发，然后 RxJava 带来的一个问题就是需要在适当的时候取消订阅关系以避免 内存泄露 ，最常见的做法就是在 Activity/Fragment#onDestroy() 方法中调用 disposable.dispose() 来解决。然后，官方文档中是用 LocationManager 来举例，这种情况就比较典型，需要重写 Activity/Fragment 的每个生命周期方法来处理它的状态。官方文档中又单独封装了一个类来处理，保持生命周期方法中的代码不会太臃肿。但是这还是没有彻底解决问题，毕竟还是要重写方法，难免不会有一次忘记重写某个生命周期函数。最理想的情况就是，我们封装的类能够 自动察觉 到生命周期的变化。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/61434b2a/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/61434b2a/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Android Architecture Components 之 Lifecycle</h1>
+      <p class="post-meta">@Clsrfish · Dec 21, 2017 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>现在都流行 MVP + RxJava2 开发，然后 RxJava 带来的一个问题就是需要在适当的时候取消订阅关系以避免 <strong>内存泄露</strong> ，最常见的做法就是在 <code>Activity/Fragment#onDestroy()</code> 方法中调用 <code>disposable.dispose()</code> 来解决。然后，官方文档中是用 <code>LocationManager</code> 来举例，这种情况就比较典型，需要重写 Activity/Fragment 的每个生命周期方法来处理它的状态。官方文档中又单独封装了一个类来处理，保持生命周期方法中的代码不会太臃肿。但是这还是没有彻底解决问题，毕竟还是要重写方法，难免不会有一次忘记重写某个生命周期函数。最理想的情况就是，我们封装的类能够 <strong>自动察觉</strong> 到生命周期的变化。</p>
+
+<h2 id="lifecycle">Lifecycle</h2>
+
+<p>正式开始前，先了解几个概念。
+Lifecycle 这个类封装了组件的生命周期信息，并且使得这些信息可以被其他人监视。</p>
+
+<p>Lifecycle 使用两个 枚举类 来追踪和它关联的组件生命周期：
+- Event：这个枚举类代表了生命周期 <strong>变化</strong>，并且与 Activity/Fragment 中的生命周期回调方法一一对应
+- State：生命周期组件当前的状态</p>
+
+<p>下面是官方文档上的一张示意图，它展示了 Event、State 之间的关系：
+<img src="https://developer.android.com/images/topic/libraries/architecture/lifecycle-states.png" alt="" /></p>
+
+<p>一般情况下，我们更关心的可能是生命周期状态的变化，通过监听这些变化来作出相应的处理，这里我们通过实现 <code>LifecycleObserver</code> 来完成监听：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyObserver</span> <span style="color:#66d9ef">implements</span> LifecycleObserver <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@OnLifecycleEvent</span><span style="color:#f92672">(</span>Lifecycle<span style="color:#f92672">.</span><span style="color:#a6e22e">Event</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ON_RESUME</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onResume</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+    <span style="color:#a6e22e">@OnLifecycleEvent</span><span style="color:#f92672">(</span>Lifecycle<span style="color:#f92672">.</span><span style="color:#a6e22e">Event</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ON_PAUSE</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onPause</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>我们看到，通过 <strong>注解</strong> 的方式就能指定某个方法在哪个生命周期事件发生时被调用，至于如何注册这个 Observer ，等另一个类讲解之后再说。</p>
+
+<h2 id="lifecycleowner">LifecycleOwner</h2>
+
+<p>刚刚介绍了 Lifecycle 这类，以及如何监听它的各种事件，但是我们还需要一个能偶提供的 Lifecycle 的宿主，这里就需要使用到 <code>LifecycleOwner</code> 。</p>
+
+<p>LifecycleOwner 是一个 <strong>只有一个方法</strong> 的接口，它表示这个类能够提供 <code>Lifecycle</code> 。最新 support 包里的 <code>AppCompatActivity/Fragment</code> 已经实现了这个接口，所以我们可以直接使用：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LifecycActivity</span> <span style="color:#66d9ef">extends</span> AppCompatActivity<span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(...)</span> <span style="color:#f92672">{</span>
+        getLifecycle<span style="color:#f92672">().</span><span style="color:#a6e22e">addObserver</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> MyLifecycleObserver<span style="color:#f92672">());</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>就这样简单的一行代码，就可以完成生命周期事件的监听了。</p>
+
+<blockquote>
+<p>注意：在 <code>MyObserver</code> 中，在执行生命周期相关的操做前最好判断一下当前生命周期。这时官方原话，我暂时还不知道是什么原因，先留个坑，等看了源码再过来补充。</p>
+</blockquote>
+
+<h2 id="实战">实战</h2>
+
+<p>了解完这个生命周期感知的类，还需要思考怎么利用这个特性来改进我们现有的代码。这里我们通过改造一个 MVP 来练习：</p>
+
+<h3 id="定义基类">定义基类</h3>
+
+<p>按照 MVP 的套路，我们需要先定义 V 和 P 的基类/接口：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">AbsView</span> <span style="color:#f92672">{</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里 AbsView 什么接口方法都没有定义，飘过。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AbsPresenter</span><span style="color:#f92672">&lt;</span>V <span style="color:#66d9ef">extends</span> AbsView<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">implements</span> LifecycleObserver <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String TAG <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;AbsPresenter&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> CompositeDisposable compositeDisposable <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CompositeDisposable<span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">protected</span> WeakReference<span style="color:#f92672">&lt;</span>V<span style="color:#f92672">&gt;</span> view <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> WeakReference<span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">setView</span><span style="color:#f92672">(</span>V v<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        view <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> WeakReference<span style="color:#f92672">&lt;&gt;(</span>v<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>v <span style="color:#66d9ef">instanceof</span> LifecycleOwner<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#f92672">((</span>LifecycleOwner<span style="color:#f92672">)</span> v<span style="color:#f92672">).</span><span style="color:#a6e22e">getLifecycle</span><span style="color:#f92672">().</span><span style="color:#a6e22e">addObserver</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">addDisposable</span><span style="color:#f92672">(</span>Disposable d<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        compositeDisposable<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>d<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@OnLifecycleEvent</span><span style="color:#f92672">(</span>Lifecycle<span style="color:#f92672">.</span><span style="color:#a6e22e">Event</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ON_PAUSE</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onPause</span><span style="color:#f92672">()</span> <span style="color:#f92672">{}</span>
+
+    <span style="color:#a6e22e">@OnLifecycleEvent</span><span style="color:#f92672">(</span>Lifecycle<span style="color:#f92672">.</span><span style="color:#a6e22e">Event</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ON_STOP</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onStop</span><span style="color:#f92672">()</span> <span style="color:#f92672">{}</span>
+
+    <span style="color:#a6e22e">@OnLifecycleEvent</span><span style="color:#f92672">(</span>Lifecycle<span style="color:#f92672">.</span><span style="color:#a6e22e">Event</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ON_DESTROY</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onDestroy</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        Log<span style="color:#f92672">.</span><span style="color:#a6e22e">d</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;lifecycle component state onDestroy&#34;</span><span style="color:#f92672">);</span>
+        compositeDisposable<span style="color:#f92672">.</span><span style="color:#a6e22e">clear</span><span style="color:#f92672">();</span>
+        view<span style="color:#f92672">.</span><span style="color:#a6e22e">clear</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>我们重点看看这个 AbsPresenter ，它实现了 LifecycleObserver，同时定义一系列被 <code>Lifecycle.Event</code> 标注的方法，这些方法在 Activity/Fragment 的生命周期变化的时候被调用，所以我们就可以把 RxJava2 的 <strong>解订阅操作</strong> 放在 <code>onDestroy</code> 这个方法里面。
+需要注意的是，这些生命周期感知的方法不能使用 private 修饰，否则编译不过。</p>
+
+<p>完成了这些基础工作，我们就可以专注于业务逻辑，而避免自己重写 onDestroy 方法解除订阅，也避免的因为疏忽忘记重写而造成内存泄漏的问题。</p>
+
+<h3 id="定义协议">定义协议</h3>
+
+<p>按照 Google Samples 中的套路，我们再定义一个协议接口：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">LOContract</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BaseLifecyclePresenter</span> <span style="color:#66d9ef">extends</span> AbsPresenter<span style="color:#f92672">&lt;</span>LifecycleView<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">BaseLifecyclePresenter</span><span style="color:#f92672">(</span>LifecycleView lifecycleView<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">super</span><span style="color:#f92672">(</span>lifecycleView<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">getMsg</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">LifecycleView</span> <span style="color:#66d9ef">extends</span> AbsView <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">showMsg</span><span style="color:#f92672">(</span>String msg<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<h3 id="实现vp">实现VP</h3>
+
+<p>最后就是实现了</p>
+
+<p>LOActivity 实现 LifecycleView</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LOActivity</span> <span style="color:#66d9ef">extends</span> AppCompatActivity <span style="color:#66d9ef">implements</span> LifecycleObserverContract<span style="color:#f92672">.</span><span style="color:#a6e22e">LifecycleView</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> BaseLifecyclePresenter p<span style="color:#f92672">;</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>Bundle savedInstanceState<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>        p <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LOPresenter<span style="color:#f92672">();</span>
+        p<span style="color:#f92672">.</span><span style="color:#a6e22e">setView</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        findViewById<span style="color:#f92672">(</span>R<span style="color:#f92672">.</span><span style="color:#a6e22e">id</span><span style="color:#f92672">.</span><span style="color:#a6e22e">load_btn</span><span style="color:#f92672">).</span><span style="color:#a6e22e">setOnClickListener</span><span style="color:#f92672">(</span>
+            view <span style="color:#f92672">-&gt;</span> p<span style="color:#f92672">.</span><span style="color:#a6e22e">getMsg</span><span style="color:#f92672">()</span>
+        <span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">showMsg</span><span style="color:#f92672">(</span>String msg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> msg<span style="color:#f92672">,</span> Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">LENGTH_SHORT</span><span style="color:#f92672">).</span><span style="color:#a6e22e">show</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>LOPresenter 实现 BaseLifecyclePresenter</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LOPresenter</span> <span style="color:#66d9ef">extends</span> LifecycleObserverContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseLifecyclePresenter</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String TAG <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;LOPresenter&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">getMsg</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        Disposable d <span style="color:#f92672">=</span> Observable
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">fromCallable</span><span style="color:#f92672">(()</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+                    <span style="color:#75715e">// 模拟一个耗时操作
+</span><span style="color:#75715e"></span>                    Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>5000<span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;message&#34;</span><span style="color:#f92672">;</span>
+                <span style="color:#f92672">})</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">subscribeOn</span><span style="color:#f92672">(</span>Schedulers<span style="color:#f92672">.</span><span style="color:#a6e22e">io</span><span style="color:#f92672">())</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">observeOn</span><span style="color:#f92672">(</span>AndroidSchedulers<span style="color:#f92672">.</span><span style="color:#a6e22e">mainThread</span><span style="color:#f92672">())</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">subscribe</span><span style="color:#f92672">(</span>
+                        msg <span style="color:#f92672">-&gt;</span> view<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">().</span><span style="color:#a6e22e">showMsg</span><span style="color:#f92672">(</span>msg<span style="color:#f92672">),</span>
+                        Throwable:<span style="color:#f92672">:</span>printStackTrace<span style="color:#f92672">,</span>
+                        <span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> Log<span style="color:#f92672">.</span><span style="color:#a6e22e">i</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;onComplete&#34;</span><span style="color:#f92672">)</span>
+                <span style="color:#f92672">);</span>
+        addDisposable<span style="color:#f92672">(</span>d<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>编译运行，点击按钮，五秒钟后就能看到一条 toast 弹出，点击返回退出当前界面，在 logcat 里面能看到 <code>AbsPresenter#onDestroy()</code> 方法被调用：</p>
+
+<p><img src="https://i.loli.net/2017/12/22/5a3d0d11994c7.png" alt="" /></p>
+
+<p><img src="https://i.loli.net/2017/12/22/5a3d0d686977f.png" alt="" /></p>
+
+<p>这里看到 <code>AbsPresenter#onDestroy()</code> 被自动调用了，完全不需要我们处理。</p>
+
+<p>完整代码在 <a href="https://github.com/dashMrl/Android_Demos/tree/15a266e6edfd10b2c4dd39b32f6d9e66dafec66e">这里</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/lifecycleobserver"><span class="tag">LifeCycleObserver</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android-architecture-components"><span class="tag">Android Architecture Components</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>498</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

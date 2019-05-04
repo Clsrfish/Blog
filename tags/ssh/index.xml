@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>SSH on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/ssh/</link>
+    <description>Recent content in SSH on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 27 Jan 2018 01:49:51 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/ssh/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>SSH 免密登录</title>
+      <link>https://clsrfish.github.io/Blog/post/1d2298d7/</link>
+      <pubDate>Sat, 27 Jan 2018 01:49:51 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/1d2298d7/</guid>
+      <description>&lt;p&gt;今天重装 CentOS 后发现按照之前的步骤来配置 SSH 后一直提示 &lt;code&gt;Permission denied&lt;/code&gt; ，第一反应反应就是 &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt; 配置出错，但是仔细检查一遍之后并没有发现什么错误。后来网上找到原因是权限问题，赶快记笔记，防止以后再遇上这个坑而不知道。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>AndroidArchitectureComponent 之 ViewModel</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="在学习 Android 稍微深入一点，就知道 Activity/Fragment 是受 Android 框架层控制的，具体表现在生命周期上面。系统会根据用户的操作或者设备状态来创建或销毁 Activity/Fragment，这个时候会带来数据的 保存和恢复(包括视图状态) 问题。一个典型场景就是表单页面，当用户旋转屏幕之后，系统会重建Activity/Fragment，如果什么数据的保存恢复工作都没有做，那么系统重建的 Activity/Fragment 将失去用户已经输入的数据，丢失数据越多，用户体验越差。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="AndroidArchitectureComponent 之 ViewModel" />
+    <meta name="twitter:description" content="在学习 Android 稍微深入一点，就知道 Activity/Fragment 是受 Android 框架层控制的，具体表现在生命周期上面。系统会根据用户的操作或者设备状态来创建或销毁 Activity/Fragment，这个时候会带来数据的 保存和恢复(包括视图状态) 问题。一个典型场景就是表单页面，当用户旋转屏幕之后，系统会重建Activity/Fragment，如果什么数据的保存恢复工作都没有做，那么系统重建的 Activity/Fragment 将失去用户已经输入的数据，丢失数据越多，用户体验越差。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="AndroidArchitectureComponent 之 ViewModel" />
+  <meta property="og:description" content="在学习 Android 稍微深入一点，就知道 Activity/Fragment 是受 Android 框架层控制的，具体表现在生命周期上面。系统会根据用户的操作或者设备状态来创建或销毁 Activity/Fragment，这个时候会带来数据的 保存和恢复(包括视图状态) 问题。一个典型场景就是表单页面，当用户旋转屏幕之后，系统会重建Activity/Fragment，如果什么数据的保存恢复工作都没有做，那么系统重建的 Activity/Fragment 将失去用户已经输入的数据，丢失数据越多，用户体验越差。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/8c318638/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/8c318638/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">AndroidArchitectureComponent 之 ViewModel</h1>
+      <p class="post-meta">@Clsrfish · Dec 25, 2017 · 4 min read</p>
+    </header>
+    <article class="post-content"><p>在学习 Android 稍微深入一点，就知道 <code>Activity/Fragment</code> 是受 Android 框架层控制的，具体表现在生命周期上面。系统会根据用户的操作或者设备状态来创建或销毁 <code>Activity/Fragment</code>，这个时候会带来数据的 <strong>保存和恢复(包括视图状态)</strong>  问题。一个典型场景就是表单页面，当用户旋转屏幕之后，系统会重建Activity/Fragment，如果什么数据的保存恢复工作都没有做，那么系统重建的 <code>Activity/Fragment</code> 将失去用户已经输入的数据，丢失数据越多，用户体验越差。</p>
+
+<p>上面的还只是最简单的场景，当存在异步操作，<code>Activity/Fragment</code> 有可能恰好在请求返回时恰好被系统回收了，如果重建的 <code>Activity/Fagment</code> 又重新请求一次，就会造成资源浪费，最理想的情况就是能够直接利用之前请求到的数据同时又不会有内存泄露的隐患。</p>
+
+<p>虽然系统提供了 <code>onSaveInstanceState()</code> 来保存数据，但是这只适用于 <strong>少量的</strong> 、支持 <strong>序列化</strong> 和 <strong>反序列化</strong> 的数据，局限性很明显。</p>
+
+<p>所以我们需要自行提供一套数据保存与恢复的机制。</p>
+
+<h2 id="viewmodel">ViewModel</h2>
+
+<p>Android Architecture Component 提供 ViewModel 来帮助我们为视图提供数据,同时，它还能在视图重建的过程中生存下来，也就保证了数据保存恢复的可行性。</p>
+
+<p>要使用 ViewModel 也很简单，只需要继承 ViewModel 并通过规定的方式获取它的实例就可以了。下面是一个简单的例子：</p>
+
+<p>首先继承 ViewModel：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyViewModel</span> <span style="color:#66d9ef">extends</span> ViewModel<span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">protected</span> String content <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;initial content&#34;</span><span style="color:#960050;background-color:#1e0010">；</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>然后在我们的视图层请求一个 <code>MyViewModel</code> 实例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VMActivity</span> <span style="color:#66d9ef">extends</span> AppCompatActivity<span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> String TAG <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;VMActivity&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> MyViewModel mvm<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(...){</span>
+        mvm <span style="color:#f92672">=</span> ViewModelProviders<span style="color:#f92672">.</span><span style="color:#a6e22e">of</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">).</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>MyViewModel<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+        Log<span style="color:#f92672">.</span><span style="color:#a6e22e">d</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span>mvm<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+        Log<span style="color:#f92672">.</span><span style="color:#a6e22e">d</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span>mvm<span style="color:#f92672">.</span><span style="color:#a6e22e">content</span><span style="color:#f92672">);</span>
+        mvm<span style="color:#f92672">.</span><span style="color:#a6e22e">content</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;modified content&#34;</span><span style="color:#f92672">;</span>
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这样就能使 <code>MyViewModel.content</code> 在 Activity 的重建中生存下来了。</p>
+
+<h2 id="viewmodel-的生命周期">ViewModel 的生命周期</h2>
+
+<p>我们先看官方文档提供的一张示意图：
+<img src="https://developer.android.com/images/topic/libraries/architecture/viewmodel-lifecycle.png" alt="" /></p>
+
+<p>这里 ViewModel 的生存期会和 Activity 的生命周期关联，ViewModel 只有在确定 Activity 不会再重建后才会销毁（<code>this.finish()</code> 调用），这里需要的表述可能有问题，需要结合 Activity 的启动模式来理解。</p>
+
+<blockquote>
+<p>Fragment 情况差不多，ViewModel 在被 <strong>detached</strong> 之后销毁。</p>
+</blockquote>
+
+<h2 id="共享数据">共享数据</h2>
+
+<p>刚刚知道了 ViewModel 的生存期与创建它时传递进去的参数有关（Activity/Fragment），那么当我们传递进去的是 Activity 时，就能获取和 Activity 的生命周期对应的 ViewModel，大概的情况就是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> AFrag <span style="color:#66d9ef">extends</span> Fragment<span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> MyViewModel vma<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">public</span> View <span style="color:#a6e22e">onCreateView</span><span style="color:#f92672">(...){</span>
+        vma  <span style="color:#f92672">=</span> ViewModelProviders<span style="color:#f92672">.</span><span style="color:#a6e22e">of</span><span style="color:#f92672">(</span>getActivity<span style="color:#f92672">()).</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>MyViewModel<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">public</span> BFrag <span style="color:#66d9ef">extends</span> Fragment<span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> MyViewModel vmb<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">public</span> View <span style="color:#a6e22e">onCreateView</span><span style="color:#f92672">(...){</span>
+        vmb  <span style="color:#f92672">=</span> ViewModelProviders<span style="color:#f92672">.</span><span style="color:#a6e22e">of</span><span style="color:#f92672">(</span>getActivity<span style="color:#f92672">()).</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>MyViewModel<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>如果这两个 Fragment 被添加到了同一个宿主 Activity 中，那么 <code>vma</code> 和 <code>vmb</code> 就是同一个实例。
+&gt; 添加到 Fragment 中同理。</p>
+
+<h2 id="viewmodel-带参构造器">ViewModel 带参构造器</h2>
+
+<p>到现在还有一个问题，那就是 ViewModel 的创建。通过传递 ViewModel  的字节码信息就可以获取一个实例，第一反应应该是 <strong>反射</strong> ，内部通过反射调用 ViewModel 的 <strong>无参构造器</strong> 来创建实例。如果需要使用带参构造器，需要借助于另一个接口—— <code>ViewModelProvider.Factory</code> ，ViewModelProvider 有一个它的默认实现实例，我们要做的就是替换这个默认实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyViewModelFactory</span> <span style="color:#66d9ef">implements</span> ViewModeProvider<span style="color:#f92672">.</span><span style="color:#a6e22e">Factory</span><span style="color:#f92672">{</span>
+  	<span style="color:#66d9ef">private</span> Params params<span style="color:#f92672">;</span>
+  	<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">MyViewModelFactory</span><span style="color:#f92672">(</span>Params params<span style="color:#f92672">){</span>
+   		<span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">params</span> <span style="color:#f92672">=</span> params<span style="color:#f92672">;</span>
+  	<span style="color:#f92672">}</span>
+  	<span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T <span style="color:#66d9ef">extends</span> ViewModel<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> modelClass<span style="color:#f92672">){</span>
+    	<span style="color:#66d9ef">return</span> modelClass<span style="color:#f92672">.</span><span style="color:#a6e22e">getConstructor</span><span style="color:#f92672">(</span>Params<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">).</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>params<span style="color:#f92672">);</span>	
+  	<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>然后在获取的时候，传递它的实例进去就可以了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">MyViewModelFactry f <span style="color:#f92672">=</span>  <span style="color:#66d9ef">new</span> MyViewModelFactory<span style="color:#f92672">(</span>params<span style="color:#f92672">);</span>
+mvm <span style="color:#f92672">=</span> ViewModelProviders<span style="color:#f92672">.</span><span style="color:#a6e22e">of</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span>f<span style="color:#f92672">).</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>MyViewModel<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span></code></pre></div>
+<p>这样就能够通过构造器向 VIewModel 传递参数了。</p>
+
+<blockquote>
+<p>注意：不建以让 ViewModel 持有Android 框架层的实例，如果需要 Context 的话，可以通过继承 <code>AndroidViewModel</code> 来实现</p>
+</blockquote>
+
+<h2 id="改造mvp">改造MVP</h2>
+
+<p>刚刚通过 <code>ViewModelProvider.Factory</code> 向 ViewModel 的构造器传递参数，结合 MVP ，可以让 ViewModel 承担 P 层的职责，而不仅仅是做一个数据的容器。我们接着<a href="https://clsrfish.github.io/Blog/posts/61434b2a.html">上一篇文章</a> 中的 MVP 继续改造：</p>
+
+<p>我们让 <code>AbsPresenter</code> 继承 <code>ViewModel</code> 并实现它的 <code>onClear()</code> 方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AbsPresenter</span><span style="color:#f92672">&lt;</span>V <span style="color:#66d9ef">extends</span> AbsView<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">extends</span> ViewModel <span style="color:#66d9ef">implements</span> LifecycleObserver <span style="color:#f92672">{</span>
+  	<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String TAG <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;AbsPresenter&#34;</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> CompositeDisposable compositeDisposable <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> CompositeDisposable<span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">private</span> WeakReference<span style="color:#f92672">&lt;</span>V<span style="color:#f92672">&gt;</span> view <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> WeakReference<span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setView</span><span style="color:#f92672">(</span>V v<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        view <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> WeakReference<span style="color:#f92672">&lt;&gt;(</span>v<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>v <span style="color:#66d9ef">instanceof</span> LifecycleOwner<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#f92672">((</span>LifecycleOwner<span style="color:#f92672">)</span> v<span style="color:#f92672">).</span><span style="color:#a6e22e">getLifecycle</span><span style="color:#f92672">().</span><span style="color:#a6e22e">addObserver</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">public</span> V <span style="color:#a6e22e">getView</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        V v <span style="color:#f92672">=</span> view<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>v <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>v <span style="color:#66d9ef">instanceof</span> Fragment <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">((</span>Fragment<span style="color:#f92672">)</span> v<span style="color:#f92672">).</span><span style="color:#a6e22e">isDetached</span><span style="color:#f92672">()</span> <span style="color:#f92672">||</span>
+                    v <span style="color:#66d9ef">instanceof</span> android<span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Fragment</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">((</span>android<span style="color:#f92672">.</span><span style="color:#a6e22e">app</span><span style="color:#f92672">.</span><span style="color:#a6e22e">Fragment</span><span style="color:#f92672">)</span> v<span style="color:#f92672">).</span><span style="color:#a6e22e">isDetached</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+              	view<span style="color:#f92672">.</span><span style="color:#a6e22e">clear</span><span style="color:#f92672">();</span>
+                <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> v<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">addDisposable</span><span style="color:#f92672">(</span>Disposable d<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        compositeDisposable<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>d<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@OnLifecycleEvent</span><span style="color:#f92672">(</span>Lifecycle<span style="color:#f92672">.</span><span style="color:#a6e22e">Event</span><span style="color:#f92672">.</span><span style="color:#a6e22e">ON_DESTROY</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onDestroy</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        Log<span style="color:#f92672">.</span><span style="color:#a6e22e">d</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;onDestroy called&#34;</span><span style="color:#f92672">);</span>
+        view<span style="color:#f92672">.</span><span style="color:#a6e22e">clear</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCleared</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        Log<span style="color:#f92672">.</span><span style="color:#a6e22e">d</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;onClear called&#34;</span><span style="color:#f92672">);</span>
+        compositeDisposable<span style="color:#f92672">.</span><span style="color:#a6e22e">clear</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span></code></pre></div>
+<p>根据 ViewModel 的生命周期，我们将 <code>compositeDisposable.clear()</code> 移动到了 <code>onClear()</code> 方法中，同时提供了一个 <code>getView()</code> 方法提供 V 层实例。</p>
+
+<h2 id="实例演示">实例演示</h2>
+
+<p>定义一个 Contract 接口：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">VMContract</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">VMView</span> <span style="color:#66d9ef">extends</span> BaseView <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onLoadMsg</span><span style="color:#f92672">(</span>String msg<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BaseVMPresenter</span> <span style="color:#66d9ef">extends</span> BasePresenter<span style="color:#f92672">&lt;</span>VMView<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">loadMsg</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>继承 <code>BaseVMPresenter</code> ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> VMPresenter <span style="color:#66d9ef">extends</span> BaseVMPresenter<span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> Repo local<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> Repo remote<span style="color:#f92672">;</span>
+    String msg<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">VMPresenter</span><span style="color:#f92672">(</span>Repo local<span style="color:#f92672">,</span> Repo remote<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">local</span> <span style="color:#f92672">=</span> local<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">remote</span> <span style="color:#f92672">=</span> remote<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">loadMsg</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>msg <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            getView<span style="color:#f92672">().</span><span style="color:#a6e22e">onLoadMsg</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;restored msg&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        Disposable disposable <span style="color:#f92672">=</span> Observable
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">fromCallable</span><span style="color:#f92672">(()</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+                    Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">sleep</span><span style="color:#f92672">(</span>5000<span style="color:#f92672">);</span>
+                    <span style="color:#66d9ef">return</span> remote<span style="color:#f92672">.</span><span style="color:#a6e22e">loadMsg</span><span style="color:#f92672">();</span>
+                <span style="color:#f92672">})</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">subscribeOn</span><span style="color:#f92672">(</span>Schedulers<span style="color:#f92672">.</span><span style="color:#a6e22e">io</span><span style="color:#f92672">())</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">observeOn</span><span style="color:#f92672">(</span>AndroidSchedulers<span style="color:#f92672">.</span><span style="color:#a6e22e">mainThread</span><span style="color:#f92672">())</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">subscribe</span><span style="color:#f92672">(</span>
+                        msg <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+                            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">msg</span> <span style="color:#f92672">=</span> msg<span style="color:#f92672">;</span>
+                            VMContract<span style="color:#f92672">.</span><span style="color:#a6e22e">VMView</span> view <span style="color:#f92672">=</span> getView<span style="color:#f92672">();</span>
+                            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>view <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                                view<span style="color:#f92672">.</span><span style="color:#a6e22e">onLoadMsg</span><span style="color:#f92672">(</span>msg<span style="color:#f92672">);</span>
+                            <span style="color:#f92672">}</span>
+                        <span style="color:#f92672">},</span>
+                        Throwable:<span style="color:#f92672">:</span>printStackTrace<span style="color:#f92672">,</span>
+                        <span style="color:#f92672">()</span> <span style="color:#f92672">-&gt;</span> Log<span style="color:#f92672">.</span><span style="color:#a6e22e">i</span><span style="color:#f92672">(</span>TAG<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;onComplete&#34;</span><span style="color:#f92672">)</span>
+                <span style="color:#f92672">);</span>
+        addDisposable<span style="color:#f92672">(</span>disposable<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Factory</span> <span style="color:#66d9ef">extends</span> ViewModelProvider<span style="color:#f92672">.</span><span style="color:#a6e22e">NewInstanceFactory</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">private</span> Repo local<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">private</span> Repo remote<span style="color:#f92672">;</span>
+
+        <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Factory</span><span style="color:#f92672">(</span>Repo local<span style="color:#f92672">,</span> Repo remote<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">local</span> <span style="color:#f92672">=</span> local<span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">remote</span> <span style="color:#f92672">=</span> remote<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+
+        <span style="color:#a6e22e">@NonNull</span>
+        <span style="color:#a6e22e">@Override</span>
+        <span style="color:#66d9ef">public</span> <span style="color:#f92672">&lt;</span>T <span style="color:#66d9ef">extends</span> ViewModel<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">create</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NonNull</span> Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> modelClass<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>modelClass<span style="color:#f92672">.</span><span style="color:#a6e22e">isAssignableFrom</span><span style="color:#f92672">(</span>VMPresenter<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">return</span> modelClass<span style="color:#f92672">.</span><span style="color:#a6e22e">getConstructor</span><span style="color:#f92672">(</span>Repo<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">,</span> Repo<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">)</span>
+                            <span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>local<span style="color:#f92672">,</span> remote<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>InstantiationException <span style="color:#f92672">|</span> IllegalAccessException <span style="color:#f92672">|</span> NoSuchMethodException <span style="color:#f92672">|</span> InvocationTargetException e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    e<span style="color:#f92672">.</span><span style="color:#a6e22e">printStackTrace</span><span style="color:#f92672">();</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>modelClass<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里 <code>VMPresenter</code> 有两个 Repo 依赖，所以还需要创建一个 <code>Factory</code>。</p>
+
+<p>最后就是让 Activity 实现接口并使用 VMPresenter：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> VMActivity <span style="color:#66d9ef">extends</span> AppCompatActivity <span style="color:#66d9ef">implements</span> VMView<span style="color:#f92672">{</span>
+  	<span style="color:#66d9ef">private</span> BaseVMPresenter p<span style="color:#f92672">;</span>
+    
+  	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(...){</span>
+        VMPresenter<span style="color:#f92672">.</span><span style="color:#a6e22e">Factory</span> factory <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> VMPresenter<span style="color:#f92672">.</span><span style="color:#a6e22e">Factory</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> LocalRepo<span style="color:#f92672">(),</span> <span style="color:#66d9ef">new</span> RemoteRepo<span style="color:#f92672">());</span>
+        VMPresenter presenter <span style="color:#f92672">=</span> ViewModelProviders<span style="color:#f92672">.</span><span style="color:#a6e22e">of</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> factory<span style="color:#f92672">).</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>VMPresenter<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+        presenter<span style="color:#f92672">.</span><span style="color:#a6e22e">setView</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        presenter<span style="color:#f92672">.</span><span style="color:#a6e22e">loadMsg</span><span style="color:#f92672">();</span>
+  	<span style="color:#f92672">}</span>
+
+  	<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">showMsg</span><span style="color:#f92672">(</span>String msg<span style="color:#f92672">){</span>
+    	Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">makeText</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> msg<span style="color:#f92672">,</span> Toast<span style="color:#f92672">.</span><span style="color:#a6e22e">LENGTH_SHORT</span><span style="color:#f92672">).</span><span style="color:#a6e22e">show</span><span style="color:#f92672">();</span>
+  	<span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>运行后我们先等第一次弹出 Toast ，然后再旋转屏幕，看看是不是会有另一个 toast 弹出。可以看出，这里没有对 <code>savedInstanceState</code> 进行判断，直接获取 presenter 实例，逻辑也很清晰，如果你对屏幕旋转前后的 presenter 是不是同一个实例持怀疑态度的话，可以打印 log 来进行验证。</p>
+
+<h2 id="小问题">小问题</h2>
+
+<p>虽然 Presenter 结合 ViewModel 的特性能够使它在屏幕旋转中生存下来，但是我们发现，一旦 Presenter 需要依赖其他模块来完成功能（这非常常见），为了兼顾单元测试和代码优雅性，就要给它添加有参构造器，继而需要为它创建 <code>Factory</code> 。我们都知道，MVP 为人所诟病的一点就是要定义接口，现在又要多定义一个 <code>Factory</code> 。再一个，我们可以发现这个 Factory 啊，它是有套路的，进一步可以得到这样的公式 ： <code>Factory  = f( params of presetner'constructor )</code> 。每次都写这样的类并不会提高我们的技术，只能凑凑代码量，所以我们需要把这个锅丢给编译器，让这个 Factory 能够自动生成。
+这里安利一下我自己造的轮子—— <a href="https://github.com/dashMrl/AutoVM">AutoVM</a> ，只需要在构造器上添加一个注解，就可以生成 Factory 了。
+欢迎 star hhh！！！</p>
+
+<h2 id="总结">总结</h2>
+
+<p>刚接触这一套框架的时候，觉得应该围绕这一套框架为核心来构思架构，但是后来发现，相对于 MVP ，并没有太多优势。现在换个角度，将它们作为 MVP 的辅助，为现有 MVP 提供更加有趣的特性，所以，官方文档上的演示可能只是为了展示这一套框架能够发挥出什么样的威力。</p>
+
+<p>完整代码在 <a href="https://github.com/dashMrl/Android_Demos/tree/8f9e0472f97ad669945d84b4bc7c8723759045c6">这里</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/viewmodel"><span class="tag">ViewModel</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android-architecture-components"><span class="tag">Android Architecture Components</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>495</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

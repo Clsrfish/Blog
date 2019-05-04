@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Docker 安装</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="这篇文章真不知道怎么写描述，很尴尬的开头。 只是简单的记录一下 Docker 的安装和常用的操作命令。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Docker 安装" />
+    <meta name="twitter:description" content="这篇文章真不知道怎么写描述，很尴尬的开头。 只是简单的记录一下 Docker 的安装和常用的操作命令。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Docker 安装" />
+  <meta property="og:description" content="这篇文章真不知道怎么写描述，很尴尬的开头。 只是简单的记录一下 Docker 的安装和常用的操作命令。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/ed49b344/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/ed49b344/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Docker 安装</h1>
+      <p class="post-meta">@Clsrfish · Jan 8, 2018 · 3 min read</p>
+    </header>
+    <article class="post-content"><p>这篇文章真不知道怎么写描述，很尴尬的开头。
+只是简单的记录一下 Docker 的安装和常用的操作命令。</p>
+
+<h2 id="安装">安装</h2>
+
+<blockquote>
+<p>这里安装的是 Docker-ce，满足我们的学习需求是完全没有问题的</p>
+
+<p>我使用的是 Ubuntu 17.04</p>
+</blockquote>
+
+<h3 id="系统要求">系统要求</h3>
+
+<p>Docker 要求我们的操作系统（Ubuntu）必须是 64-bit，同时必须是下面这些版本：
+- Artful 17.10 (Docker CE 17.11 Edge and higher only)
+- Zesty 17.04
+- Xenial 16.04 (LTS)
+- Trusty 14.04 (LTS)</p>
+
+<blockquote>
+<p>虽然可能不是这些版本也能安装成功，但是可能官方文档上的一些操作可能会执行失败，所以最妥当的方法就是使用长期支持版本（LTS）</p>
+</blockquote>
+
+<h3 id="卸载旧版本">卸载旧版本</h3>
+
+<p>Docker 目前版本和之前的版本名称有改变，所以需要卸载以前的版本，如果这是你第一次安装的话，可以跳过。
+终端执行一下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo apt remove docker docker-engine docker.io</code></pre></div>
+<blockquote>
+<p>你的镜像、容器等不会被一起清除，它们还呆在 <code>/var/lib/docker/</code> 目录下</p>
+</blockquote>
+
+<h3 id="安装-1">安装</h3>
+
+<p>安装方式有 <strong>从源安装</strong> 和 <strong>安装包安装</strong> 两种，这里选择前者进行演示。</p>
+
+<h4 id="配置源">配置源</h4>
+
+<h5 id="更新源">更新源</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo apt-get update</code></pre></div>
+<h5 id="安装-https-证书">安装 HTTPS 证书</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo apt-get install <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    apt-transport-https <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    ca-certificates <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    curl <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    software-properties-common</code></pre></div>
+<h5 id="添加-docker-官方-gpg-密钥">添加 Docker 官方 GPG 密钥</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</code></pre></div>
+<p>如果密钥添加成功，那么源列表里面会有指纹（fingerprint）为 <code>9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88</code> 的 key，这里通过搜索后八位指纹来验证下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo apt-key fingerprint 0EBFCD88
+
+pub   4096R/0EBFCD88 <span style="color:#ae81ff">2017</span>-02-22
+      Key fingerprint <span style="color:#f92672">=</span> 9DC8 <span style="color:#ae81ff">5822</span> 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+uid                  Docker Release <span style="color:#f92672">(</span>CE deb<span style="color:#f92672">)</span> &lt;docker@docker.com&gt;
+sub   4096R/F273FCD8 <span style="color:#ae81ff">2017</span>-02-22</code></pre></div>
+<h5 id="配置稳定版的源">配置稳定版的源</h5>
+
+<p>因为机器属于 x86_64/amd64 所以执行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo add-apt-repository <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>   <span style="color:#e6db74">&#34;deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+</span><span style="color:#e6db74">   </span><span style="color:#66d9ef">$(</span>lsb_release -cs<span style="color:#66d9ef">)</span><span style="color:#e6db74"> \
+</span><span style="color:#e6db74">   stable&#34;</span></code></pre></div>
+<h4 id="开始安装">开始安装</h4>
+
+<h5 id="再次更新源列表">再次更新源列表</h5>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo apt-get update</code></pre></div>
+<h5 id="安装指定版本-docker">安装指定版本 Docker</h5>
+
+<p>因为生产环境中最好是选定一个版本后就基本保持不变，所以这里来制定安装版本，而不是一股脑直接装最新版。</p>
+
+<p>先执行一下命令看看有哪些版本可供选择：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ apt-cache madison docker-ce
+
+ docker-ce | <span style="color:#ae81ff">17</span>.12.0~ce-0~ubuntu | https://download.docker.com/linux/ubuntu zesty/stable amd64 Packages
+ docker-ce | <span style="color:#ae81ff">17</span>.09.1~ce-0~ubuntu | https://download.docker.com/linux/ubuntu zesty/stable amd64 Packages
+ docker-ce | <span style="color:#ae81ff">17</span>.09.0~ce-0~ubuntu | https://download.docker.com/linux/ubuntu zesty/stable amd64 Packages
+ docker-ce | <span style="color:#ae81ff">17</span>.06.2~ce-0~ubuntu | https://download.docker.com/linux/ubuntu zesty/stable amd64 Packages
+ docker-ce | <span style="color:#ae81ff">17</span>.06.1~ce-0~ubuntu | https://download.docker.com/linux/ubuntu zesty/stable amd64 Packages
+ docker-ce | <span style="color:#ae81ff">17</span>.06.0~ce-0~ubuntu | https://download.docker.com/linux/ubuntu zesty/stable amd64 Packages</code></pre></div>
+<p>输出中 <code>17.12.0~ce-0~ubuntu</code> 的字样就是版本号了，这里选择最新的版本安装：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo apt install docker-ce<span style="color:#f92672">=</span><span style="color:#ae81ff">17</span>.12.0~ce-0~ubuntu</code></pre></div>
+<p><code>=</code> 号后面接你想安装的版本</p>
+
+<h5 id="验证">验证</h5>
+
+<p>跑一个 HelloWorld 看看 Docker 有没有安装成功：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo docker run hello-world</code></pre></div>
+<p>如果得到下面的输出就证明安装成功了，否则再回过头看看哪里出了错：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">Unable to find image <span style="color:#e6db74">&#39;hello-world:latest&#39;</span> locally
+latest: Pulling from library/hello-world
+ca4f61b1923c: Pull complete 
+Digest: sha256:ca0eeb6fb05351dfc8759c20733c91def84cb8007aa89a5bf606bc8b315b9fc7
+Status: Downloaded newer image <span style="color:#66d9ef">for</span> hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ <span style="color:#ae81ff">1</span>. The Docker client contacted the Docker daemon.
+ <span style="color:#ae81ff">2</span>. The Docker daemon pulled the <span style="color:#e6db74">&#34;hello-world&#34;</span> image from the Docker Hub.
+    <span style="color:#f92672">(</span>amd64<span style="color:#f92672">)</span>
+ <span style="color:#ae81ff">3</span>. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ <span style="color:#ae81ff">4</span>. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://cloud.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/engine/userguide/</code></pre></div>
+<h3 id="后续配置">后续配置</h3>
+
+<p>完成基本安装后，还可以通过一些设置来提高使用的便捷性。</p>
+
+<h4 id="添加当前用户到-docker-用户组">添加当前用户到 docker 用户组</h4>
+
+<p>完成最基本的安装后，虽然可以使用，但是每次都需要加上 <code>sudo</code> ，这是因为 docker daemon 进程是绑定在 Unix socket 上，并且默认地 Unix socket 属于 root 用户。如果想避免每次都使用 <code>sudo</code> 进行操作，可以创建一个叫 <code>docker</code> 的 Unix 用户组，然后将当前登录的用户添加进去：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo groupadd docker
+$ sudo usermod -aG docker $USER</code></pre></div>
+<h4 id="开机自启">开机自启</h4>
+
+<p>大多数 Linux 发行版（RHEL，CentOS，Fedora，Ubuntu1604及以上）使用 <code>systemd</code> 管理开机自启的服务：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo systemctl enable/disable docker</code></pre></div>
+<p>到这里也就安装好了。</p>
+
+<blockquote>
+<p>关于 docker 提供的其他命令，建议直接看 <a href="https://docs.docker.com/engine/reference/commandline/cli/">官方文档</a> 里介绍.</p>
+</blockquote></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/docker"><span class="tag">Docker</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/ubutnu"><span class="tag">Ubutnu</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>480</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>[Flutter] Dart 异步编程</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content=" 基于 Dart VM version: 2.1.0-dev.4.0.flutter-4eb879133a (Tue Sep 18 19:20:33 2018 &#43;0000) on &amp;ldquo;macos_x64&amp;rdquo;
+ Dart 基础库提供了大量返回值类型为 Future 和 Stream 的函数，这些函数都是异步函数，当调用这些函数的时候，函数在完成一些“基础配置“后就会立马返回，而不是等待函数执行完成。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="[Flutter] Dart 异步编程" />
+    <meta name="twitter:description" content=" 基于 Dart VM version: 2.1.0-dev.4.0.flutter-4eb879133a (Tue Sep 18 19:20:33 2018 &#43;0000) on &amp;ldquo;macos_x64&amp;rdquo;
+ Dart 基础库提供了大量返回值类型为 Future 和 Stream 的函数，这些函数都是异步函数，当调用这些函数的时候，函数在完成一些“基础配置“后就会立马返回，而不是等待函数执行完成。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="[Flutter] Dart 异步编程" />
+  <meta property="og:description" content=" 基于 Dart VM version: 2.1.0-dev.4.0.flutter-4eb879133a (Tue Sep 18 19:20:33 2018 &#43;0000) on &amp;ldquo;macos_x64&amp;rdquo;
+ Dart 基础库提供了大量返回值类型为 Future 和 Stream 的函数，这些函数都是异步函数，当调用这些函数的时候，函数在完成一些“基础配置“后就会立马返回，而不是等待函数执行完成。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/c773f50199233831a2379fde98a7b3eb/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/c773f50199233831a2379fde98a7b3eb/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">[Flutter] Dart 异步编程</h1>
+      <p class="post-meta">@Clsrfish · Sep 24, 2018 · 3 min read</p>
+    </header>
+    <article class="post-content"><blockquote>
+<p>基于 Dart VM version: 2.1.0-dev.4.0.flutter-4eb879133a (Tue Sep 18 19:20:33 2018 +0000) on &ldquo;macos_x64&rdquo;</p>
+</blockquote>
+
+<p>Dart 基础库提供了大量返回值类型为 <code>Future</code>  和 <code>Stream</code> 的函数，这些函数都是异步函数，当调用这些函数的时候，函数在完成一些“基础配置“后就会立马返回，而不是等待函数执行完成。</p>
+
+<h2 id="future">Future</h2>
+
+<p>在 JS 世界里，有 <code>Promise</code> ，Dart 中相应实现为 <code>Future</code> 。在语意上，<code>Future</code> 表示将来某个时间开始并完成的事情的结果，这和 <code>Promise</code> 含义相近。</p>
+
+<p>下面是一个简单🌰：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) {
+  <span style="color:#66d9ef">new</span> Future(() {
+    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;success&#34;</span>;
+  }).then((s) {
+    print(s);
+  });
+  print(<span style="color:#e6db74">&#34;main&#34;</span>);
+}
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * 输出
+</span><span style="color:#75715e"> * main
+</span><span style="color:#75715e"> * success
+</span><span style="color:#75715e"> */</span></code></pre></div>
+<p>所以可以知道 Future 在创建后立马返回，而不是执行里面的方法体。</p>
+
+<h3 id="异常处理">异常处理</h3>
+
+<p>Future 异常处理有两种方式，一种是通过 <code>then</code> 函数的<strong>可选命名参数</strong>：<code>onError</code>；第二种是通过 <code>catchError</code> 方法。不过更加完善的异常处理一般是两个方式配合使用，看🌰：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) {
+  <span style="color:#66d9ef">new</span> Future(() {
+    <span style="color:#66d9ef">throw</span> Exception(<span style="color:#e6db74">&#34;the first exception&#34;</span>);
+  }).then((_) <span style="color:#f92672">=&gt;</span> <span style="color:#ae81ff">12</span>, onError: (e) {
+    print(<span style="color:#e6db74">&#39;onError callback: </span><span style="color:#e6db74">${</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>);
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">123</span>;
+  }).then((s) {
+    <span style="color:#66d9ef">throw</span> Exception(<span style="color:#e6db74">&#34;the second exception:</span><span style="color:#e6db74">${</span>s<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>);
+  }).catchError((e) {
+    print(<span style="color:#e6db74">&#34;catch </span><span style="color:#e6db74">${</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>);
+  });
+}
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * 输出
+</span><span style="color:#75715e"> * onError callback: Exception: the first exception
+</span><span style="color:#75715e"> * catch Exception: the second exception:123
+</span><span style="color:#75715e"> */</span></code></pre></div>
+<p>从结果上看，<code>onError</code> 和 <code>catchError</code> 都可以接受到之前发生的错误，但是这两个处理的使用场景还是有细微的 差别。</p>
+
+<h2 id="stream">Stream</h2>
+
+<p><code>Stream</code> 表示一系列数据或事件，比如点击时间和通知等。</p>
+
+<p>这里直接看例子：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) {
+  Directory(<span style="color:#e6db74">&#34;/usr/local&#34;</span>).list(recursive: <span style="color:#66d9ef">false</span>, followLinks: <span style="color:#66d9ef">false</span>).listen(
+      (entity) {
+    print(entity.path);
+  }, onDone: () {
+    print(<span style="color:#e6db74">&#34;onDone&#34;</span>);
+  }, onError: (e) {
+    print(<span style="color:#e6db74">&#34;onError: </span><span style="color:#e6db74">${</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>);
+  }, cancelOnError: <span style="color:#66d9ef">false</span>);
+  print(<span style="color:#e6db74">&#34;main&#34;</span>);
+}</code></pre></div>
+<p>输出结果中，会先输出 &ldquo;main&rdquo;。</p>
+
+<p><code>Stream</code> 在调用 <code>listen</code> 方法之后会建立一个<strong>订阅关系</strong>，然后发送数据。</p>
+
+<p><code>Stream</code> 也分为两种：&rdquo;Single-subscription&rdquo; 和 &ldquo;broadcast&rdquo;，前者表示只能有一个监听者，即只能调用 <code>listen</code> 调用一次；后者表示一种多播模式，可以调用多次 <code>listen</code> 与多个监听者建立订阅关系。</p>
+
+<h2 id="async-await">async &amp; await</h2>
+
+<p>前面 <code>Future</code> 在处理单次简单的异步任务时表现优异，但是当面对多次异步需求，比如两次网络请求，第二次请求依赖第一次请求的返回结果（当然这只是最简单的场景），就会出现类似<strong>回调地狱</strong>的问题。<code>async</code>  和 <code>await</code> 就是应对这样在问题语法层面的一种方式，它们使得<strong>异步调用</strong>变得像同步调用那样顺畅。</p>
+
+<blockquote>
+<p>和 JS 一样，await 只能在 async 函数内部使用</p>
+</blockquote>
+
+<h3 id="async-函数">async 函数</h3>
+
+<p>async 函数和普通函数的声明方式基本没差别，你只需要在方法体之前加上 <code>async</code> 关键字就OK 了，比如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">[Future<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>] getInt() <span style="color:#66d9ef">async</span>{
+    <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">2333</span>;
+}</code></pre></div>
+<p>除了增加了修饰符，也将返回值类型使用 <code>Future</code> 进行了包装，但是奇妙的是你并不需要自己将返回值进行包装，Dart 会帮你，如果你想自己手动包装也没问题。</p>
+
+<h3 id="await-表达式">await 表达式</h3>
+
+<p>我们先看看怎么调用 async 函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) {
+  getInt().then(print);
+  print(<span style="color:#e6db74">&#34;main&#34;</span>);
+}
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * 输出
+</span><span style="color:#75715e"> * main
+</span><span style="color:#75715e"> * 2333
+</span><span style="color:#75715e"> */</span></code></pre></div>
+<p>假如想要 “main” 在 “2333” 之后输出，那么可以改成这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) {
+  getInt().then((i){
+    print(i);
+	print(<span style="color:#e6db74">&#34;main&#34;</span>);        
+  });
+}</code></pre></div>
+<p>问题得到了解决，但是面对更复杂的场景时，回调地狱还是会发生，这个时候再做做修改：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) <span style="color:#66d9ef">async</span> {
+  <span style="color:#66d9ef">var</span> i <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> getInt();
+  print(i);
+  print(<span style="color:#e6db74">&#34;main&#34;</span>);
+}</code></pre></div>
+<p>可以看到 main 函数变成了 async 函数，同时第2行使用了 <code>await</code> 关键字。通过这样的改造，本来是异步的 <code>getInt()</code> 变成了同步的，整个调用流程看起来也更加流畅了。</p>
+
+<h3 id="实例代码">实例代码</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">Future<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> _getUserInfo() <span style="color:#66d9ef">async</span> {
+  print(<span style="color:#e6db74">&#34;_getUserInfo1&#34;</span>);
+  <span style="color:#66d9ef">await</span> <span style="color:#66d9ef">new</span> Future.delayed(<span style="color:#66d9ef">new</span> Duration(milliseconds: <span style="color:#ae81ff">3000</span>), () {
+    print(<span style="color:#e6db74">&#34;耗时操作&#34;</span>);
+    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;耗时操作完成&#34;</span>;
+  }).then((r) <span style="color:#f92672">=&gt;</span> print(r));
+  <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#34;我是用户&#34;</span>;
+}
+
+<span style="color:#66d9ef">void</span> _loadUserInfo() <span style="color:#66d9ef">async</span> {
+  print(<span style="color:#e6db74">&#34;_loadUserInfo1&#34;</span>);
+  <span style="color:#66d9ef">var</span> s <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#e6db74">&#34;something&#34;</span>;
+  print(s);
+  print(<span style="color:#66d9ef">await</span> _getUserInfo());
+  print(<span style="color:#e6db74">&#34;_loadUserInfo2&#34;</span>);
+}
+
+main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) {
+  print(<span style="color:#e6db74">&#34;main1&#34;</span>);
+  _loadUserInfo();
+  print(<span style="color:#e6db74">&#34;main2&#34;</span>);
+}
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * 输出结果
+</span><span style="color:#75715e"> * main1
+</span><span style="color:#75715e"> * _loadUserInfo1
+</span><span style="color:#75715e"> * main2
+</span><span style="color:#75715e"> * something
+</span><span style="color:#75715e"> * _getUserInfo1
+</span><span style="color:#75715e"> * 耗时操作
+</span><span style="color:#75715e"> * 耗时操作完成
+</span><span style="color:#75715e"> * 我是用户
+</span><span style="color:#75715e"> * _loadUserInfo2
+</span><span style="color:#75715e"> */</span></code></pre></div>
+<p>这里可以看到 <code>async</code> 函数会一直执行直到 <code>await</code> 或 <code>return</code>，然后立即返回。</p>
+
+<h2 id="sync-async-yield-yield">sync* &amp; async* &amp; yield &amp; yield*</h2>
+
+<p>在学习 Future、async、await 之后，接着聊聊 <strong>Generator</strong> （毕竟是想要取代 JS 的语言）。</p>
+
+<p>关于 Generator，可以理解成一系列等待计算的序列。Dart 通过 sync*、async* 等关键字帮助开发者快速实现自己的生成器。</p>
+
+<blockquote>
+<p>这里我们可以将 async* 看作 async 的加强版，即你可以在 async* 函数里面使用 await</p>
+</blockquote>
+
+<h3 id="同步-genrator">同步 Genrator</h3>
+
+<p>同步 generator 函数返回值是 <code>Iterable</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">Iterable naturalsTo(n) <span style="color:#66d9ef">sync</span><span style="color:#f92672">*</span> {
+  <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+  <span style="color:#66d9ef">while</span> (k <span style="color:#f92672">&lt;</span> n) <span style="color:#66d9ef">yield</span> k<span style="color:#f92672">++</span>;
+}</code></pre></div>
+<p>上面代码就实现了一个简单 Generator，调用 <code>naturalsTo</code> 后会得到一个 Iterable，但是<strong>方法体</strong>并不会立即执行。调用这个 Iterable 的 iterator 的 <code>moveNext()</code>，方法体会执行到 <code>yield</code> 语句（包含该语句）为止，并能通过 <code>iterator.current</code> 拿到 yield 表达式的返回值。</p>
+
+<h3 id="异步-genrator">异步 Genrator</h3>
+
+<p>异步 generator 函数返回值是 <code>Stream</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">Stream asynchronousNaturalsTo(n) <span style="color:#66d9ef">async</span><span style="color:#f92672">*</span> {
+  <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+  <span style="color:#66d9ef">while</span> (k <span style="color:#f92672">&lt;</span> n) <span style="color:#66d9ef">yield</span> k<span style="color:#f92672">++</span>;
+}</code></pre></div>
+<p>同样，调用 <code>asynchronousNaturalsTo</code> 立即得到一个 <code>Stream</code> ，<strong>方法体</strong>也是直到调用 <code>listen</code> 之后才会执行。当执行到 <code>yield</code> 时，计算得到的结果会推给 listener，同时继续执行止步到下一句 <code>yield</code> 之前。</p>
+
+<h3 id="实例代码-1">实例代码</h3>
+
+<p>上面的描述还是比较抽象，看起来同步异步 Generator 似乎并没有差别，我们看下下面代码的运行结果来具体感受一下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) <span style="color:#66d9ef">async</span> {
+  n2Sync(<span style="color:#ae81ff">3</span>).first;
+  n2Async(<span style="color:#ae81ff">3</span>).first;
+  print(<span style="color:#e6db74">&#34;main&#34;</span>);
+}
+
+Iterable n2Sync(n) <span style="color:#66d9ef">sync</span><span style="color:#f92672">*</span> {
+  <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+  <span style="color:#66d9ef">while</span> (k <span style="color:#f92672">&lt;</span> n) {
+    print(<span style="color:#e6db74">&#34;n2Sync before:</span><span style="color:#e6db74">${</span>k<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>);
+    <span style="color:#66d9ef">yield</span> k<span style="color:#f92672">++</span>;
+    print(<span style="color:#e6db74">&#34;n2Sync after:</span><span style="color:#e6db74">${</span>k<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>);
+  }
+}
+
+Stream n2Async(n) <span style="color:#66d9ef">async</span><span style="color:#f92672">*</span> {
+  <span style="color:#66d9ef">int</span> k <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+  <span style="color:#66d9ef">while</span> (k <span style="color:#f92672">&lt;</span> n) {
+    print(<span style="color:#e6db74">&#34;n2async before:</span><span style="color:#e6db74">${</span>k<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>);
+    <span style="color:#66d9ef">yield</span> k<span style="color:#f92672">++</span>;
+    print(<span style="color:#e6db74">&#34;n2async after:</span><span style="color:#e6db74">${</span>k<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>);
+  }
+}
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * 输出
+</span><span style="color:#75715e"> * n2Sync before:0
+</span><span style="color:#75715e"> * main
+</span><span style="color:#75715e"> * n2async before:0
+</span><span style="color:#75715e"> * n2async after:1
+</span><span style="color:#75715e"> * n2async before:1
+</span><span style="color:#75715e"> */</span></code></pre></div>
+<p>当调用变成这样时：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) <span style="color:#66d9ef">async</span> {
+  n2Sync(<span style="color:#ae81ff">3</span>).forEach(print);
+  n2Async(<span style="color:#ae81ff">3</span>).forEach(print);
+  print(<span style="color:#e6db74">&#34;main&#34;</span>);
+}
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * 输出
+</span><span style="color:#75715e"> * n2Sync before:0
+</span><span style="color:#75715e"> * 0
+</span><span style="color:#75715e"> * n2Sync after:1
+</span><span style="color:#75715e"> * n2Sync before:1
+</span><span style="color:#75715e"> * 1
+</span><span style="color:#75715e"> * n2Sync after:2
+</span><span style="color:#75715e"> * n2Sync before:2
+</span><span style="color:#75715e"> * 2
+</span><span style="color:#75715e"> * n2Sync after:3
+</span><span style="color:#75715e"> * main
+</span><span style="color:#75715e"> * n2async before:0
+</span><span style="color:#75715e"> * 0
+</span><span style="color:#75715e"> * n2async after:1
+</span><span style="color:#75715e"> * n2async before:1
+</span><span style="color:#75715e"> * 1
+</span><span style="color:#75715e"> * n2async after:2
+</span><span style="color:#75715e"> * n2async before:2
+</span><span style="color:#75715e"> * 2
+</span><span style="color:#75715e"> * n2async after:3
+</span><span style="color:#75715e"> */</span></code></pre></div>
+<p>⚠️注意看 “main” 的输出位置，这样大概就能理解同步异步生成器的区别了。</p>
+
+<h3 id="递归调用">递归调用</h3>
+
+<p>假如存在递归调用，则可以这样写：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">Iterable naturalsDownFrom(n) <span style="color:#66d9ef">sync</span><span style="color:#f92672">*</span> {
+  <span style="color:#66d9ef">if</span> (n <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
+     <span style="color:#66d9ef">yield</span> n;
+     <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#66d9ef">in</span> naturalsDownFrom(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)) { <span style="color:#66d9ef">yield</span> i; }
+  }
+}
+<span style="color:#f92672">//</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">1</span> </code></pre></div>
+<p>不过我们可以通过 <code>yield*</code> 简化上述代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">Iterable naturalsDownFrom(n) <span style="color:#66d9ef">sync</span><span style="color:#f92672">*</span> {
+  <span style="color:#66d9ef">if</span> ( n <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) {
+    <span style="color:#66d9ef">yield</span> n;
+    <span style="color:#66d9ef">yield</span><span style="color:#f92672">*</span> naturalsDownFrom(n<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>);
+ }
+}</code></pre></div>
+<blockquote>
+<p>异步 Generator 同理</p>
+</blockquote>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://www.dartlang.org/guides/language/language-tour#asynchrony-support">https://www.dartlang.org/guides/language/language-tour#asynchrony-support</a></p>
+
+<p><a href="https://www.dartlang.org/articles/language/await-async">https://www.dartlang.org/articles/language/await-async</a></p>
+
+<p><a href="https://www.dartlang.org/articles/language/beyond-async">https://www.dartlang.org/articles/language/beyond-async</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>222</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

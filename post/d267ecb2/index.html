@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Dagger2 上手指南</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="在 Java 的开发中，怎么利用各种设计模式和架构设计来解耦、提高拓展性，似乎已经成了一名 Java 开发人员的必修课。在一些大型系统中，还会有各种听起来高大上的名词，如 IOC、OSGI、CGLIB 等。所以这里我们就来讲讲 IOC 的一个实现框架——Dagger2。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Dagger2 上手指南" />
+    <meta name="twitter:description" content="在 Java 的开发中，怎么利用各种设计模式和架构设计来解耦、提高拓展性，似乎已经成了一名 Java 开发人员的必修课。在一些大型系统中，还会有各种听起来高大上的名词，如 IOC、OSGI、CGLIB 等。所以这里我们就来讲讲 IOC 的一个实现框架——Dagger2。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Dagger2 上手指南" />
+  <meta property="og:description" content="在 Java 的开发中，怎么利用各种设计模式和架构设计来解耦、提高拓展性，似乎已经成了一名 Java 开发人员的必修课。在一些大型系统中，还会有各种听起来高大上的名词，如 IOC、OSGI、CGLIB 等。所以这里我们就来讲讲 IOC 的一个实现框架——Dagger2。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/d267ecb2/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/d267ecb2/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Dagger2 上手指南</h1>
+      <p class="post-meta">@Clsrfish · Dec 31, 2017 · 4 min read</p>
+    </header>
+    <article class="post-content"><p>在 Java 的开发中，怎么利用各种设计模式和架构设计来解耦、提高拓展性，似乎已经成了一名 Java 开发人员的必修课。在一些大型系统中，还会有各种听起来高大上的名词，如 IOC、OSGI、CGLIB 等。所以这里我们就来讲讲 IOC 的一个实现框架——Dagger2。</p>
+
+<h2 id="ioc-di">IOC/DI</h2>
+
+<blockquote>
+<p>什么是 IOC（inverse of control）？</p>
+</blockquote>
+
+<p>IOC 是一种面向对象编程中的一种设计原则，主要用来降低代码之间的耦合度。主要手段是通过 <strong>第三方工具</strong> 实现具有依赖关系代码之间的解耦。</p>
+
+<p>IOC 名称的含义？</p>
+
+<p>考虑两种情况：</p>
+
+<ul>
+<li>类 A 需要类 B 的实例，A通过 new 关键字来创建实例，这时创建和使用都是 A 做主。</li>
+<li>类 A 需要类 B 的实例，但是并没有主动使用 new 关键字，这时 A 只能被动接受外部传递给它的实例。</li>
+</ul>
+
+<p>对比两种情况，第二种情况中 A 失去了对 B 的控制权，获取 B 的过程由主动变为被动。</p>
+
+<blockquote>
+<p>什么是 DI（Dependency Injection）？</p>
+</blockquote>
+
+<p>DI 就是将某个实例通过某种方式传递给需要这个实例的地方。</p>
+
+<blockquote>
+<p>IOC 与 DI</p>
+</blockquote>
+
+<ul>
+<li>IOC 是一种工程思想</li>
+<li>DI 是一种设计模式，一种手段</li>
+</ul>
+
+<h2 id="dagger2">Dagger2</h2>
+
+<blockquote>
+<p>latest version 2.13</p>
+</blockquote>
+
+<p>Dagger2 是一个针对 Java  和 Android 的 <strong>静态</strong>、<strong>编译时运行</strong> 的依赖注入框架。因为是编译时运行，避免了在运行时使用反射所带来的性能开销，非常适合一些性能敏感的场景。</p>
+
+<h3 id="场景分析">场景分析</h3>
+
+<p>首先看一下初学 Java 时会写出的代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">A</span><span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">private</span> B b <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> B<span style="color:#f92672">();</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">A</span><span style="color:#f92672">(){}</span>
+<span style="color:#f92672">}</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">B</span><span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">B</span><span style="color:#f92672">(){}</span>  
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里有几个问题：</p>
+
+<ul>
+<li>A 对 B 的依赖程度非常高，当出现一个 NewB 的时候，需要修改 A 代码，不符合开闭原则</li>
+<li>不利于单元测试，无法使用 mock B 对象</li>
+</ul>
+
+<p>考虑上述两个问题，可以改造成这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">A</span><span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">private</span> BaseB b<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">A</span><span style="color:#f92672">(</span>BaseB b<span style="color:#f92672">){</span>
+    <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">b</span> <span style="color:#f92672">=</span> b<span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BaseB</span><span style="color:#f92672">{}</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">B</span> <span style="color:#66d9ef">extends</span> BaseB<span style="color:#f92672">{}</span></code></pre></div>
+<p>这样，之前的两个问题都解决了。</p>
+
+<p>现在再来思考一种情况：</p>
+
+<p>假如 A 是有状态的，并且很多功能模块使用到了 A，那么会有很多地方存在创建 A 实例的动作，然后因为需求不同还需要不同的 BaseB 子类。如果这时候产经突然改需求，导致我们的的 A 又需要依赖 C ，按照上一步的思想，我们可能需要给 A 构造函数添加一个参数，这时候使用到了 A 的地方就都得修改，虽然不是什么难事，但是效率（投入产出比）十分之低。</p>
+
+<p>Dagger2 的可以比较完美的解决这个问题。</p>
+
+<h3 id="核心注解">核心注解</h3>
+
+<p>先来看几个 Dagger2 最主要的四个注解。</p>
+
+<h4 id="inject">@Inject</h4>
+
+<p>这个不是 Dagger2 提供的注解，而是 java 依赖注入规范提供的注解。<code>Inject</code> 可以用在 <strong>成员属性</strong>、<strong>构造方法</strong>、<strong>成员方法</strong> 上，对应于每一种情况都会有不同的作用，这里用表格来归纳下：</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">使用对象</th>
+<th align="left">效果</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">构造器</td>
+<td align="left">表示可以使用这个构造器来对外提供实例</td>
+</tr>
+
+<tr>
+<td align="left">成员属性</td>
+<td align="left">表示这个属性需要被注入</td>
+</tr>
+
+<tr>
+<td align="left">方法</td>
+<td align="left">表示这个方法在依赖注入的最后阶段会被调用</td>
+</tr>
+</tbody>
+</table>
+
+<p>这里有几点需要注意：
+- 注入优先级： 构造器 &gt; 成员属性 &gt; 方法
+- 只能有一个构造器被 <code>@Inject</code> 标注，访问权限不能是 <code>private</code>
+- 成员属性 被注入的顺序不能保证
+- 方法 被调用的顺序不能保证</p>
+
+<h4 id="module">@Module</h4>
+
+<p>被 <code>@Module</code> 标注的类表明这个类会参与 <strong>依赖图</strong> 的构建，最主要的功能是 <strong>提供</strong> 依赖，提供依赖的方法（可以是静态方法）被 <code>@Provides</code> 标注。这些方法本身可能也需要别的依赖，这时 Dagger2 就会寻找满足这个方法的依赖，找不到就编译失败。</p>
+
+<h4 id="provides">@Provides</h4>
+
+<p>配合 <code>@Module</code> 使用在方法上，表明这个方法会参与 <strong>依赖树</strong> 的构建。
+&gt; 要注意方法的访问权限</p>
+
+<h4 id="component">@Component</h4>
+
+<p>上面提到了两个代表：<strong>依赖需求方</strong> 和 <strong>依赖供给方</strong>，但是它们之间没有直接的联系，怎么把依赖交到 依赖需求方 的手上还是个问题。
+<code>@Component</code> 就是它们之间的桥梁，一般会使用 <code>@Component</code> 来标注一个 <strong>接口</strong>，然后指定 <code>@Component</code> 的 <code>modules</code> 属性为定义好的 <code>Module</code>（依赖供给方），最后声明一个包含 <strong>依赖需求方</strong> 参数类型的函数。
+这样，联系就建立好了，构建一下工程，Dagger2 的注解处理器就会帮我们生成一个 <code>DaggerXXXX</code> 的类，通过它我们就能完成依赖注入工作了。</p>
+
+<h3 id="实例练习">实例练习</h3>
+
+<p>刚刚讲解完几个概念，现在来看看在它们的联系在代码中的体现：
+&gt; 为了便于表达，这里使用 MVP 来演示</p>
+
+<h4 id="声明-inject">声明 Inject</h4>
+
+<p>首先得确定哪些地方需要依赖注入（即依赖需求方）：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainActivity</span> <span style="color:#66d9ef">extends</span> AppCompatActivity <span style="color:#66d9ef">implements</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">MainView</span> <span style="color:#f92672">{</span>
+  <span style="color:#75715e">// MainActiivty 作为 MVP 中的 V，需要持有 P 层实例，即 MainContract.BaseMainPresenter 的一个实例
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@Inject</span>
+    <span style="color:#66d9ef">protected</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span> presenter<span style="color:#f92672">;</span>
+    <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<p>注意这里 <code>presenter</code> 的类型声明是 <code>MainContract.BaseMainPresenter</code> ，这是一个抽象类。
+再看一下 <code>MainContract.BaseMainPresenter</code> 的实现类：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainPresenter</span> <span style="color:#66d9ef">extends</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span> <span style="color:#f92672">{</span>
+<span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<p>按照之前的理解，这里可以使用 <code>@Inject</code> 来标注 <code>MainPresenter</code> 的构造器，但是这里没有，而且也不行，因为 Dagger2 是静态解析的，所以我们通过 Module 来提供它的实例。</p>
+
+<h4 id="声明-module">声明 Module</h4>
+
+<p>定义好了 依赖需求方，还差供给方没有定义：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Module</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainModule</span> <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Provides</span>
+    <span style="color:#66d9ef">public</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span> <span style="color:#a6e22e">provideMainPresenter</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MainPresenter<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里有几个点说明一下：
+- 被 <code>@Provides</code> 标注的方法一般命名为 <code>provideXXX</code>
+- 返回值类型一定要和 <code>@Inject</code> 标注的类型一致，如 <code>MainContract.BaseMainPresenter</code>，否则编译失败
+- 在方法内部直接构建实例。这也是我个人比较喜欢的方式，因为这样就不需要在 <code>MainPresenter</code> 那边添加啥东西，配置过程都集中到 Module 里面。 再考虑另一种情况，当使用第三方库的时候，一般是没办法在它的构造器上加注解的，也只能在 Module 里面创建实例，保持风格统一总是没错的。</p>
+
+<h4 id="声明-component">声明 Component</h4>
+
+<p>还需要 Component 来建立上面两者之间的联系：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Component</span><span style="color:#f92672">(</span>modules <span style="color:#f92672">=</span> <span style="color:#f92672">{</span>MainModule<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">})</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">MainComponent</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">inject</span><span style="color:#f92672">(</span>MainActivity activity<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这个方法的名称可以随意，为了便于理解还是建议使用类似 <code>injectXXX</code> 的命名方式。
+编译之后，Dagger2 会生成一个 <code>DaggerMainComponent</code> 实现 <code>MainComponent</code>，通过这个类就能完成注入了</p>
+
+<h4 id="完成注入">完成注入</h4>
+
+<p>直接看代码吧：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainActivity</span> <span style="color:#66d9ef">extends</span> AppCompatActivity <span style="color:#66d9ef">implements</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">MainView</span> <span style="color:#f92672">{</span>
+  <span style="color:#a6e22e">@Override</span>
+  <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>Bundle savedInstanceState<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>savedInstanceState<span style="color:#f92672">);</span>
+    setContentView<span style="color:#f92672">(</span>R<span style="color:#f92672">.</span><span style="color:#a6e22e">layout</span><span style="color:#f92672">.</span><span style="color:#a6e22e">activity_main</span><span style="color:#f92672">);</span>
+    DaggerMainComponent<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">().</span><span style="color:#a6e22e">inject</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+<span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>在使用到 presenter 之前进行注入，官方说是要在 <code>super.onCreate(savedInstanceState)</code> 之前注入，不过还是觉得在使用之前注入合理点。</p>
+
+<p>这样就完成了一个比较简单的依赖注入实践。</p>
+
+<h3 id="高级功能">高级功能</h3>
+
+<p>除了最基本的注入之外，Dagger2 还提供了一些其他的满足我们需求的功能，比如说单例、懒加载等。</p>
+
+<h4 id="scope">@Scope</h4>
+
+<p>这个用在注解上的，因为它本身没有具体定义，只是提供了一个规范。它表明一个依赖的使用规则，可以看做生命周期或者作用域（我更喜欢用生命周期表述），如我在注入 <code>MainPresenter</code>的时候，是注入同一个实例，还是每执行一次 <code>inject()</code> 就创建一个新的 <code>MainPresenter</code> ，这个需求还是挺常见的。</p>
+
+<p>体现 Scope 的注解有：<code>@Singleton</code> 和 <code>@Resuable</code>，下面具体说说它们的作用。</p>
+
+<h5 id="singleton">@Singleton</h5>
+
+<p>向 Dagger2 声明，每次都使用同一个实例进行注入。因为 Dagger2 为 Component 和 依赖
+ 在依赖图中建立联系，所以需要保持它们两个的 Scope 是相同的，比如我在 <code>provideMainPresenter()</code> 上使用了 <code>@Singleton</code> ，那么在 <code>MainComponent</code> 上也要使用 <code>@Singleton</code> 来保持一致。
+ 这样，通过 <strong>同一个</strong>　<code>DaggerMainComponent</code> 实例获取的 <code>presenter</code> 就都是一样的了。请注意 “同一个” 这个修饰词，如果我们连续执行 <code>DaggerMainComponent.create().inject(this)</code> 两次，那么每次实例还是不一样的，只有这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"> DaggerMainComponnet component <span style="color:#f92672">=</span> DaggerMainComponent<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">();</span>
+ component<span style="color:#f92672">.</span><span style="color:#a6e22e">inject</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+ component<span style="color:#f92672">.</span><span style="color:#a6e22e">inject</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span></code></pre></div>
+<p>注入的 <code>presenter</code> 才是同一个实例。
+ 所以我们不能够指望 <code>@Singleton</code> 能够创建全局单例，而且它也没有处理并发的情况。</p>
+
+<h5 id="resuable">@Resuable</h5>
+
+<p>可重用，表示希望能够重用之前创建的实例，不过也可能还是会创建出新的实例，一般用在类声明上。不过我似乎并没看出使用和不使用有什么区别，所以也就不多嘴了。</p>
+
+<h3 id="lazy-t">Lazy<T></h3>
+
+<p>懒加载，只有第一次使用的时候才会真正的去创建实例。它的适用场景还是比较容易想到，比如有一些开销比较大的对象，但是又不一定会马上用到，甚至不会用上，那么只有真正用上的时候再创建是是再好不过的了。比如要懒加载 <code>presenter</code>，就可以这样写：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Inject</span>
+<span style="color:#66d9ef">protected</span> Lazy<span style="color:#f92672">&lt;</span>MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span><span style="color:#f92672">&gt;</span> presenter<span style="color:#f92672">;</span>
+<span style="color:#75715e">//...
+</span><span style="color:#75715e"></span>presenter<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">().</span><span style="color:#a6e22e">loadMsg</span><span style="color:#f92672">();</span></code></pre></div>
+<h3 id="provider-t">Provider<T></h3>
+
+<p>有时候可能需要很多的实例，而不是一次注入就一直是这么一个实例了。这种需求非常适合 stateful 实例，能够保证每次都能拿到一个全新的实例，不会受之前的操作影响。代码实现是这样子的：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Inject</span> Provider<span style="color:#f92672">&lt;</span>MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span><span style="color:#f92672">&gt;</span> presenterProvider<span style="color:#f92672">;</span>
+<span style="color:#75715e">//...
+</span><span style="color:#75715e"></span>presenterProvider<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">().</span><span style="color:#a6e22e">loadMsg</span><span style="color:#f92672">();</span></code></pre></div>
+<blockquote>
+<p>这个例子不太恰当，不过懂大概意思就好了。</p>
+</blockquote>
+
+<h3 id="qualifier">@Qualifier</h3>
+
+<p>Dagger2 是静态解析的，直接通过类型来进行辨别依赖关系，但是有时候光凭类型还不能确定一个依赖，那么就需要为 Dagger2 提供额外的信息，Dagger2 使用 <code>@Named</code> 来完成这种额外约束。下面演示一下这种需求场景的代码，还是继续改造我们的 <code>MainPresenter</code> ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainPresenter</span> <span style="color:#66d9ef">extends</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> Repo local<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> Repo remote<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">MainPresenter</span><span style="color:#f92672">(</span>Repo local<span style="color:#f92672">,</span> Repo remote<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">local</span> <span style="color:#f92672">=</span> local<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">remote</span> <span style="color:#f92672">=</span> remote<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这时候 <code>MainPresenter</code> 多了两个 Repo 依赖，那么 <code>MainModule</code> 也需要做相应的更改：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Module</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainModule</span> <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Provides</span>
+    <span style="color:#a6e22e">@Reusable</span>
+    <span style="color:#66d9ef">public</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span> <span style="color:#a6e22e">provideMainPresenter</span><span style="color:#f92672">(</span>
+            Repo local<span style="color:#f92672">,</span> Repo remote<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MainPresenter<span style="color:#f92672">(</span>local<span style="color:#f92672">,</span> remote<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Provides</span>
+    <span style="color:#66d9ef">public</span> Repo <span style="color:#a6e22e">provideLocalRepo</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> LocalRepo<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Provides</span>
+    <span style="color:#66d9ef">public</span> Repo <span style="color:#a6e22e">provideRemoteRepo</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> LocalRepo<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这样看着没问题，不过 Dagger2 不认，它不知道你方法名字有啥意思，也不知道你方法内部怎么的。
+所以我们需要使用 <code>@Named</code> 来帮助 Dagger2 判断：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Module</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainModule</span> <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Provides</span>
+    <span style="color:#a6e22e">@Reusable</span>
+    <span style="color:#66d9ef">public</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span> <span style="color:#a6e22e">provideMainPresenter</span><span style="color:#f92672">(</span>
+            <span style="color:#a6e22e">@Named</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;local&#34;</span><span style="color:#f92672">)</span> Repo local<span style="color:#f92672">,</span> <span style="color:#a6e22e">@Named</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;remote&#34;</span><span style="color:#f92672">)</span> Repo remote<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MainPresenter<span style="color:#f92672">(</span>local<span style="color:#f92672">,</span> remote<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Provides</span>
+    <span style="color:#a6e22e">@Named</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;local&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> Repo <span style="color:#a6e22e">provideLocalRepo</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> LocalRepo<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Provides</span>
+    <span style="color:#a6e22e">@Named</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;remote&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#66d9ef">public</span> Repo <span style="color:#a6e22e">provideRemoteRepo</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> RemoteRepo<span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这样就 OK 了。
+&gt; 这里例子也不是很恰当，Repo 应该有一个良好的封装，Presenter 是不应该知道有 Remote 和 Local 的区别的</p>
+
+<h3 id="bindsinstance">@BindsInstance</h3>
+
+<p>用在 <code>Component</code> 或 <code>SubComponent</code> 的 <code>Builder</code> 的方法上，它允许我们在构建 <code>DaggerXXXX</code> 的时候主动提供依赖到依赖树中。还是用例子来说明，<code>MainPresenter</code> 能够通过 <code>loadMsg()</code> 来获取一条消息，但是按照常理，我们还得告诉它一个 <code>address</code>，不能让它 xjb 找，所以还得改改：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainPresenter</span> <span style="color:#66d9ef">extends</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">MainPresenter</span><span style="color:#f92672">(</span>String address<span style="color:#f92672">,</span> Repo local<span style="color:#f92672">,</span> Repo remote<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">address</span> <span style="color:#f92672">=</span> address<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">local</span> <span style="color:#f92672">=</span> local<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">remote</span> <span style="color:#f92672">=</span> remote<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p><code>MainModule</code> 中再加个参数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Module</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainModule</span> <span style="color:#f92672">{</span>
+    <span style="color:#a6e22e">@Provides</span>
+    <span style="color:#a6e22e">@Reusable</span>
+    <span style="color:#66d9ef">public</span> MainContract<span style="color:#f92672">.</span><span style="color:#a6e22e">BaseMainPresenter</span> <span style="color:#a6e22e">provideMainPresenter</span><span style="color:#f92672">(</span>
+            String address<span style="color:#f92672">,</span> <span style="color:#a6e22e">@Named</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;local&#34;</span><span style="color:#f92672">)</span> Repo local<span style="color:#f92672">,</span> <span style="color:#a6e22e">@Named</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;remote&#34;</span><span style="color:#f92672">)</span> Repo remote
+    <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> MainPresenter<span style="color:#f92672">(</span>address<span style="color:#f92672">,</span> local<span style="color:#f92672">,</span> remote<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#75715e">//...
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<p>这样就可以了！
+这样还可以把 Activity 的实例绑定上去，只要要注意下内存泄漏问题。</p>
+
+<blockquote>
+<p>也可以通过手动创建 <code>MainModule</code> 实例来完成一些依赖的传递。</p>
+
+<p>到这里，一些基本的、常用的方法就讲得差不多，更多的还是要自己踩坑，经验这东西也不好说。
+Dagger2 的使用方式非常像配置文件，把依赖的构建过程从具体的业务逻辑或其它逻辑中抽离出来，使业务代码变得清晰，然后拓展性、可测试性也提高了。
+如果是 Android 开发的话，可能带来的问题就是方法数增多，不过也不算大问题，毕竟还有 multidex，如果使用了热修复、插件化等技术的话，可能还需要折腾下。</p>
+</blockquote>
+
+<p>完整代码在 <a href="https://github.com/dashMrl/Android_Demos/tree/90f5715ecfddb74f11bb393c6f4f00e931a2d96a">这里</a></p>
+
+<blockquote>
+<p>关于 Dagger2 一些更高级的用法，我们下一篇文章再交流（再不复习怕是要挂了）</p>
+</blockquote>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="http://blog.xiaohansong.com/2015/10/21/IoC-and-DI/">控制反转（IoC）与依赖注入（DI</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/dagger2"><span class="tag">Dagger2</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/ioc"><span class="tag">IOC</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/di"><span class="tag">DI</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/java"><span class="tag">Java</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>488</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

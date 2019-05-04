@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Picasso on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/picasso/</link>
+    <description>Recent content in Picasso on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 30 Dec 2017 01:21:16 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/picasso/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Picasso 加载流程</title>
+      <link>https://clsrfish.github.io/Blog/post/82cb002a/</link>
+      <pubDate>Sat, 30 Dec 2017 01:21:16 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/82cb002a/</guid>
+      <description>&lt;p&gt;自己第一次写比较完整 app 还是去年暑假，当时参加现在的团队夏令营，组长要求我们不能使用第三方库（亏得自己还苦哈哈地看了几天各种第三方库），所以就得自己手写图片加载逻辑，所以也就遇到很多问题，比如错位、加载慢等。不过使用第三方库的话，一行代码就能解决这些问题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

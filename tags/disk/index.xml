@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Disk on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/disk/</link>
+    <description>Recent content in Disk on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Tue, 26 Dec 2017 11:16:28 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/disk/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Android 磁盘目录</title>
+      <link>https://clsrfish.github.io/Blog/post/8a73e0d4/</link>
+      <pubDate>Tue, 26 Dec 2017 11:16:28 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/8a73e0d4/</guid>
+      <description>&lt;p&gt;每次遇到存储这一块的时候，都要去看 &lt;a href=&#34;https://developer.android.com/training/basics/data-storage/files.html&#34;&gt;官方文档&lt;/a&gt; ；但是这里有一个蛋疼的问题就是，官方文档中没有对特定方法返回的路径进行说明。所以每次都会在这个问题上耗费十多分钟来 &lt;strong&gt;看文档&lt;/strong&gt; 和 &lt;strong&gt;写 Demo&lt;/strong&gt; 来找到符合要求的方法，这次就做个笔记，以防不时之需。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

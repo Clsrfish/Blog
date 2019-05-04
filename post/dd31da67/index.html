@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Android 项目集成 React Native</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="如果不是一个从零开始的项目，那么更多情况下是需要把 React Native 作为一个功能模块嵌入到现有应用中，这篇文章简单记录一下怎么集成 RN 到现有 Android 项目中，以及一些坑点。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Android 项目集成 React Native" />
+    <meta name="twitter:description" content="如果不是一个从零开始的项目，那么更多情况下是需要把 React Native 作为一个功能模块嵌入到现有应用中，这篇文章简单记录一下怎么集成 RN 到现有 Android 项目中，以及一些坑点。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Android 项目集成 React Native" />
+  <meta property="og:description" content="如果不是一个从零开始的项目，那么更多情况下是需要把 React Native 作为一个功能模块嵌入到现有应用中，这篇文章简单记录一下怎么集成 RN 到现有 Android 项目中，以及一些坑点。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/dd31da67/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/dd31da67/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Android 项目集成 React Native</h1>
+      <p class="post-meta">@Clsrfish · Apr 7, 2018 · 3 min read</p>
+    </header>
+    <article class="post-content"><p>如果不是一个从零开始的项目，那么更多情况下是需要把 React Native 作为一个功能模块嵌入到现有应用中，这篇文章简单记录一下怎么集成 RN 到现有 Android 项目中，以及一些坑点。</p>
+
+<blockquote>
+<p>OS：macOS 10.13.4</p>
+
+<p>node：v9.10.1</p>
+
+<p>npm：5.8.0</p>
+
+<p>AS：3.1.0</p>
+</blockquote>
+
+<h2 id="创建-npm-工程">创建 npm 工程</h2>
+
+<p>按照传统 React Native 的代码使用 npm 进行“构建”，并且 Android 项目中一些依赖也来自于这个工程。</p>
+
+<p>找一个你喜欢的位置，执行一下命令初始化一个 npm 项目：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mkdir rn <span style="color:#f92672">&amp;&amp;</span> cd rn
+$ npm init -y</code></pre></div>
+<p>然后需要安装 react 和 react-native ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ npm install --save react react-native</code></pre></div>
+<p>接着创建一个入口文件和一些必要目录：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ touch index.android.js
+$ mkdir app</code></pre></div>
+<p>完成以上操作后，会得到一个如下的目录结构：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">├── app
+├── index.android.js
+├── node_modules
+├── package-lock.json
+└── package.json</code></pre></div>
+<p>再向 index.android.js 中填入如下内容：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-jsx" data-lang="jsx"><span style="color:#66d9ef">import</span> <span style="color:#a6e22e">React</span> <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react&#39;</span>;
+<span style="color:#66d9ef">import</span> {
+  <span style="color:#a6e22e">AppRegistry</span>,
+  <span style="color:#a6e22e">StyleSheet</span>,
+  <span style="color:#a6e22e">Text</span>,
+  <span style="color:#a6e22e">View</span>
+} <span style="color:#a6e22e">from</span> <span style="color:#e6db74">&#39;react-native&#39;</span>;
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HelloWorld</span> <span style="color:#66d9ef">extends</span> <span style="color:#a6e22e">React</span>.<span style="color:#a6e22e">Component</span> {
+  <span style="color:#a6e22e">render</span>() {
+    <span style="color:#66d9ef">return</span> (
+      &lt;<span style="color:#f92672">View</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">styles</span>.<span style="color:#a6e22e">container</span>}&gt;
+        &lt;<span style="color:#f92672">Text</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span>{<span style="color:#a6e22e">styles</span>.<span style="color:#a6e22e">hello</span>}&gt;<span style="color:#a6e22e">Hello</span>    <span style="color:#a6e22e">RN</span><span style="color:#f92672">!!</span>&lt;/<span style="color:#f92672">Text</span>&gt;
+      &lt;/<span style="color:#f92672">View</span>&gt;
+    )
+  }
+}
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">styles</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">StyleSheet</span>.<span style="color:#a6e22e">create</span>({
+  <span style="color:#a6e22e">container</span><span style="color:#f92672">:</span> {
+    <span style="color:#a6e22e">flex</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+    <span style="color:#a6e22e">justifyContent</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;center&#39;</span>,
+  },
+  <span style="color:#a6e22e">hello</span><span style="color:#f92672">:</span> {
+    <span style="color:#a6e22e">fontSize</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">20</span>,
+    <span style="color:#a6e22e">textAlign</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;center&#39;</span>,
+    <span style="color:#a6e22e">margin</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">10</span>,
+  },
+});
+
+<span style="color:#a6e22e">AppRegistry</span>.<span style="color:#a6e22e">registerComponent</span>(<span style="color:#e6db74">&#39;HelloRN&#39;</span>, () =&gt; <span style="color:#a6e22e">HelloWorld</span>);</code></pre></div>
+<p>以上代码在屏幕正中央显示 “HelloRN” 。</p>
+
+<p>最后修改一下 <strong>package.json</strong> 文件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;rn&#34;</span>,
+  <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#e6db74">&#34;1.0.0&#34;</span>,
+  <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+  <span style="color:#f92672">&#34;main&#34;</span>: <span style="color:#e6db74">&#34;index.js&#34;</span>,
+  <span style="color:#f92672">&#34;scripts&#34;</span>: {
+    <span style="color:#f92672">&#34;start&#34;</span>: <span style="color:#e6db74">&#34;node node_modules/react-native/local-cli/cli.js start&#34;</span>, <span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">启动开发服务器</span>
+    <span style="color:#f92672">&#34;bundle-android&#34;</span>: <span style="color:#e6db74">&#34;node node_modules/react-native/local-cli/cli.js bundle --platform android --dev false --entry-file index.android.js --bundle-output ../rndemo/src/release/assets/index.android.bundle --assets-dest ../rndemo/src/release/res/&#34;</span>,	<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">打包</span> <span style="color:#960050;background-color:#1e0010">JS</span> 
+    <span style="color:#f92672">&#34;test&#34;</span>: <span style="color:#e6db74">&#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34;</span>
+  },
+  <span style="color:#f92672">&#34;keywords&#34;</span>: [],
+  <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+  <span style="color:#f92672">&#34;license&#34;</span>: <span style="color:#e6db74">&#34;ISC&#34;</span>,
+  <span style="color:#f92672">&#34;dependencies&#34;</span>: {
+    <span style="color:#f92672">&#34;react&#34;</span>: <span style="color:#e6db74">&#34;^16.3.1&#34;</span>,
+    <span style="color:#f92672">&#34;react-native&#34;</span>: <span style="color:#e6db74">&#34;^0.55.1&#34;</span>
+  }
+}</code></pre></div>
+<p>具体的路径根据实际情况修改。</p>
+
+<h2 id="创建-android-工程">创建 Android 工程</h2>
+
+<p>在和 rn 同级目录创建一个工程，然后修改根目录的 build.gradle 如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">allprojects <span style="color:#f92672">{</span>
+    repositories <span style="color:#f92672">{</span>
+<span style="color:#75715e">//		...
+</span><span style="color:#75715e"></span>        maven<span style="color:#f92672">{</span>
+            url <span style="color:#e6db74">&#34;$rootDir/rn/node_modules/react-native/android&#34;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里很容易猜到，在 <code>$rootDir/rn/node_modules/react-native/android</code> 中肯定有一些 jar 包。</p>
+
+<p>然后在 app module 的build.gradle 文件里添加：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">dependencies<span style="color:#f92672">{</span>
+  <span style="color:#75715e">//...
+</span><span style="color:#75715e"></span>  implementation <span style="color:#e6db74">&#34;com.facebook.react:react-native:+&#34;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<h3 id="添加权网络权限">添加权网络权限</h3>
+
+<p>在 <code>AndroidManifest.xml</code> 文件里添加网络权限：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#f92672">&lt;uses-permission</span> <span style="color:#a6e22e">android:name=</span><span style="color:#e6db74">&#34;android.permission.INTERNET&#34;</span> <span style="color:#f92672">/&gt;</span></code></pre></div>
+<h3 id="添加开发者菜单">添加开发者菜单</h3>
+
+<p>这个一般用于开发时，可以直接从本地服务器自动拉取最新 JavaScript 代码，还是建议加上。正式发版时，还是需要去掉这个，所以还需要简单配置下。</p>
+
+<p>在 src 目录下创建一个 debug 目录，然后创建一个 <code>AndroidManifest.xml</code> 文件并填入以下内容：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#75715e">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span style="color:#f92672">&lt;manifest</span> <span style="color:#a6e22e">xmlns:android=</span><span style="color:#e6db74">&#34;http://schemas.android.com/apk/res/android&#34;</span>
+    <span style="color:#a6e22e">package=</span><span style="color:#e6db74">&#34;com.dashmrl.rndemo&#34;</span><span style="color:#f92672">&gt;</span>
+
+    <span style="color:#f92672">&lt;application&gt;</span>
+        <span style="color:#f92672">&lt;activity</span> <span style="color:#a6e22e">android:name=</span><span style="color:#e6db74">&#34;com.facebook.react.devsupport.DevSettingsActivity&#34;</span> <span style="color:#f92672">/&gt;</span>
+    <span style="color:#f92672">&lt;/application&gt;</span>
+
+<span style="color:#f92672">&lt;/manifest&gt;</span></code></pre></div>
+<p>这样在正式打包的时候就可以去掉这个 DevSettingsActivity 了。</p>
+
+<h3 id="添加-drawoverlays-权限">添加 DrawOverlays 权限</h3>
+
+<p>开发时，错误信息会显示在红底悬浮窗中，在 Android M 及以上的系统中需要用户授权才能显示，所以为了便于debug，需要开启这一权限。在 Activity 中添加如下代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Override</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>Bunlde savedStateInstance<span style="color:#f92672">){</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION</span><span style="color:#f92672">.</span><span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION_CODES</span><span style="color:#f92672">.</span><span style="color:#a6e22e">M</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>Settings<span style="color:#f92672">.</span><span style="color:#a6e22e">canDrawOverlays</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+            Intent intent <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Intent<span style="color:#f92672">(</span>Settings<span style="color:#f92672">.</span><span style="color:#a6e22e">ACTION_MANAGE_OVERLAY_PERMISSION</span><span style="color:#f92672">,</span>
+                                       Uri<span style="color:#f92672">.</span><span style="color:#a6e22e">parse</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;package:&#34;</span> <span style="color:#f92672">+</span> getPackageName<span style="color:#f92672">()));</span>
+            startActivityForResult<span style="color:#f92672">(</span>intent<span style="color:#f92672">,</span> OVERLAY_PERMISSION_REQ_CODE<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#a6e22e">@Override</span>
+<span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onActivityResult</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> requestCode<span style="color:#f92672">,</span> <span style="color:#66d9ef">int</span> resultCode<span style="color:#f92672">,</span> Intent data<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>requestCode <span style="color:#f92672">==</span> OVERLAY_PERMISSION_REQ_CODE<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION</span><span style="color:#f92672">.</span><span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION_CODES</span><span style="color:#f92672">.</span><span style="color:#a6e22e">M</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>Settings<span style="color:#f92672">.</span><span style="color:#a6e22e">canDrawOverlays</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                <span style="color:#75715e">// SYSTEM_ALERT_WINDOW permission not granted...
+</span><span style="color:#75715e"></span>            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里只是大概的流程，具体的看场景。</p>
+
+<h3 id="添加-rn-的宿主-activity">添加 RN 的宿主 Activity</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HelloActivity</span> <span style="color:#66d9ef">extends</span> AppCompatActivity <span style="color:#66d9ef">implements</span> DefaultHardwareBackBtnHandler <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> ReactRootView mReactRootView<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> ReactInstanceManager mReactInstanceManager<span style="color:#f92672">;</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>Bundle savedInstanceState<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>savedInstanceState<span style="color:#f92672">);</span>
+
+        mReactRootView <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ReactRootView<span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        mReactInstanceManager <span style="color:#f92672">=</span> ReactInstanceManager<span style="color:#f92672">.</span><span style="color:#a6e22e">builder</span><span style="color:#f92672">()</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">setApplication</span><span style="color:#f92672">(</span>getApplication<span style="color:#f92672">())</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">setUseDeveloperSupport</span><span style="color:#f92672">(</span>BuildConfig<span style="color:#f92672">.</span><span style="color:#a6e22e">DEBUG</span><span style="color:#f92672">)</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">setJSMainModulePath</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;index.android&#34;</span><span style="color:#f92672">)</span><span style="color:#75715e">// 开发服务器 js bundle 所在目录
+</span><span style="color:#75715e"></span>                <span style="color:#f92672">.</span><span style="color:#a6e22e">setBundleAssetName</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;index.android.bundle&#34;</span><span style="color:#f92672">)</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">addPackage</span><span style="color:#f92672">(</span><span style="color:#66d9ef">new</span> MainReactPackage<span style="color:#f92672">())</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">setInitialLifecycleState</span><span style="color:#f92672">(</span>LifecycleState<span style="color:#f92672">.</span><span style="color:#a6e22e">RESUMED</span><span style="color:#f92672">)</span>
+                <span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
+
+        <span style="color:#75715e">// 注意这里的 HelloRN 必须对应“index.android.js”中的
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// “AppRegistry.registerComponent()”的第一个参数
+</span><span style="color:#75715e"></span>        mReactRootView<span style="color:#f92672">.</span><span style="color:#a6e22e">startReactApplication</span><span style="color:#f92672">(</span>mReactInstanceManager<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;HelloRN&#34;</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+        setContentView<span style="color:#f92672">(</span>mReactRootView<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onPause</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onPause</span><span style="color:#f92672">();</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mReactInstanceManager <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            mReactInstanceManager<span style="color:#f92672">.</span><span style="color:#a6e22e">onHostPause</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onResume</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onResume</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mReactInstanceManager <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            mReactInstanceManager<span style="color:#f92672">.</span><span style="color:#a6e22e">onHostResume</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onDestroy</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onDestroy</span><span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mReactInstanceManager <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            mReactInstanceManager<span style="color:#f92672">.</span><span style="color:#a6e22e">onHostDestroy</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#75715e">//	一般情况下，需要先将返回键事件交由 JS 处理
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onBackPressed</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mReactInstanceManager <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            mReactInstanceManager<span style="color:#f92672">.</span><span style="color:#a6e22e">onBackPressed</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onBackPressed</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#75715e">//	当 JS 不想处理返回键事件的时候，就会调用这个方法
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">invokeDefaultOnBackPressed</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onBackPressed</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#75715e">//  默认情况下，抖一抖手机显示配置对话框，但是模拟器无法抖一抖
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">onKeyUp</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> keyCode<span style="color:#f92672">,</span> KeyEvent event<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>keyCode <span style="color:#f92672">==</span> KeyEvent<span style="color:#f92672">.</span><span style="color:#a6e22e">KEYCODE_MENU</span> <span style="color:#f92672">&amp;&amp;</span> mReactInstanceManager <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            mReactInstanceManager<span style="color:#f92672">.</span><span style="color:#a6e22e">showDevOptionsDialog</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onKeyUp</span><span style="color:#f92672">(</span>keyCode<span style="color:#f92672">,</span> event<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>然后把这个 Activity 注册就好了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"> <span style="color:#f92672">&lt;activity</span>
+   <span style="color:#a6e22e">android:name=</span><span style="color:#e6db74">&#34;.HelloActivity&#34;</span>
+   <span style="color:#a6e22e">android:label=</span><span style="color:#e6db74">&#34;@string/app_name&#34;</span>
+   <span style="color:#a6e22e">android:theme=</span><span style="color:#e6db74">&#34;@style/Theme.AppCompat.Light.NoActionBar&#34;</span><span style="color:#f92672">&gt;</span>
+ <span style="color:#f92672">&lt;/activity&gt;</span></code></pre></div>
+<p>第4行避免出现工具栏，现在一般也都会使用这个主题。</p>
+
+<h2 id="开车">开车</h2>
+
+<p>完成上面的配置就可以运行了。</p>
+
+<h3 id="启动开发服务器">启动开发服务器</h3>
+
+<p>进入 rn 目录，执行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ npm start	</code></pre></div>
+<p>然后会看到如下输出：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">&gt; rn@1.0.0 start /Volumes/Files/Projects/Android/Android_Demos/rn
+&gt; node node_modules/react-native/local-cli/cli.js start
+
+Scanning folders <span style="color:#66d9ef">for</span> symlinks in /Volumes/Files/Projects/Android/Android_Demos/rn/node_modules <span style="color:#f92672">(</span>14ms<span style="color:#f92672">)</span>
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  Running Metro Bundler on port <span style="color:#ae81ff">8081</span>.                                         │
+│                                                                              │
+│  Keep Metro running <span style="color:#66d9ef">while</span> developing on any JS projects. Feel free to        │
+│  close this tab and run your own Metro instance <span style="color:#66d9ef">if</span> you prefer.               │
+│                                                                              │
+│  https://github.com/facebook/react-native                                    │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Looking <span style="color:#66d9ef">for</span> JS files in
+   /Volumes/Files/Projects/Android/Android_Demos/rn
+
+
+Metro Bundler ready.
+
+Loading dependency graph, <span style="color:#66d9ef">done</span>.</code></pre></div>
+<h3 id="运行-android-应用">运行 Android 应用</h3>
+
+<p>启动开发服务器后，就可以和正常开发 Android 应用时一样启动应用了。</p>
+
+<p>运行后可以看到终端里有如下的输出：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"> BUNDLE  <span style="color:#f92672">[</span>android, dev<span style="color:#f92672">]</span> ./index.android.js ▓▓▓▓▓▓▓▓▓▓▓▓▓░░░ <span style="color:#ae81ff">86</span>.3% <span style="color:#f92672">(</span><span style="color:#ae81ff">446</span>/480<span style="color:#f92672">)</span></code></pre></div>
+<p>效果如下：</p>
+
+<p><img src="https://i.loli.net/2018/04/07/5ac8c2ed70558.png" alt="" /></p>
+
+<p>这时候使用 cmd + M 键呼出菜单，就可以进行一些调试的配置了。</p>
+
+<h3 id="坑点">坑点</h3>
+
+<p>当显示 Perf Monitor 时就会造成开发热更新失败，所以只能先关闭这个，只在真正性能调优的时候开启。</p>
+
+<h2 id="打包-app">打包 App</h2>
+
+<p>最终还是要打包成一个 App，需要先将 JS 打包，然后再 build 应用。</p>
+
+<p>进入 rn 目录，执行以下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ npm run bundle-android</code></pre></div>
+<p>assets、res 目录要提前创建好，然后文件就会输出到相应目录下去。</p>
+
+<blockquote>
+<p>release 文件夹这里专门用来放 JS bundle ，不需要添加到版本控制系统里面去</p>
+</blockquote>
+
+<p>然后走正常的 Android 打包流程就好了。</p>
+
+<p><a href="https://github.com/dashMrl/Android_Demos/tree/7dad68a388008cb3e1800532ac23b2dc9d88955b">Demo 地址</a></p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="https://reactnative.cn/docs/0.51/integration-with-existing-apps.html">https://reactnative.cn/docs/0.51/integration-with-existing-apps.html</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/react-native"><span class="tag">React Native</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>392</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Activity on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/activity/</link>
+    <description>Recent content in Activity on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 06 Jan 2018 02:04:02 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/activity/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Activity 生命周期</title>
+      <link>https://clsrfish.github.io/Blog/post/fd703f93/</link>
+      <pubDate>Sat, 06 Jan 2018 02:04:02 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/fd703f93/</guid>
+      <description>&lt;p&gt;Activity 的生命周期是每位 Android 开发都必须掌握的基本知识，以致于几乎所有的 Android ，入门书籍在前几章就会开始讲生命周期。这篇文章大体上是官方文档的个人理解，内容上可能会有一些出入。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

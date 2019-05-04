@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>terminal on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/terminal/</link>
+    <description>Recent content in terminal on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Thu, 25 Jan 2018 17:48:13 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/terminal/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Mac 下 Terminal &#43; zsh 配置</title>
+      <link>https://clsrfish.github.io/Blog/post/ed90638e/</link>
+      <pubDate>Thu, 25 Jan 2018 17:48:13 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/ed90638e/</guid>
+      <description>&lt;p&gt;之前一直用 Ubuntu 自带的 Bash，没有去配置什么插件，感觉用着也还行，现在换到 MacOS 的 Terminal 下，发现它默认配置真的没有 Ubuntu 的好看，为了能更加快乐的使用终端，还是决定去捣鼓一番。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

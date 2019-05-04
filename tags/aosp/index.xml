@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AOSP on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/aosp/</link>
+    <description>Recent content in AOSP on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Tue, 30 Jan 2018 12:44:34 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/aosp/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>AOSP (Android 9.0.0)源码下载</title>
+      <link>https://clsrfish.github.io/Blog/post/df3a1293/</link>
+      <pubDate>Tue, 30 Jan 2018 12:44:34 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/df3a1293/</guid>
+      <description>&lt;p&gt;现在学习 Android 不像早些年，会写个 App 就能找到饭碗，如今不看看 Framework 源码有种分分钟掉队的感觉。虽然现在有一些比较优秀的站点提供源码阅读，但是毕竟在浏览器里面阅读，还是会遇到很多限制，最好还是自己下载一份。说道下载问题就来了，AOSP 的仓库被墙了，所以直接不能直接下载，或者说直接下载网速会很慢，还好国内有一些镜像服务可以避免这一问题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

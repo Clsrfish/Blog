@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>ThreadLocal</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="在并发编程的时候，常常会遇到共享变量，通常为了保证数据的 一致性 ，需要对变量加锁，这就导致了执行效率的降低。如果仅仅在线程内部访问，就不需要进行加锁，这时候就体现出了数据的 独立性 （这两个名词是随手造的，知道意思就好了）。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="ThreadLocal" />
+    <meta name="twitter:description" content="在并发编程的时候，常常会遇到共享变量，通常为了保证数据的 一致性 ，需要对变量加锁，这就导致了执行效率的降低。如果仅仅在线程内部访问，就不需要进行加锁，这时候就体现出了数据的 独立性 （这两个名词是随手造的，知道意思就好了）。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="ThreadLocal" />
+  <meta property="og:description" content="在并发编程的时候，常常会遇到共享变量，通常为了保证数据的 一致性 ，需要对变量加锁，这就导致了执行效率的降低。如果仅仅在线程内部访问，就不需要进行加锁，这时候就体现出了数据的 独立性 （这两个名词是随手造的，知道意思就好了）。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/151f44ae/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/151f44ae/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">ThreadLocal</h1>
+      <p class="post-meta">@Clsrfish · Dec 30, 2017 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>在并发编程的时候，常常会遇到共享变量，通常为了保证数据的 <strong>一致性</strong> ，需要对变量加锁，这就导致了执行效率的降低。如果仅仅在线程内部访问，就不需要进行加锁，这时候就体现出了数据的 <strong>独立性</strong> （这两个名词是随手造的，知道意思就好了）。</p>
+
+<p>ThreadLocal 类能够帮助我们实现数据独立性，它保证了线程单独持有一个变量，并且对这个变量的操作不会影响其它线程的值。具体的情况可能和我讲的你所理解的有些出入，下面我们通过源代码来深入探究。</p>
+
+<h2 id="提供的api">提供的API</h2>
+
+<p>正式开始之前，先看看 ThreadLocal 这个类给我提供了哪些API</p>
+
+<ul>
+<li><strong>set(T value)</strong> <br/>
+给当前线程设置一个 ThreadLocal <strong>值</strong> 的拷贝</li>
+<li><strong>T get()</strong> <br/>
+获取当前线程保存的 ThreadLocal <strong>值</strong> 的拷贝</li>
+<li><strong>remove()</strong> <br/>
+移除当前线程保存的拷贝</li>
+<li><strong>T initialValue()</strong> <br/>
+当当前线程通过 <code>get()</code> 来第一次访问 Threadlocal 的时候被调用，然后会返回一个 <strong>T</strong> ，默认返回是 <code>null</code> 。 如果调用了 <code>remove()</code>，下一次又调用 <code>get()</code> ，这个方法还会被调用</li>
+</ul>
+
+<p>下面简单使用一下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">main</span>(args: Array&lt;String&gt;) {
+    <span style="color:#66d9ef">val</span> str = <span style="color:#e6db74">&#34;init value&#34;</span>
+    <span style="color:#66d9ef">val</span> tl = ThreadLocal&lt;String&gt;()
+    tl.<span style="color:#66d9ef">set</span>(str)
+    <span style="color:#66d9ef">val</span> thread = Thread{
+        tl.<span style="color:#66d9ef">set</span>(<span style="color:#e6db74">&#34;child&#39;s value&#34;</span>)
+        println(tl.<span style="color:#66d9ef">get</span>())
+    }
+    thread.start()
+    thread.join()<span style="color:#75715e">//让子线程执行完
+</span><span style="color:#75715e"></span>    println(tl.<span style="color:#66d9ef">get</span>())
+}</code></pre></div>
+<p>然后我们的预期结果是：</p>
+
+<pre><code>child's value
+init value
+</code></pre>
+
+<p>运行之后的结果和上面一样。</p>
+
+<h2 id="注意点">注意点</h2>
+
+<p>如果上面的代码没什么问题，我们接着写另一个例子。
+为了演示方便，我们先定义一个 Foo 类：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Foo</span>(<span style="color:#66d9ef">var</span> name:String)</code></pre></div>
+<p>然后再看我们的 main 函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">main</span>(args: Array&lt;String&gt;) {
+    <span style="color:#66d9ef">val</span> foo = Foo(<span style="color:#e6db74">&#34;init value&#34;</span>)
+    <span style="color:#66d9ef">val</span> tl = ThreadLocal&lt;Foo&gt;()
+    tl.<span style="color:#66d9ef">set</span>(foo)
+    <span style="color:#66d9ef">val</span> thread = Thread {
+        tl.<span style="color:#66d9ef">get</span>().name = <span style="color:#e6db74">&#34;changed in child&#34;</span>
+        println(tl.<span style="color:#66d9ef">get</span>())
+    }
+    thread.start()
+    thread.join()<span style="color:#75715e">//保证线程执行完毕
+</span><span style="color:#75715e"></span>
+    println(tl.<span style="color:#66d9ef">get</span>())
+    <span style="color:#75715e">//预期结果：
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//changed in child
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//init value
+</span><span style="color:#75715e"></span>}</code></pre></div>
+<p>运行一下，Oops，崩了！！！
+对比一下之前的例子，会发现第二个例子在子线程中首先通过 <code>get()</code> 获取 foo 实例。这里就存在一个问题，回过头看 <code>initialValue()</code> 函数的注释，发现这个线程正好符合它被调用的条件，所以我们会得到一个 <strong>NullPointException</strong> 。</p>
+
+<p>既然 <code>initialValue()</code> 返回了一个 null 值，那么我们重写这个方法，返回一个合法值。改造之后的代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">main</span>(args: Array&lt;String&gt;) { 
+    <span style="color:#66d9ef">val</span> tl = <span style="color:#66d9ef">object</span>:ThreadLocal&lt;Foo&gt;(){
+        <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">initialValue</span>(): Foo = Foo(<span style="color:#e6db74">&#34;init value&#34;</span>)
+    }
+    <span style="color:#66d9ef">val</span> thread = Thread {
+        tl.<span style="color:#66d9ef">get</span>().name = <span style="color:#e6db74">&#34;changed in child&#34;</span>
+        println(tl.<span style="color:#66d9ef">get</span>())
+    }
+    thread.start()
+    thread.join()<span style="color:#75715e">//保证线程执行完毕
+</span><span style="color:#75715e"></span>
+    println(tl.<span style="color:#66d9ef">get</span>())
+    <span style="color:#75715e">//预期结果：
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//changed in child
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//init value
+</span><span style="color:#75715e"></span>}</code></pre></div>
+<p>运行一下，打印结果也确实和预期结果一致。不过还有个问题，如果我们执行 <code>println(tl.get().hashCode())</code> ，会发现两个对象不一样，因为不同线程的初始值都是新创建的 Foo 对象。有同学可能就会想到这样改：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">val</span> tl = <span style="color:#66d9ef">object</span>:ThreadLocal&lt;Foo&gt;(){
+<span style="color:#66d9ef">val</span> foo = Foo(<span style="color:#e6db74">&#34;init value&#34;</span>)
+<span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">initialValue</span>(): Foo = foo
+}</code></pre></div>
+<p>这样就是实现了，不同线程的初始值是同一个实例了，不过这个初始值不是线程私有的，并发情况下还是会发生数据不同步的问题。到底怎么使用，根据具体情况吧。</p>
+
+<h2 id="源码分析">源码分析</h2>
+
+<p>ThreadLocal 这个类还是比较简单，只有几个关键函数，我们一个个来分析：</p>
+
+<h3 id="t-get">T get()</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> T <span style="color:#a6e22e">get</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    Thread t <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">();</span>
+    ThreadLocalMap map <span style="color:#f92672">=</span> getMap<span style="color:#f92672">(</span>t<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>map <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        ThreadLocalMap<span style="color:#f92672">.</span><span style="color:#a6e22e">Entry</span> e <span style="color:#f92672">=</span> map<span style="color:#f92672">.</span><span style="color:#a6e22e">getEntry</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>e <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#a6e22e">@SuppressWarnings</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;unchecked&#34;</span><span style="color:#f92672">)</span>
+            T result <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>T<span style="color:#f92672">)</span>e<span style="color:#f92672">.</span><span style="color:#a6e22e">value</span><span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">return</span> result<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">return</span> setInitialValue<span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>大致意思为：
+- 获取当前线程的 ThreadLocalMap 实例
+- 如果 ThreadLocalMap 实例为 null，创建并设置初值；否则以 this 为 key 从 ThreadLocalMap 里取值
+- 如果取值不为 null，强转返回，否则调用 <code>initialValue()</code> 并返回
+  这里的 ThreadLocalMap 可以简单地看作一个散列表；然后 Entry 其实是 WeakReference 子类，这个弱引用保证在某些场景下不会发生 <strong>内存泄漏</strong>。</p>
+
+<h3 id="set-t-value">set(T value)</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>T value<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    Thread t <span style="color:#f92672">=</span> Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">();</span>
+    ThreadLocalMap map <span style="color:#f92672">=</span> getMap<span style="color:#f92672">(</span>t<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>map <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>
+        map<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">else</span>
+        createMap<span style="color:#f92672">(</span>t<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>set() 所做的工作非常简单：
+- 获取当前线程的 ThreadLocalMap 对象
+- 如果ThreadLocalMap 不为 nul，从 ThreadLocalMap 中取值；如果为null，为当前线程创建ThreadLocalMap 实例并设置初始值</p>
+
+<h3 id="remove">remove()</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">remove</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+     ThreadLocalMap m <span style="color:#f92672">=</span> getMap<span style="color:#f92672">(</span>Thread<span style="color:#f92672">.</span><span style="color:#a6e22e">currentThread</span><span style="color:#f92672">());</span>
+     <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>m <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>
+         m<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>拿到当前线程的 ThreadLocalMap ，不为null 就清除值。调用这个方法之后，ThreadLocal 就重新进入刚创建时的状态了。</p>
+
+<h2 id="关于线程私有">关于线程私有</h2>
+
+<p>Java 中对象都是存放在 heap（堆内存） 中，而堆内存是线程共享的，也就是说 ThreadLocal 保存的值还是线程共享的，只是代码逻辑给它提供了线程私有的属性。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/threadlocal"><span class="tag">ThreadLocal</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/java"><span class="tag">Java</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

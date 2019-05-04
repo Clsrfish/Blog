@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/</link>
+    <description>Recent content in Tags on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Fri, 11 Jan 2019 01:03:43 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>CentOS</title>
+      <link>https://clsrfish.github.io/Blog/tags/centos/</link>
+      <pubDate>Fri, 11 Jan 2019 01:03:43 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/centos/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hadoop</title>
+      <link>https://clsrfish.github.io/Blog/tags/hadoop/</link>
+      <pubDate>Fri, 11 Jan 2019 01:03:43 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/hadoop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Git</title>
+      <link>https://clsrfish.github.io/Blog/tags/git/</link>
+      <pubDate>Sun, 16 Dec 2018 16:29:01 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/git/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>BuildOwner</title>
+      <link>https://clsrfish.github.io/Blog/tags/buildowner/</link>
+      <pubDate>Sun, 02 Dec 2018 15:09:37 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/buildowner/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Flutter</title>
+      <link>https://clsrfish.github.io/Blog/tags/flutter/</link>
+      <pubDate>Sun, 02 Dec 2018 15:09:37 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/flutter/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PipelineOwner</title>
+      <link>https://clsrfish.github.io/Blog/tags/pipelineowner/</link>
+      <pubDate>Sun, 02 Dec 2018 15:09:37 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/pipelineowner/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Dart</title>
+      <link>https://clsrfish.github.io/Blog/tags/dart/</link>
+      <pubDate>Sat, 17 Nov 2018 18:39:09 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/dart/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Mixin</title>
+      <link>https://clsrfish.github.io/Blog/tags/mixin/</link>
+      <pubDate>Sat, 17 Nov 2018 18:39:09 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/mixin/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Element</title>
+      <link>https://clsrfish.github.io/Blog/tags/element/</link>
+      <pubDate>Tue, 06 Nov 2018 19:57:06 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/element/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RenderObject</title>
+      <link>https://clsrfish.github.io/Blog/tags/renderobject/</link>
+      <pubDate>Tue, 06 Nov 2018 19:57:06 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/renderobject/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Widget</title>
+      <link>https://clsrfish.github.io/Blog/tags/widget/</link>
+      <pubDate>Tue, 06 Nov 2018 19:57:06 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/widget/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>BLoC</title>
+      <link>https://clsrfish.github.io/Blog/tags/bloc/</link>
+      <pubDate>Wed, 31 Oct 2018 13:11:09 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/bloc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Android</title>
+      <link>https://clsrfish.github.io/Blog/tags/android/</link>
+      <pubDate>Sat, 29 Sep 2018 10:52:51 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/android/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>HTTP</title>
+      <link>https://clsrfish.github.io/Blog/tags/http/</link>
+      <pubDate>Sat, 29 Sep 2018 10:52:51 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/http/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Class</title>
+      <link>https://clsrfish.github.io/Blog/tags/class/</link>
+      <pubDate>Tue, 25 Sep 2018 18:29:15 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/class/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OOP</title>
+      <link>https://clsrfish.github.io/Blog/tags/oop/</link>
+      <pubDate>Tue, 25 Sep 2018 18:29:15 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/oop/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ViewModel</title>
+      <link>https://clsrfish.github.io/Blog/tags/viewmodel/</link>
+      <pubDate>Sat, 18 Aug 2018 11:25:06 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/viewmodel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>TypeScript</title>
+      <link>https://clsrfish.github.io/Blog/tags/typescript/</link>
+      <pubDate>Sat, 18 Aug 2018 10:56:52 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/typescript/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>React Native</title>
+      <link>https://clsrfish.github.io/Blog/tags/react-native/</link>
+      <pubDate>Sat, 07 Apr 2018 16:28:41 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/react-native/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GitLab Flow</title>
+      <link>https://clsrfish.github.io/Blog/tags/gitlab-flow/</link>
+      <pubDate>Sat, 31 Mar 2018 09:44:27 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/gitlab-flow/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GitHub Flow</title>
+      <link>https://clsrfish.github.io/Blog/tags/github-flow/</link>
+      <pubDate>Sat, 31 Mar 2018 09:44:20 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/github-flow/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tools</title>
+      <link>https://clsrfish.github.io/Blog/tags/tools/</link>
+      <pubDate>Sat, 31 Mar 2018 00:35:31 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/tools/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CI</title>
+      <link>https://clsrfish.github.io/Blog/tags/ci/</link>
+      <pubDate>Thu, 15 Feb 2018 09:26:33 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/ci/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Gitlab</title>
+      <link>https://clsrfish.github.io/Blog/tags/gitlab/</link>
+      <pubDate>Thu, 15 Feb 2018 09:26:33 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/gitlab/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Jenkins</title>
+      <link>https://clsrfish.github.io/Blog/tags/jenkins/</link>
+      <pubDate>Thu, 15 Feb 2018 09:26:33 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/jenkins/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>AOSP</title>
+      <link>https://clsrfish.github.io/Blog/tags/aosp/</link>
+      <pubDate>Tue, 30 Jan 2018 12:44:34 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/aosp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>https://clsrfish.github.io/Blog/tags/linux/</link>
+      <pubDate>Sat, 27 Jan 2018 01:49:51 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SSH</title>
+      <link>https://clsrfish.github.io/Blog/tags/ssh/</link>
+      <pubDate>Sat, 27 Jan 2018 01:49:51 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/ssh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>terminal</title>
+      <link>https://clsrfish.github.io/Blog/tags/terminal/</link>
+      <pubDate>Thu, 25 Jan 2018 17:48:13 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/terminal/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>zsh</title>
+      <link>https://clsrfish.github.io/Blog/tags/zsh/</link>
+      <pubDate>Thu, 25 Jan 2018 17:48:13 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/zsh/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Android SDK Manager</title>
+      <link>https://clsrfish.github.io/Blog/tags/android-sdk-manager/</link>
+      <pubDate>Tue, 16 Jan 2018 17:34:40 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/android-sdk-manager/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hybrid</title>
+      <link>https://clsrfish.github.io/Blog/tags/hybrid/</link>
+      <pubDate>Tue, 09 Jan 2018 21:59:21 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/hybrid/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>JSBridge</title>
+      <link>https://clsrfish.github.io/Blog/tags/jsbridge/</link>
+      <pubDate>Tue, 09 Jan 2018 21:59:21 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/jsbridge/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Webview</title>
+      <link>https://clsrfish.github.io/Blog/tags/webview/</link>
+      <pubDate>Tue, 09 Jan 2018 21:59:21 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/webview/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Docker</title>
+      <link>https://clsrfish.github.io/Blog/tags/docker/</link>
+      <pubDate>Mon, 08 Jan 2018 22:24:32 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/docker/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ubutnu</title>
+      <link>https://clsrfish.github.io/Blog/tags/ubutnu/</link>
+      <pubDate>Mon, 08 Jan 2018 22:24:32 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/ubutnu/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Activity</title>
+      <link>https://clsrfish.github.io/Blog/tags/activity/</link>
+      <pubDate>Sat, 06 Jan 2018 02:04:02 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/activity/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Lifecycle</title>
+      <link>https://clsrfish.github.io/Blog/tags/lifecycle/</link>
+      <pubDate>Sat, 06 Jan 2018 02:04:02 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/lifecycle/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Java</title>
+      <link>https://clsrfish.github.io/Blog/tags/java/</link>
+      <pubDate>Sat, 06 Jan 2018 01:49:39 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Retrofit</title>
+      <link>https://clsrfish.github.io/Blog/tags/retrofit/</link>
+      <pubDate>Sat, 06 Jan 2018 01:49:39 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/retrofit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>2017</title>
+      <link>https://clsrfish.github.io/Blog/tags/2017/</link>
+      <pubDate>Mon, 01 Jan 2018 21:07:05 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>2018</title>
+      <link>https://clsrfish.github.io/Blog/tags/2018/</link>
+      <pubDate>Mon, 01 Jan 2018 21:07:05 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DI</title>
+      <link>https://clsrfish.github.io/Blog/tags/di/</link>
+      <pubDate>Sun, 31 Dec 2017 19:03:38 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/di/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Dagger2</title>
+      <link>https://clsrfish.github.io/Blog/tags/dagger2/</link>
+      <pubDate>Sun, 31 Dec 2017 19:03:38 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/dagger2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>IOC</title>
+      <link>https://clsrfish.github.io/Blog/tags/ioc/</link>
+      <pubDate>Sun, 31 Dec 2017 19:03:38 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/ioc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Github Pages</title>
+      <link>https://clsrfish.github.io/Blog/tags/github-pages/</link>
+      <pubDate>Sat, 30 Dec 2017 22:34:10 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/github-pages/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hexo</title>
+      <link>https://clsrfish.github.io/Blog/tags/hexo/</link>
+      <pubDate>Sat, 30 Dec 2017 22:34:10 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/hexo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Next</title>
+      <link>https://clsrfish.github.io/Blog/tags/next/</link>
+      <pubDate>Sat, 30 Dec 2017 22:34:10 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/next/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Annotation</title>
+      <link>https://clsrfish.github.io/Blog/tags/annotation/</link>
+      <pubDate>Sat, 30 Dec 2017 22:32:32 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/annotation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Annotation Processor</title>
+      <link>https://clsrfish.github.io/Blog/tags/annotation-processor/</link>
+      <pubDate>Sat, 30 Dec 2017 22:32:32 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/annotation-processor/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Connection Pool</title>
+      <link>https://clsrfish.github.io/Blog/tags/connection-pool/</link>
+      <pubDate>Sat, 30 Dec 2017 22:25:36 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/connection-pool/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OkHttp</title>
+      <link>https://clsrfish.github.io/Blog/tags/okhttp/</link>
+      <pubDate>Sat, 30 Dec 2017 22:25:36 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/okhttp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ThreadLocal</title>
+      <link>https://clsrfish.github.io/Blog/tags/threadlocal/</link>
+      <pubDate>Sat, 30 Dec 2017 21:53:30 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/threadlocal/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Picasso</title>
+      <link>https://clsrfish.github.io/Blog/tags/picasso/</link>
+      <pubDate>Sat, 30 Dec 2017 01:21:16 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/picasso/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Butter Knife</title>
+      <link>https://clsrfish.github.io/Blog/tags/butter-knife/</link>
+      <pubDate>Sat, 30 Dec 2017 00:45:35 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/butter-knife/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Curl</title>
+      <link>https://clsrfish.github.io/Blog/tags/curl/</link>
+      <pubDate>Thu, 28 Dec 2017 09:24:08 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/curl/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Shell</title>
+      <link>https://clsrfish.github.io/Blog/tags/shell/</link>
+      <pubDate>Thu, 28 Dec 2017 09:24:08 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/shell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Disk</title>
+      <link>https://clsrfish.github.io/Blog/tags/disk/</link>
+      <pubDate>Tue, 26 Dec 2017 11:16:28 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/disk/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>LruCache</title>
+      <link>https://clsrfish.github.io/Blog/tags/lrucache/</link>
+      <pubDate>Tue, 26 Dec 2017 11:15:25 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/lrucache/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DiskLruCache</title>
+      <link>https://clsrfish.github.io/Blog/tags/disklrucache/</link>
+      <pubDate>Tue, 26 Dec 2017 11:15:05 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/disklrucache/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Environment</title>
+      <link>https://clsrfish.github.io/Blog/tags/environment/</link>
+      <pubDate>Tue, 26 Dec 2017 11:01:59 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/environment/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Android Architecture Components</title>
+      <link>https://clsrfish.github.io/Blog/tags/android-architecture-components/</link>
+      <pubDate>Mon, 25 Dec 2017 15:54:54 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/android-architecture-components/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>LifeCycleObserver</title>
+      <link>https://clsrfish.github.io/Blog/tags/lifecycleobserver/</link>
+      <pubDate>Thu, 21 Dec 2017 23:53:58 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/lifecycleobserver/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>others</title>
+      <link>https://clsrfish.github.io/Blog/tags/others/</link>
+      <pubDate>Tue, 19 Dec 2017 14:00:00 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/others/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

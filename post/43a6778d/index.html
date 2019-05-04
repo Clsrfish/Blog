@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>缓存之 MemoryLruCache</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="在开发图片加载功能时，既要保证加载速度，又要避免 OOM，特别是在类似于图库这样的场景中，如何处理好这两者关系显得尤为重要。所以最简单的想法就是一共缓存，将那些暂时 “食之无味，弃之可惜” 的对象暂时缓存起来，以备不适之需。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="缓存之 MemoryLruCache" />
+    <meta name="twitter:description" content="在开发图片加载功能时，既要保证加载速度，又要避免 OOM，特别是在类似于图库这样的场景中，如何处理好这两者关系显得尤为重要。所以最简单的想法就是一共缓存，将那些暂时 “食之无味，弃之可惜” 的对象暂时缓存起来，以备不适之需。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="缓存之 MemoryLruCache" />
+  <meta property="og:description" content="在开发图片加载功能时，既要保证加载速度，又要避免 OOM，特别是在类似于图库这样的场景中，如何处理好这两者关系显得尤为重要。所以最简单的想法就是一共缓存，将那些暂时 “食之无味，弃之可惜” 的对象暂时缓存起来，以备不适之需。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/43a6778d/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/43a6778d/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">缓存之 MemoryLruCache</h1>
+      <p class="post-meta">@Clsrfish · Dec 26, 2017 · 3 min read</p>
+    </header>
+    <article class="post-content"><p>在开发图片加载功能时，既要保证加载速度，又要避免 OOM，特别是在类似于图库这样的场景中，如何处理好这两者关系显得尤为重要。所以最简单的想法就是一共缓存，将那些暂时 “食之无味，弃之可惜”  的对象暂时缓存起来，以备不适之需。</p>
+
+<h2 id="lrucache-简单使用">LruCache 简单使用</h2>
+
+<p>这里我们以缓存 <code>Bitmap</code> 为例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">val</span> cacheSize = (Runtime.getRuntime().maxMemory() / <span style="color:#ae81ff">1024</span> / <span style="color:#ae81ff">8</span>).toInt()
+<span style="color:#66d9ef">val</span> cache = <span style="color:#66d9ef">object</span> <span style="color:#960050;background-color:#1e0010">: </span><span style="color:#a6e22e">LruCache</span>&lt;String, Bitmap&gt;(cacheSize) {
+    <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">sizeOf</span>(key: String?, value: Bitmap?): Int {
+        <span style="color:#66d9ef">return</span> value<span style="color:#f92672">?.</span>byteCount <span style="color:#f92672">?:</span> <span style="color:#ae81ff">0</span> / <span style="color:#ae81ff">1024</span>
+    }
+
+    <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">create</span>(key: String?): Bitmap {
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">super</span>.create(key)
+    }
+
+    <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">entryRemoved</span>(evicted: Boolean, key: String?, oldValue: Bitmap?, newValue: Bitmap?) {
+        <span style="color:#66d9ef">super</span>.entryRemoved(evicted, key, oldValue, newValue)
+    }
+
+}</code></pre></div>
+<p>这里使用该进程最大可用内存的 <strong>八分之一</strong> 来缓存 bitmap，单位为 KB 。
+然后重写用于 <strong>计算 value 大小</strong> 的 <code>sizeOf()</code>，如果不重写，每个 value 的大小会被记为 1。
+至于 <code>entryRemoved()</code>，当有相应的 value 被移除的时候会调用，默认是个空方法。
+<code>create()</code> 函数在缓存没有命中的时候会调用，可以重写该函数来返回一个缺省值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">val</span> previous = cache.put(<span style="color:#e6db74">&#34;bitmap&#34;</span>,bitmap)
+<span style="color:#66d9ef">val</span> removed = cache.remove(<span style="color:#e6db74">&#34;bitmap&#34;</span>)</code></pre></div>
+<p>调用 <code>put()</code> 函数，传入键值就完成了缓存的写入，如果这个 key 之前有对应的 value ，则会返回旧值，否则返回 null；移除/更新缓存就调用 <code>remove()</code> 并传入 key 就行了，如果有与 key 对应的 value，则返回 value，否则返回 null。</p>
+
+<h2 id="源码分析">源码分析</h2>
+
+<p>看完了简单使用，我们接着看看它的内部是怎么实现的。</p>
+
+<h3 id="概览">概览</h3>
+
+<p>首先看看它的成员变量和构造函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LruCache</span><span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> LinkedHashMap<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;</span> map<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> size<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> maxSize<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> putCount<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> createCount<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> evictionCount<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> hitCount<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> missCount<span style="color:#f92672">;</span>
+    
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">LruCache</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> maxSize<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">maxSize</span> <span style="color:#f92672">=</span> maxSize<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">map</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> LinkedHashMap<span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;(</span>0<span style="color:#f92672">,</span> 0<span style="color:#f92672">.</span><span style="color:#a6e22e">75f</span><span style="color:#f92672">,</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#75715e">//...
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<ul>
+<li>size：表示已缓存的大小</li>
+<li>maxSize：表示最大缓存大小，这个值由构造器的参数决定，也可以通过函数更改</li>
+<li>putCount：放入缓存的次数</li>
+<li>createCount：创建缺省值的次数</li>
+<li>evictionCount：缓存剔除次数</li>
+<li>hitCount：缓存命中次数</li>
+<li>missCount：缓存未命中次数</li>
+</ul>
+
+<p>这些值都可以通过函数获取，可以通过这些值的分析来确定最适合的缓存的大小。</p>
+
+<p>然后我们看到构造函数里初始化了一个大小为零，负载因子为 0.75 并且按 <strong>访问顺序</strong> 排序的 LinkedHashMap，最后一个 true 就是实现 LruCache 的关键所在，它表示 LinkedHashMap 里面的值是以 <strong>最后一次</strong> 被访问/缓存的时间来排序。</p>
+
+<p><br/></p>
+
+<h3 id="lrucache-put">LruCache#put()</h3>
+
+<p>再来看 <code>LruCache#put()</code> 函数的实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> V <span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>K key<span style="color:#f92672">,</span> V value<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    V previous<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        putCount<span style="color:#f92672">++;</span>
+        size <span style="color:#f92672">+=</span> safeSizeOf<span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+        previous <span style="color:#f92672">=</span> map<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>previous <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            size <span style="color:#f92672">-=</span> safeSizeOf<span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> previous<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>previous <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        entryRemoved<span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">,</span> key<span style="color:#f92672">,</span> previous<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    
+    trimToSize<span style="color:#f92672">(</span>maxSize<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span> previous<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里的工作非常简单，将键值放入 map ，调整相应的成员变量，如果有被替换出来的值，调用 <code>entryRemoved()</code>，最后看看是不是要移除一些“很久“没访问过的缓存。</p>
+
+<p><br/></p>
+
+<h3 id="lrucache-get">LruCache#get()</h3>
+
+<p>接着看 <code>LruCache#get()</code> 函数的实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">final</span> V <span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>K key<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    V mapValue<span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        mapValue <span style="color:#f92672">=</span> map<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mapValue <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            hitCount<span style="color:#f92672">++;</span>
+            <span style="color:#66d9ef">return</span> mapValue<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        missCount<span style="color:#f92672">++;</span>
+    <span style="color:#f92672">}</span>
+
+    V createdValue <span style="color:#f92672">=</span> create<span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>createdValue <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        createCount<span style="color:#f92672">++;</span>
+        mapValue <span style="color:#f92672">=</span> map<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> createdValue<span style="color:#f92672">);</span>
+
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mapValue <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            map<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> mapValue<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            size <span style="color:#f92672">+=</span> safeSizeOf<span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> createdValue<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>mapValue <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        entryRemoved<span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">,</span> key<span style="color:#f92672">,</span> createdValue<span style="color:#f92672">,</span> mapValue<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> mapValue<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+        trimToSize<span style="color:#f92672">(</span>maxSize<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">return</span> createdValue<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>首先查找 map，如果找到缓存就立马返回；如果没有相应的缓存，则尝试调用 <code>create(key)</code> 来创建一个缺省值，这里要注意的是，并发情况下， map 有可能在 <code>create()</code> 还没有返回时被其他的线程更新了，也即有可能这个 key 对应的缓存被添加到了 map。如果没有缺省值，立即返回 null，如果有，放入 map 进行缓存，然后根据返回值是否为 null 来判断 map 在此前有没有被放入 key 的缓存，如果有的话，取消缺省值的放入。最后就是返回缺省值或者缓存。</p>
+
+<p><br/></p>
+
+<h3 id="trimtosize">trimToSize()</h3>
+
+<p>最后，我们再来看看 <code>trimToSize()</code> 函数是怎么保证缓存大小不超过最大大小的：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">trimToSize</span><span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> maxSize<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        K key<span style="color:#f92672">;</span>
+        V value<span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>size <span style="color:#f92672">&lt;</span> 0 <span style="color:#f92672">||</span> <span style="color:#f92672">(</span>map<span style="color:#f92672">.</span><span style="color:#a6e22e">isEmpty</span><span style="color:#f92672">()</span> <span style="color:#f92672">&amp;&amp;</span> size <span style="color:#f92672">!=</span> 0<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> IllegalStateException<span style="color:#f92672">(</span>getClass<span style="color:#f92672">().</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">()</span>
+                        <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;.sizeOf() is reporting inconsistent results!&#34;</span><span style="color:#f92672">);</span>
+            <span style="color:#f92672">}</span>
+
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>size <span style="color:#f92672">&lt;=</span> maxSize<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+
+            Map<span style="color:#f92672">.</span><span style="color:#a6e22e">Entry</span><span style="color:#f92672">&lt;</span>K<span style="color:#f92672">,</span> V<span style="color:#f92672">&gt;</span> toEvict <span style="color:#f92672">=</span> map<span style="color:#f92672">.</span><span style="color:#a6e22e">eldest</span><span style="color:#f92672">();</span>
+            <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>toEvict <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">break</span><span style="color:#f92672">;</span>
+            <span style="color:#f92672">}</span>
+
+            key <span style="color:#f92672">=</span> toEvict<span style="color:#f92672">.</span><span style="color:#a6e22e">getKey</span><span style="color:#f92672">();</span>
+            value <span style="color:#f92672">=</span> toEvict<span style="color:#f92672">.</span><span style="color:#a6e22e">getValue</span><span style="color:#f92672">();</span>
+            map<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+            size <span style="color:#f92672">-=</span> safeSizeOf<span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> value<span style="color:#f92672">);</span>
+            evictionCount<span style="color:#f92672">++;</span>
+        <span style="color:#f92672">}</span>
+
+        entryRemoved<span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">,</span> key<span style="color:#f92672">,</span> value<span style="color:#f92672">,</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>二话不说，先来个死循环，循环里面首先判断当前大小有没有超出最大大小，如果超出则从 map 里面移除最老的缓存，调用 <code>entryRemoved()</code> 函数，进入下一轮。</p>
+
+<h2 id="总结">总结</h2>
+
+<p>总体上讲，并没有什么太难的地方，整体的逻辑弄清楚就差不多知道内部是怎么工作的了。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/lrucache"><span class="tag">LruCache</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>494</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

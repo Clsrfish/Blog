@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Git Flow（译）</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="在这篇文章中，我将会向大家讲解我大约一年前引入一些项目（公司或者私有的）里并且被事实证明为非常成功的开发模式。我早就想写一些关于这方面的东西，但是直到现在才找到时间来完整地完成这些东西。这里我不会讨论任何项目细节方面的东西，仅仅讨论分支策略和发版管理。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Git Flow（译）" />
+    <meta name="twitter:description" content="在这篇文章中，我将会向大家讲解我大约一年前引入一些项目（公司或者私有的）里并且被事实证明为非常成功的开发模式。我早就想写一些关于这方面的东西，但是直到现在才找到时间来完整地完成这些东西。这里我不会讨论任何项目细节方面的东西，仅仅讨论分支策略和发版管理。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Git Flow（译）" />
+  <meta property="og:description" content="在这篇文章中，我将会向大家讲解我大约一年前引入一些项目（公司或者私有的）里并且被事实证明为非常成功的开发模式。我早就想写一些关于这方面的东西，但是直到现在才找到时间来完整地完成这些东西。这里我不会讨论任何项目细节方面的东西，仅仅讨论分支策略和发版管理。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/2018-03-31-git-flow/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/2018-03-31-git-flow/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Git Flow（译）</h1>
+      <p class="post-meta">@Clsrfish · Mar 31, 2018 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>在这篇文章中，我将会向大家讲解我大约一年前引入一些项目（公司或者私有的）里并且被事实证明为非常成功的开发模式。我早就想写一些关于这方面的东西，但是直到现在才找到时间来完整地完成这些东西。这里我不会讨论任何项目细节方面的东西，仅仅讨论分支策略和发版管理。</p>
+
+<p><img src="http://nvie.com/img/git-model@2x.png" alt="" /></p>
+
+<h2 id="为什么选择-git">为什么选择 Git</h2>
+
+<p>网上有各种关于 Git 和其他版本控制系统的优缺点比较，当然也有很多意见不一致的地方。作为一名开发者，我更偏向于使用 Git。Git 确实改变了开发者对于分支管理的思考方式。在传统的 CVS/Subversio 的世界中，分支合并和创建通常被认为有一点吓人（通常是冲突）并且你一段时间内只会做一次。</p>
+
+<p>但是使用 Git，这些操纵将会变得非常简单，并且它们会成为你日常工作流中核心的一部分。例如，在 CVS/Subversion 的文档中，分支的创建和合并被安排在最后三章作为高级功能；与此同时，所有的 Git 文档里面，这些都是在前三章中的基础部分进行讲解的。</p>
+
+<p>由于 Git 的简便性和可复现性，分支创建与合并再也不令人望而生畏。版本控制系统本就应该只辅助完成分支的创建于合并。</p>
+
+<p>关于工具的讨论就到这里，让我们接着看开发模式。接下来我要讲解的开发模式，不过是一套流程，为了更好地管理开发进展，每个团队成员都必须遵守它。</p>
+
+<h2 id="去中心化和中心化">去中心化和中心化</h2>
+
+<p>我们使用一个中心仓库来配合分支管理模型。需要注意的是，这个中心仓库仅仅是被看作中心仓库，毕竟 Git 是去中心化版本控制系统，这里只是为了便于理解。我们通常把这个中心仓库叫做 <strong>origin</strong> ，大多数 Git 用户应该非常熟悉这个名字。</p>
+
+<p><img src="http://nvie.com/img/centr-decentr@2x.png" alt="" /> 每个开发者从这个仓库拉取或向它提交代码。除了这个中心化的 <strong>pull-push</strong> 关系外，每位开发者还会从其它的子团队拉取代码。例如，在向中心仓库提交之前，这种模式对于那种有几个团队一起开发一个功能的时候非常有效。在上面的图示中，有由 Alice 与 Bob、Alice 与 David 以及 Clair 与 David 组成的子团队。</p>
+
+<h2 id="主要分支">主要分支</h2>
+
+<p><img src="http://nvie.com/img/main-branches@2x.png" alt="" /></p>
+
+<p>一个比较核心的问题，这个开发模式受现有开发模式的启发。中心仓库保持两个永久的分支：</p>
+
+<ul>
+<li>master</li>
+<li>develop</li>
+</ul>
+
+<p>origin 的 master 分支，大部分 Git 用户都不会陌生。与 master 分支共存的还有一个 develop 分支。</p>
+
+<p>我们认为 origin/master 分支上的代码总是对应着一个预发布状态的代码。</p>
+
+<p>origin/master 分支存放着下一个版本的更改。有些人把这个分支叫做 ”integration branch“。所有的 nightly 自动化构建都是从这个分支产生的。</p>
+
+<p>当 develop 分支的代码达到一个稳定状态并且可以发布时，所有的更改都应该被合并到 master 分支上，并且打上版本号的 tag。关于这个过程更加详细的信息将会在下面讲解。</p>
+
+<p>因此，每次变更合并到 master 分支，都代表着一个生产环境发布。这一点上我们会非常谨慎，所以我们可以使用 Git hook 脚本来使得当变更提交到 master 上时，代码会自动构建并发布到我们的生产服务器上。</p>
+
+<h2 id="支撑分支">支撑分支</h2>
+
+<p>在 master 和 develop 分支之外，我们的开发模式使用一些支撑分支来辅助多个团队并行开发，追踪功能变更，准备版本发布以及快速修复线上问题。不像 <strong>主要分支</strong> ，这些分支通常有一个有限的生命周期，因为它们最后都会被移除。</p>
+
+<p>这些不同的分支是：</p>
+
+<ul>
+<li>Feature branches</li>
+<li>Release branches</li>
+<li>Hotfix branches</li>
+</ul>
+
+<p>这些分支有它们各自的目的，并且有一套严格的规则来限制它们从哪些分支产生，以及最终合并到哪些分支。我们马上就会讨论这些规则。</p>
+
+<p>毫无疑问，这些分支在技术的角度来讲是比较“特殊的”。它们根据使用方式来进行分类，当然它们也还是普通的分支。</p>
+
+<h3 id="feature-braches">Feature braches</h3>
+
+<p><img src="http://nvie.com/img/fb@2x.png" alt="" /></p>
+
+<ul>
+<li>可能产生于：</li>
+</ul>
+
+<p>develop</p>
+
+<ul>
+<li>必须合并到：</li>
+</ul>
+
+<p>develop</p>
+
+<ul>
+<li>命名要求：</li>
+</ul>
+
+<p>除了 master、develop、release-* 、hotfix-*</p>
+
+<p>feature 分支通常用来为下一个或者接下来的版本开发新的功能。一个功能分支最终被合并到哪一个release版本是未知的。只要这个功能还在开发，功能分支就会一直存在，但是最终还是会被合并到develop分支或者抛弃并删除。</p>
+
+<p>功能分支通常指存在于开发者的仓库中，并不会提交到 origin 中去。</p>
+
+<h4 id="创建-feature-分支">创建 feature 分支</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git checkout -b feature-hello develop</code></pre></div>
+<p>将会从 develop 分支创建 feature-hello 分支。</p>
+
+<h4 id="合并分支">合并分支</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git checkout feature-hello
+$ git merge develop
+$ git checkout develop
+$ git merge feature-hello
+$ git branch -d feature-hello</code></pre></div>
+<p>这里会先将 develop 分支合并到 feature 分支，最后再合并回 develop 分支，这样可以避免在 develop 分支上解决冲突，避免 develop 分支被污染，最后删除 feature 分支。</p>
+
+<h3 id="release-branches">Release branches</h3>
+
+<ul>
+<li>可能产生于：</li>
+</ul>
+
+<p>develop</p>
+
+<ul>
+<li>必须合并到：</li>
+</ul>
+
+<p>develop 和 master</p>
+
+<ul>
+<li>命名要求：</li>
+</ul>
+
+<p>release-*</p>
+
+<p>release 分支为一个生产发布做准备。这里允许做一些小的 bug 修复并准备一些发布所需的元数据（如 版本号、构建日期等）。通过在 release 上做这些工作，develop 可以继续为下一次大版本发布做准备。</p>
+
+<p>当 develop 分支达到一个比较理想的发布状态时，就可以创建 release 分支了。这时还需要保证所有的功能都开发完毕并且合并到了 develop 分支。下一个版本的功能分支必须在这次的 release 分支创建之后才能创建。</p>
+
+<p>release 分支在创建之后就会拥有一个版本号，但是这个时候还不能确定我的下一个 release 版本号是多少，因为这个还会受一系列因素的影响，比如代码提交次数等。</p>
+
+<h4 id="创建-release-分支">创建 release 分支</h4>
+
+<p>release 分支从 develop 分支产生。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 版本号依实际情况变化</span>
+$ git checkout -b release-1.2 develop</code></pre></div>
+<p>这个新分支会一直存在直到正式发布。在此之前，小的 bug 修复可以提交到这个分支。这个分支上禁止添加新功能。release 分支最后必须合并到 develop 和 master 分支。</p>
+
+<h4 id="结束-release-分支">结束 release 分支</h4>
+
+<p>当 release 分支的代码到达可以真正发布的状态时，需要做一些处理工作。首先， release 分支必须合并到 master 分支，然后 master 分支上的 commit 必须打上 tag 用于历史版本的查询。最后，release 分支上的变化必须合并到 develop 分支。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git checkout master
+$ git merge release-1.2
+$ git tag -a <span style="color:#ae81ff">1</span>.2
+$ git checkout develop
+$ git merge release-1.2
+$ git branch -d release-1.2</code></pre></div>
+<h3 id="hotfix-branches">Hotfix branches</h3>
+
+<p><img src="http://nvie.com/img/hotfix-branches@2x.png" alt="" /></p>
+
+<ul>
+<li>可能产生于：</li>
+</ul>
+
+<p>master</p>
+
+<ul>
+<li>必须合并到：</li>
+</ul>
+
+<p>develop 和 master</p>
+
+<ul>
+<li>命名要求：</li>
+</ul>
+
+<p>hotfix-*</p>
+
+<p>hotfix 分支和 release 分支很像，它们都准备了一次新的版本发布，尽管 hotfix 是预料之外的。当线上版本出现非预期的问题时，就会创建 hotfix 分支，并且标记上版本信息。</p>
+
+<p>利用 hotfix 分支可以做到一个成员继续开发，而另一个成员进行 bug 修复。</p>
+
+<h4 id="创建-hotfix-分支">创建 hotfix 分支</h4>
+
+<p>从 master 分支创建 hotfix 分支，例如当前 master 版本号为 1.2，那么 hotfix 版本号就应该为 1.2.1。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git checkout -b hotfix-1.2.1 master</code></pre></div>
+<h4 id="结束-hotfix-分支">结束 hotfix 分支</h4>
+
+<p>当完成 bug 修复后，hotfix 分支需要被合并到 master 和 develop 分支。这部分操作和 release 分支很像：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git checkout master
+$ git merge --no-ff hotfix-1.2.1
+$ git tag -a <span style="color:#ae81ff">1</span>.2.1
+$ git checkout develop
+$ git merge --no-ff hotfix-1.2.1
+$ git branch -d hotfix-1.2.1</code></pre></div>
+<h2 id="总结">总结</h2>
+
+<p>这里并没有引入什么新的东西到分支模型，文章开头的图示被证明对我们的项目非常有帮助。它展现了一个易于理解的精致思维模型，并且使得团队成员能够理解整个项目的分支管理和发布过程。</p>
+
+<blockquote>
+<p>原文链接: <a href="http://nvie.com/posts/a-successful-git-branching-model/?spm=a2c4e.11153940.blogcont68655.9.9277436ekX25Dp">http://nvie.com/posts/a-successful-git-branching-model/?spm=a2c4e.11153940.blogcont68655.9.9277436ekX25Dp</a>
+参考链接：
+<a href="https://yq.aliyun.com/articles/68655">https://yq.aliyun.com/articles/68655</a></p>
+
+<p><a href="http://nvie.com/posts/a-successful-git-branching-model/?spm=a2c4e.11153940.blogcont68655.9.9277436ekX25Dp">http://nvie.com/posts/a-successful-git-branching-model/?spm=a2c4e.11153940.blogcont68655.9.9277436ekX25Dp</a></p>
+</blockquote></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/git"><span class="tag">Git</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/tools"><span class="tag">Tools</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

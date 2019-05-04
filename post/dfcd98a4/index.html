@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Hexo 搭建静态博客</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="上次搭的博客写了两篇 Hexo 的配置后就凉了，所以这次刚刚搭好的时候就没想做个记录，怕和上次一样，把写博客的热情全花在了搭建博客上。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Hexo 搭建静态博客" />
+    <meta name="twitter:description" content="上次搭的博客写了两篇 Hexo 的配置后就凉了，所以这次刚刚搭好的时候就没想做个记录，怕和上次一样，把写博客的热情全花在了搭建博客上。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Hexo 搭建静态博客" />
+  <meta property="og:description" content="上次搭的博客写了两篇 Hexo 的配置后就凉了，所以这次刚刚搭好的时候就没想做个记录，怕和上次一样，把写博客的热情全花在了搭建博客上。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/dfcd98a4/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/dfcd98a4/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Hexo 搭建静态博客</h1>
+      <p class="post-meta">@Clsrfish · Dec 30, 2017 · 6 min read</p>
+    </header>
+    <article class="post-content"><p>上次搭的博客写了两篇 Hexo 的配置后就凉了，所以这次刚刚搭好的时候就没想做个记录，怕和上次一样，把写博客的热情全花在了搭建博客上。</p>
+
+<blockquote>
+<p>系统平台是 Ubuntu 17.04，其他平台的安装过程可能会有一些不同，不过后面的配置还是一样的。这里只有安装配置过程，具体使用，还请移步官方文档。
+建议先看完再进行操作！！！</p>
+</blockquote>
+
+<h2 id="安装">安装</h2>
+
+<p>hexo 是一个基于 node 的静态博客生成工具，所以先安装 node ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo apt install nodejs</code></pre></div>
+<p>这样安装似乎没有像 windows 下那样顺带把 npm 也给安装了，所以还需要安装一下 npm ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo apt install npm</code></pre></div>
+<p>再接着安装 Hexo：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo npm install hexo -g</code></pre></div>
+<blockquote>
+<p>很多朋友会遇到 <code>Permission denied</code> 的错误，所以我们需要使用 <code>sudo</code> 安装</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 在有读写权限的目录下执行，Blog 可以换成你喜欢的名字</span>
+mkdir Blog <span style="color:#f92672">&amp;&amp;</span> cd Blog
+<span style="color:#75715e"># 初始化 Blog</span>
+hexo init</code></pre></div>
+<p>不出问题，写作环境就安装好了，再测试下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># 生成静态资源</span>
+hexo g
+<span style="color:#75715e"># 在本地启动 node 静态资源服务器</span>
+hexo s</code></pre></div>
+<p>打开命令行里面输出的 <code>http://27.0.0.1:4000</code>，就能看到一篇 <strong>hello world</strong></p>
+</blockquote>
+
+<p>这里把安装命令整理一下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo apt install nodejs npm
+sudo npm install hexo -g
+mkdir Blog <span style="color:#f92672">&amp;&amp;</span> cd Blog
+hexo init
+<span style="color:#75715e"># 下面的命令是为了安装某些正常安装但安装失败的依赖</span>
+npm install -f </code></pre></div>
+<h2 id="目录结构">目录结构</h2>
+
+<p>完成最基本的安装后， Blog 的目录结构大概是这样的</p>
+
+<pre><code>├── node_modules
+├── scaffolds
+│   ├── draft.md
+│   ├── page.md
+│   └── post.md
+├── source
+│   └── _posts
+│       └── hello-world.md
+├── themes
+│   └── landscape
+├── package.json
+└── _config.yml
+</code></pre>
+
+<p>每个都简单说明一下：
+- node_modules</p>
+
+<p>差不多是一个本地运行环境，一般情况下是不需要动它的</p>
+
+<ul>
+<li>sacffolds</li>
+</ul>
+
+<p>里面都是模板文件，可以打开看看，后面会进行一些修改</p>
+
+<ul>
+<li>source</li>
+</ul>
+
+<p>这里放的是我们的源文件，文章和图片等</p>
+
+<ul>
+<li>themes</li>
+</ul>
+
+<p>这里放的是一些主题，不同的文件夹就是不同的主题，目录名就是主题名</p>
+
+<ul>
+<li>package.json</li>
+</ul>
+
+<p>Blog 工程的配置文件，一般情况下也不会动</p>
+
+<ul>
+<li>_config.yml</li>
+</ul>
+
+<p>站点配置文件，定制化需要对它进行一些修改，我们下文也叫它 <strong>站点配置文件</strong></p>
+
+<h2 id="站点基础配置">站点基础配置</h2>
+
+<p>首先打开 <code>站点配置文件</code>，将 <code>#Site</code> 信息根据你的情况配置：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># Site</span>
+title: <span style="color:#e6db74">&#34;Backyard&#34;</span>
+subtitle: <span style="color:#e6db74">&#34;敲敲代码，扯扯蛋&#34;</span>
+description: <span style="color:#e6db74">&#34;dashMrl&#39;s 个人小站————笔记+随笔&#34;</span>
+author: dashMrl
+language: zh-Hans
+timezone:</code></pre></div>
+<p>然后修改 <code># Deployment</code> 部分：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># Deployment</span>
+<span style="color:#75715e">## Docs: https://hexo.io/docs/deployment.html</span>
+deploy:
+  type: git
+  branch: master
+  repo: 
+    github: git@github.com:dashMrl/dashMrl.github.io.git</code></pre></div>
+<blockquote>
+<p>这里默认你知道怎么启用 GithubPages 服务，避免每次部署输入密码，我们使用 ssh密钥的方式部署</p>
+</blockquote>
+
+<p>完成这些基本配置，就可以比较舒服的开始写博客了，如果你还需要更多定制化，接着往下看。</p>
+
+<h2 id="主题配置">主题配置</h2>
+
+<p>到现在我们还是使用的默认主题 —— landscape，以我的审美来看，还是挺挫的。这里我们选择 Next 主题，这也是 GItHub 上 star 最多的一个主题。</p>
+
+<blockquote>
+<p>如果觉得 Next 主题样式还行，也能满足你的大部分需求，就用它吧，其他的主题可能真的会有很多小问题，亲测</p>
+</blockquote>
+
+<p>每个主题文件下都有一个 <code>_config.yml</code> 文件，这里我们就叫它 <strong>主题配置文件</strong> 。</p>
+
+<p>首先去 Github 下载 Next 主题的 release 版本，解压到 thems 目录下，改名 <code>next</code> ，然后修改 <strong>站点配置文件</strong> ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># Extensions</span>
+theme: next </code></pre></div>
+<p>再次执行 <code>hexo g &amp;&amp; hexo s</code> 就可以看到生效的主题。</p>
+
+<blockquote>
+<p>关于一些基本的配置，Next 的使用文档上都有，这里就只调我觉得重要的讲</p>
+</blockquote>
+
+<h3 id="阅读更多按钮">阅读更多按钮</h3>
+
+<p>默认情况下首页会将整篇文章显示出来，非常丑陋并且影响阅读，所以有时候只想显示一小段描述。</p>
+
+<p>在 <strong>主题配置文件</strong> 中找到 <code>auto_excerpt</code> ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># Automatically Excerpt. Not recommend.</span>
+<span style="color:#75715e"># Please use &lt;!-- more --&gt; in the post to control excerpt accurately.</span>
+auto_excerpt:
+  enable: <span style="color:#66d9ef">true</span>
+  length: <span style="color:#ae81ff">80</span></code></pre></div>
+<p>上面这种方式是截取 <strong>前 80</strong>  字符作为描述，如果想要精确控制的话，关闭 <code>auto_excerpt</code>使用 <code>&lt;--! more --&gt;</code> 来截断。我比较懒，就直接默认截取前80了。</p>
+
+<h3 id="back-2-top-按钮设置">back 2 top 按钮设置</h3>
+
+<p>在 <strong>主题配置文件</strong> 找到 <code>sidebar</code> 设置项，将相应子设置改成：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">  <span style="color:#75715e"># Scroll percent label in b2t button.</span>
+  scrollpercent: <span style="color:#66d9ef">true</span>
+
+  <span style="color:#75715e"># Enable sidebar on narrow view (only for Muse | Mist).</span>
+  onmobile: <span style="color:#66d9ef">true</span></code></pre></div>
+<p>这样就能够在 backtotop 按钮上显示当前阅读的百分比了。</p>
+
+<h3 id="字数统计">字数统计</h3>
+
+<p>在 <strong>主题配置文件</strong>  找到 <code>Post wordcount display settings</code> ，修改成下面样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># Post wordcount display settings</span>
+<span style="color:#75715e"># Dependencies: https://github.com/willin/hexo-wordcount</span>
+post_wordcount:
+  item_text: <span style="color:#66d9ef">true</span>
+  wordcount: <span style="color:#66d9ef">true</span>
+  min2read: <span style="color:#66d9ef">true</span>
+  totalcount: <span style="color:#66d9ef">true</span>
+  separated_meta: <span style="color:#66d9ef">true</span></code></pre></div>
+<p>配置完后我们还需要安装 <code>hexo-wordcount</code> 插件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">npm install hexo-wordcount --save-dev</code></pre></div>
+<p>这样就能显示每篇文章字数和大概阅读时长，同时在页面底部显示整个站点的字数，，感觉挺有用的。</p>
+
+<h3 id="本地搜索">本地搜索</h3>
+
+<p>在 <strong>主题配置文件</strong> 中找到 <code>#Local Search</code> ，修改成这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># Local search</span>
+<span style="color:#75715e"># Dependencies: https://github.com/flashlab/hexo-generator-search</span>
+local_search:
+  enable: <span style="color:#66d9ef">true</span>
+  <span style="color:#75715e"># if auto, trigger search by changing input</span>
+  <span style="color:#75715e"># if manual, trigger search by pressing enter key or search button</span>
+  trigger: auto
+  <span style="color:#75715e"># show top n results per article, show all results by setting to -1</span>
+  top_n_per_article: <span style="color:#ae81ff">1</span></code></pre></div>
+<p>然后在 <strong>站点配置文件</strong>  里你开心的位置加上/修改：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># Local Search</span>
+search: 
+  path: search.xml
+  field: post
+  format: html
+  limit: <span style="color:#ae81ff">10000</span></code></pre></div>
+<p>最后安装插件：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">npm install hexo-generator-search --save-dev</code></pre></div>
+<blockquote>
+<p>还有更多的细节配置，就不一个个讲了，自己看 <strong>主题配置文件</strong> ，里面都有介绍，按照自己的需求配置就行了。</p>
+</blockquote>
+
+<h2 id="高级定制">高级定制</h2>
+
+<p>有时候还需要对博客进行一些优化配置，比如资源压缩等，需要我们添加一些插件甚至修改框架文件。</p>
+
+<h3 id="文章链接优化">文章链接优化</h3>
+
+<p>默认情况下，文章链接是 <code>year/month/day/title</code> 的形式，这样的链接层级对搜索引擎很不友好，当标题里包含中文的时候链接还会因为编码的问题变得丑陋异常。这里我们使用 <code>hexo-abbrlink</code> 插件对此进行优化。</p>
+
+<p>在 <strong>站点配置文件</strong> 里找到 <code>#URL</code> 配置部分，然后修改成下面这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># URL</span>
+<span style="color:#75715e">## If your site is put in a subdirectory, set url as &#39;http://yoursite.com/child&#39; and root as &#39;/child/&#39;</span>
+url: https://xinsbackyard.tech
+root: /
+permalink: posts/:abbrlink.html
+permalink_defaults:
+abbrlink:
+  alg: crc32
+  rep: hex</code></pre></div>
+<p>这样每篇文章就会有一个类似 <code>f4a6041.html</code> 的链接了，而且还提升了逼格。</p>
+
+<blockquote>
+<p>配置完了记得安装插件（虽然应该先安装再配置来着的）</p>
+</blockquote>
+
+<h3 id="rss-订阅">RSS 订阅</h3>
+
+<p>提供 RSS 订阅功能，让关注我们博客的朋友及时收到新文章的“推送”，虽然我自己没有用过 RSS ，但是感觉还是很牛逼的样子，既然这么牛逼，肯定要加上。</p>
+
+<p>在 <strong>站点配置文件</strong> 中你开心的位置上加上：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># RSS</span>
+feed:
+  type: atom
+  path: atom.xml
+  limit: <span style="color:#ae81ff">20</span>
+  hub: 
+  content: 
+  content_limit: <span style="color:#ae81ff">140</span>
+  content_limit_delim: <span style="color:#e6db74">&#39; &#39;</span></code></pre></div>
+<p>然后安装 <code>hexo-generator-feed</code> 插件。</p>
+
+<h3 id="添加站点运行时长">添加站点运行时长</h3>
+
+<p>在网页底部显示 <code>本站已运行 0 年 12 天 1 小时 33 分钟 4 秒</code> 这样的字样，虽然并没有什么实质上的作用，但是以后看着自己的博客运行了这么久，发布了多少篇文章还是挺不错的。</p>
+
+<blockquote>
+<p>这里以 Next 主题为例，其它的主题应该类似的</p>
+</blockquote>
+
+<p>在 next 文件夹找到 <code>layout/_partials/footer.swig</code> 文件，然后找到这一段：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js">{<span style="color:#f92672">%</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">theme</span>.<span style="color:#a6e22e">footer</span>.<span style="color:#a6e22e">custom_text</span> <span style="color:#f92672">%</span>}
+	...
+{<span style="color:#f92672">%</span> <span style="color:#a6e22e">endif</span> <span style="color:#f92672">%</span>}
+</code></pre></div>
+<p>在它前面加上 <code>&lt;div id=&quot;showDays&quot;&gt;本站已运行 0 年 0 天 0 小时 0 分钟 0 秒&lt;/div&gt;</code> ，然后在它后面加上：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">script</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">seconds</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>;
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">minutes</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">seconds</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">60</span>;
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">hours</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">minutes</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">60</span>;
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">days</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">hours</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">24</span>;
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">years</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">days</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">365</span>;
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">birthDay</span> <span style="color:#f92672">=</span> Date.<span style="color:#a6e22e">UTC</span>(<span style="color:#ae81ff">2017</span>,<span style="color:#ae81ff">12</span>,<span style="color:#ae81ff">19</span>,<span style="color:#ae81ff">14</span>,<span style="color:#ae81ff">00</span>,<span style="color:#ae81ff">00</span>); <span style="color:#75715e">// 这里设置建站时间
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">setInterval</span>(<span style="color:#66d9ef">function</span>() {
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">today</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Date();
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">todayYear</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">today</span>.<span style="color:#a6e22e">getFullYear</span>();
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">todayMonth</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">today</span>.<span style="color:#a6e22e">getMonth</span>()<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>;
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">todayDate</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">today</span>.<span style="color:#a6e22e">getDate</span>();
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">todayHour</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">today</span>.<span style="color:#a6e22e">getHours</span>();
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">todayMinute</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">today</span>.<span style="color:#a6e22e">getMinutes</span>();
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">todaySecond</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">today</span>.<span style="color:#a6e22e">getSeconds</span>();
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">now</span> <span style="color:#f92672">=</span> Date.<span style="color:#a6e22e">UTC</span>(<span style="color:#a6e22e">todayYear</span>,<span style="color:#a6e22e">todayMonth</span>,<span style="color:#a6e22e">todayDate</span>,<span style="color:#a6e22e">todayHour</span>,<span style="color:#a6e22e">todayMinute</span>,<span style="color:#a6e22e">todaySecond</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">diff</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">now</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">birthDay</span>;
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">diffYears</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">floor</span>(<span style="color:#a6e22e">diff</span><span style="color:#f92672">/</span><span style="color:#a6e22e">years</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">diffDays</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">floor</span>((<span style="color:#a6e22e">diff</span><span style="color:#f92672">/</span><span style="color:#a6e22e">days</span>)<span style="color:#f92672">-</span><span style="color:#a6e22e">diffYears</span><span style="color:#f92672">*</span><span style="color:#ae81ff">365</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">diffHours</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">floor</span>((<span style="color:#a6e22e">diff</span><span style="color:#f92672">-</span>(<span style="color:#a6e22e">diffYears</span><span style="color:#f92672">*</span><span style="color:#ae81ff">365</span><span style="color:#f92672">+</span><span style="color:#a6e22e">diffDays</span>)<span style="color:#f92672">*</span><span style="color:#a6e22e">days</span>)<span style="color:#f92672">/</span><span style="color:#a6e22e">hours</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">diffMinutes</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">floor</span>((<span style="color:#a6e22e">diff</span><span style="color:#f92672">-</span>(<span style="color:#a6e22e">diffYears</span><span style="color:#f92672">*</span><span style="color:#ae81ff">365</span><span style="color:#f92672">+</span><span style="color:#a6e22e">diffDays</span>)<span style="color:#f92672">*</span><span style="color:#a6e22e">days</span><span style="color:#f92672">-</span><span style="color:#a6e22e">diffHours</span><span style="color:#f92672">*</span><span style="color:#a6e22e">hours</span>)<span style="color:#f92672">/</span><span style="color:#a6e22e">minutes</span>);
+    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">diffSeconds</span> <span style="color:#f92672">=</span> Math.<span style="color:#a6e22e">floor</span>((<span style="color:#a6e22e">diff</span><span style="color:#f92672">-</span>(<span style="color:#a6e22e">diffYears</span><span style="color:#f92672">*</span><span style="color:#ae81ff">365</span><span style="color:#f92672">+</span><span style="color:#a6e22e">diffDays</span>)<span style="color:#f92672">*</span><span style="color:#a6e22e">days</span><span style="color:#f92672">-</span><span style="color:#a6e22e">diffHours</span><span style="color:#f92672">*</span><span style="color:#a6e22e">hours</span><span style="color:#f92672">-</span><span style="color:#a6e22e">diffMinutes</span><span style="color:#f92672">*</span><span style="color:#a6e22e">minutes</span>)<span style="color:#f92672">/</span><span style="color:#a6e22e">seconds</span>);
+      document.<span style="color:#a6e22e">getElementById</span>(<span style="color:#e6db74">&#39;showDays&#39;</span>).<span style="color:#a6e22e">innerHTML</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;本站已运行 &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">diffYears</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34; 年 &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">diffDays</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34; 天 &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">diffHours</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34; 小时 &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">diffMinutes</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34; 分钟 &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">diffSeconds</span><span style="color:#f92672">+</span><span style="color:#e6db74">&#34; 秒&#34;</span>;
+  }, <span style="color:#ae81ff">1000</span>);
+<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/script&gt;</span>
+</code></pre></div>
+<p>这时候就可以在网页底部显示运行时间了。不过问题也来了，当我们在手机浏览器中加载网页的时候，底部因为太高而挡住了帖子中阅读更多按钮，所以为了避免这种情况，我们把 <code>Powered by Hexo</code> 等推广字样去掉（在这里对 Hexo 和 Next 说声抱歉）。</p>
+
+<p>在 <strong>站点配置文件</strong> 里找到 <code>footer:</code> 配置，然后修改：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">footer:
+<span style="color:#75715e">#...</span>
+  powered: <span style="color:#66d9ef">false</span>
+  theme:
+<span style="color:#75715e">#...</span>
+    enable: <span style="color:#66d9ef">false</span></code></pre></div>
+<p>这样就算完成了。</p>
+
+<blockquote>
+<p>如果学过 web 开发的话，可以把它们改得“面目全非”</p>
+</blockquote>
+
+<h3 id="修改-tag-图标">修改 tag 图标</h3>
+
+<p>每篇文章底部都会显示几个 <code>#tagname</code>  ，这个 # 号觉着不怎么好看，换成图标。</p>
+
+<p>在 next 文件夹中找到 <code>layout/_macro/post.swig</code> ，找到 ：</p>
+
+<pre><code>{% if post.tags and post.tags.length and not is_index %}
+	&lt;div class=&quot;post-tags&quot;&gt;
+    	{% for tag in post.tags %}
+            &lt;a href=&quot;{{ url_for(tag.path) }}&quot; rel=&quot;tag&quot;&gt; #{{ tag.name }}&lt;/a&gt;
+         {% endfor %}
+    &lt;/div&gt;
+{% endif %}
+</code></pre>
+
+<p>把 <code>{{ tag.name }}</code> 前面的 <strong>#</strong> 改成 <code>&lt;i class=&quot;fa fa-tag&quot;&gt;&lt;/i&gt;</code> 。这样就 OK 了。</p>
+
+<h3 id="静态资源压缩">静态资源压缩</h3>
+
+<p>Hexo 生成的静态资源中有很多的空行空格，然后我们的图片也有比较大的优化空间，为了减小它们的体积，提高加载速速，需要对其进行一定程度的压缩。</p>
+
+<p>这里我们使用 Gulp 来压缩资源，首先安装必要的依赖：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">npm install gulp gulp-clean-css gulp-html-clean gulp-htmlmin gulp-imagemin gulp-uglify --save-dev</code></pre></div>
+<p>然后在博客根目录下添加 <code>gulpfile.js</code> 文件，并写入如下内容：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">gulp</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;gulp&#39;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">minifycss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;gulp-clean-css&#39;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">uglify</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;gulp-uglify&#39;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">htmlmin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;gulp-htmlmin&#39;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">htmlclean</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;gulp-htmlclean&#39;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">imagemin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;gulp-imagemin&#39;</span>);
+
+<span style="color:#75715e">// 压缩html
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">task</span>(<span style="color:#e6db74">&#39;minify-html&#39;</span>, ()=&gt; {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">src</span>(<span style="color:#e6db74">&#39;public/**/*.html&#39;</span>)
+        .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">htmlclean</span>())
+        .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">htmlmin</span>({
+            <span style="color:#a6e22e">removeComments</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+            <span style="color:#a6e22e">collapseWhitespace</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,<span style="color:#75715e">//压缩HTML
+</span><span style="color:#75715e"></span>            <span style="color:#a6e22e">removeEmptyAttributes</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,<span style="color:#75715e">//删除所有空格作属性值 &lt;input id=&#34;&#34; /&gt; ==&gt; &lt;input /&gt;
+</span><span style="color:#75715e"></span>            <span style="color:#a6e22e">minifyJS</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+            <span style="color:#a6e22e">minifyCSS</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+            <span style="color:#a6e22e">minifyURLs</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>,
+        }))
+        .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">dest</span>(<span style="color:#e6db74">&#39;public&#39;</span>))
+});
+<span style="color:#75715e">// 压缩css
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">task</span>(<span style="color:#e6db74">&#39;minify-css&#39;</span>, ()=&gt; {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">src</span>([<span style="color:#e6db74">&#39;public/css/**/*.css&#39;</span>, <span style="color:#e6db74">&#39;!public/css/**/*min.css&#39;</span>])
+        .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">minifycss</span>({ <span style="color:#a6e22e">compatibility</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;ie8&#39;</span> }))
+        .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">dest</span>(<span style="color:#e6db74">&#39;public/css&#39;</span>));
+});
+<span style="color:#75715e">// 压缩js
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">task</span>(<span style="color:#e6db74">&#39;minify-js&#39;</span>,  ()=&gt; {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">src</span>([<span style="color:#e6db74">&#39;public/js/**/*.js&#39;</span>, <span style="color:#e6db74">&#39;!public/js/**/*min.js&#39;</span>])
+        .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">uglify</span>())
+        .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">dest</span>(<span style="color:#e6db74">&#39;public/js&#39;</span>));
+});
+<span style="color:#75715e">// 压缩图片
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">task</span>(<span style="color:#e6db74">&#39;minify-images&#39;</span>,  ()=&gt; {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">src</span>(<span style="color:#e6db74">&#39;public/images/**/*.*&#39;</span>)
+        .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">imagemin</span>(
+            [<span style="color:#a6e22e">imagemin</span>.<span style="color:#a6e22e">gifsicle</span>({ <span style="color:#e6db74">&#39;optimizationLevel&#39;</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">3</span> }),
+            <span style="color:#a6e22e">imagemin</span>.<span style="color:#a6e22e">jpegtran</span>({ <span style="color:#e6db74">&#39;progressive&#39;</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> }),
+<span style="color:#75715e">//			在我电脑上下面这一行会报错
+</span><span style="color:#75715e">//            imagemin.optipng({ &#39;optimizationLevel&#39;: 5 }),
+</span><span style="color:#75715e"></span>            <span style="color:#a6e22e">imagemin</span>.<span style="color:#a6e22e">svgo</span>()],
+            { <span style="color:#e6db74">&#39;verbose&#39;</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> }))
+        .<span style="color:#a6e22e">pipe</span>(<span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">dest</span>(<span style="color:#e6db74">&#39;public/images&#39;</span>))
+});
+<span style="color:#75715e">// 默认任务
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">gulp</span>.<span style="color:#a6e22e">task</span>(<span style="color:#e6db74">&#39;default&#39;</span>, [
+    <span style="color:#e6db74">&#39;minify-html&#39;</span>, <span style="color:#e6db74">&#39;minify-css&#39;</span>, <span style="color:#e6db74">&#39;minify-js&#39;</span>, <span style="color:#e6db74">&#39;minify-images&#39;</span>
+]);
+</code></pre></div>
+<p>然后在每次部署博客之前都执行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">gulp</code></pre></div>
+<p>如果站点的文本文件比重大的话，压缩效果还是很可观的。</p>
+
+<h2 id="seo-优化">SEO 优化</h2>
+
+<p>其实 SEO 也可以放在上一节中，但是 SEO 算是比较不同的配置，所以就拿出来单独讲。</p>
+
+<h3 id="生成-sitemap">生成 sitemap</h3>
+
+<p>我们需要把站点内容主动推给搜索引擎，推送载体就是 sitemap。打开 <strong>站点配置文件</strong> ，在你开心的位置添加上：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># Site Map</span>
+sitemap: 
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml</code></pre></div>
+<p>然后安装 <code>hexo-generator-sitemap</code> 和 <code>hexo-generator-baidu-sitemap</code> 两个插件。</p>
+
+<h3 id="认证网站所有权">认证网站所有权</h3>
+
+<p>这里需要分 Google 和 百度 分别认证，具体怎么认证，有很多优秀的博客有讲，这里就不赘述了</p>
+
+<h3 id="主动-自动推送">主动/自动推送</h3>
+
+<p>这里主要是针对百度的，因为 Github 把百度的爬虫给屏蔽了(虽然不知道为什么，但觉得百度好委屈hhh)。在百度站长认证完网站所有权之后就可以推送链接了，有被动爬取(被屏蔽)、自动推送和主动推送三种方式。</p>
+
+<p>要开启自动推送非常简单，Next 帮我们把推送脚本内置了，只需要在 <strong>主题配置文件</strong> 里开启 <code>baidu_push: true</code> 就可以了。</p>
+
+<p>至于主动推送，就是我们按照一定格式手工推送链接。emmm，手工？不存在的，这么无聊的事情肯定要自动化，然后就是考虑推送时机，更新博客的时候最合适，所以我们写一个博客的 <strong>部署脚本</strong> ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>statusCheck<span style="color:#f92672">(){</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> $? !<span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">]</span>
+    <span style="color:#66d9ef">then</span>
+        echo -n $1<span style="color:#e6db74">&#39; failed!!\n&#39;</span>
+        exit $?
+    <span style="color:#66d9ef">else</span>
+        echo -n $1<span style="color:#e6db74">&#39; completed!!\n&#39;</span>
+    <span style="color:#66d9ef">fi</span> 
+<span style="color:#f92672">}</span>
+echo <span style="color:#e6db74">&#39;start cleaning...&#39;</span>
+node_modules/hexo/bin/hexo clean
+statusCheck <span style="color:#e6db74">&#39;cleaning public resource&#39;</span>
+
+echo <span style="color:#e6db74">&#39;start generating...&#39;</span>
+node_modules/hexo/bin/hexo g
+statusCheck <span style="color:#e6db74">&#39;generating public resource&#39;</span>
+
+echo <span style="color:#e6db74">&#39;start compressing by gulp...&#39;</span>
+node_modules/gulp/bin/gulp.js
+statusCheck <span style="color:#e6db74">&#39;compressing public resource&#39;</span>
+
+echo <span style="color:#e6db74">&#39;start deploying...&#39;</span>
+node_modules/hexo/bin/hexo d
+statusCheck <span style="color:#e6db74">&#39;deploying to repository&#39;</span>
+
+echo <span style="color:#e6db74">&#39;start upload sitemap to baidu&#39;</span>
+cat public/sitemap.xml | grep loc| grep -o <span style="color:#e6db74">&#39;https://xinsbackyard.tech/posts/.*\.html&#39;</span> &gt; public/urls.txt
+curl -H <span style="color:#e6db74">&#39;Content-Type:text/plain&#39;</span> --data-binary @public/urls.txt <span style="color:#e6db74">&#34;http://data.zz.baidu.com/urls?site=https://xinsbackyard.tech&amp;token=tZapjdbbZwBxt7WV&#34;</span>
+<span style="color:#75715e">#rm public/urls.txt</span>
+statusCheck <span style="color:#e6db74">&#39;push links to baidu&#39;</span>
+
+echo <span style="color:#e6db74">&#39;completed...&#39;</span></code></pre></div>
+<h2 id="pwa-改造">PWA 改造</h2>
+
+<p>PWA（渐进式 WebApp）在国内还一直不愠不火，但是 PWA 在提高用户体验方面确实有很大的作用，国外有很多案例（没亲自考证）。更重要的一点是，如果你使用原生系统，并且使用 Chrome 浏览 PWA 改造过的站点，Chrome 会根据用户的浏览情况来弹出 <code>添加该站点到主屏幕</code> 的请求窗口，当点击确认后， <strong>应用抽屉</strong> 里就会出现一个你站点的 “App”，你没看错，是和我们从应用商店安装的应用待在一个地方，而且还能在系统设置里看到它。</p>
+
+<h3 id="manifest-json">manifest.json</h3>
+
+<p>就像一个 Android App 一样，我们需要提供一个清单文件来描述我们的站点，它大概长这样：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Backyard&#34;</span>,
+  <span style="color:#f92672">&#34;short_name&#34;</span>: <span style="color:#e6db74">&#34;Backyard&#34;</span>,
+  <span style="color:#f92672">&#34;description&#34;</span>: <span style="color:#e6db74">&#34;dashMrl&#39;s 后花园——笔记+随笔&#34;</span>,
+  <span style="color:#f92672">&#34;dir&#34;</span>: <span style="color:#e6db74">&#34;auto&#34;</span>,
+<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">这里设置成</span> <span style="color:#960050;background-color:#1e0010">standalone</span> <span style="color:#960050;background-color:#1e0010">很重要，不然不会显示为一个单独的应用</span>
+  <span style="color:#f92672">&#34;display&#34;</span>: <span style="color:#e6db74">&#34;standalone&#34;</span>,
+<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">下面的两个颜色可以设置一样，会配合图标生成一个启动页</span>
+  <span style="color:#f92672">&#34;theme_color&#34;</span>: <span style="color:#e6db74">&#34;#272727&#34;</span>,
+  <span style="color:#f92672">&#34;background_color&#34;</span>: <span style="color:#e6db74">&#34;#272727&#34;</span>,
+  <span style="color:#f92672">&#34;start_url&#34;</span>: <span style="color:#e6db74">&#34;/?pwa=true&#34;</span>,
+  <span style="color:#f92672">&#34;scope&#34;</span>: <span style="color:#e6db74">&#34;/&#34;</span>,
+<span style="color:#960050;background-color:#1e0010">//</span> <span style="color:#960050;background-color:#1e0010">下面是</span> <span style="color:#960050;background-color:#1e0010">PWA</span> <span style="color:#960050;background-color:#1e0010">安装到手机上后显示的图标，最高需要提供到</span> <span style="color:#960050;background-color:#1e0010">512x512（我找遍了都没找到我头像这种分辨率的图，QAQ）</span>
+  <span style="color:#f92672">&#34;icons&#34;</span>: [
+    {
+      <span style="color:#f92672">&#34;src&#34;</span>: <span style="color:#e6db74">&#34;images/icons/touch48.png&#34;</span>,
+      <span style="color:#f92672">&#34;sizes&#34;</span>: <span style="color:#e6db74">&#34;48x48&#34;</span>,
+      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;image/png&#34;</span>
+    },
+    {
+      <span style="color:#f92672">&#34;src&#34;</span>: <span style="color:#e6db74">&#34;images/icons/touch72.png&#34;</span>,
+      <span style="color:#f92672">&#34;sizes&#34;</span>: <span style="color:#e6db74">&#34;72x72&#34;</span>,
+      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;image/png&#34;</span>
+    },
+    {
+      <span style="color:#f92672">&#34;src&#34;</span>: <span style="color:#e6db74">&#34;images/icons/touch96.png&#34;</span>,
+      <span style="color:#f92672">&#34;sizes&#34;</span>: <span style="color:#e6db74">&#34;96x96&#34;</span>,
+      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;image/png&#34;</span>
+    },
+    {
+      <span style="color:#f92672">&#34;src&#34;</span>: <span style="color:#e6db74">&#34;images/icons/touch144.png&#34;</span>,
+      <span style="color:#f92672">&#34;sizes&#34;</span>: <span style="color:#e6db74">&#34;144x144&#34;</span>,
+      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;image/png&#34;</span>
+    },
+    {
+      <span style="color:#f92672">&#34;src&#34;</span>: <span style="color:#e6db74">&#34;images/icons/touch168.png&#34;</span>,
+      <span style="color:#f92672">&#34;sizes&#34;</span>: <span style="color:#e6db74">&#34;168x168&#34;</span>,
+      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;image/png&#34;</span>
+    },
+    {
+      <span style="color:#f92672">&#34;src&#34;</span>: <span style="color:#e6db74">&#34;images/icons/touch192.png&#34;</span>,
+      <span style="color:#f92672">&#34;sizes&#34;</span>: <span style="color:#e6db74">&#34;192x192&#34;</span>,
+      <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;image/png&#34;</span>
+    }
+  ]
+}</code></pre></div>
+<p>然后把这个文件丢到 <code>source</code> 文件夹下面，再修改 <code>.../themes/next/layout/_partials/head.swig</code> 文件使得每个页面都声明 manifest ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">...
+<span style="color:#f92672">&lt;</span><span style="color:#a6e22e">link</span> <span style="color:#a6e22e">rel</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;manifest&#34;</span> <span style="color:#a6e22e">href</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/manifest.json&#34;</span><span style="color:#f92672">&gt;</span>
+...
+</code></pre></div>
+<p>还有一些辅助我们生成这个文件的网站，大家可以自行搜索，如果想要深入了解这个文件，可以前往 MDN 上学习。</p>
+
+<h3 id="service-worker">Service Worker</h3>
+
+<p>这算是 PWA 精髓所在了，它的作用可以不恰当地理解为缓存。当我们第一次浏览某个网页的时候，浏览器会尝试注册这个 ServiceWorker，此时处于 <code>installing</code> 状态，注册成功后它就会运行在一个单独的进程，并处于 <code>active</code> 状态，然后当我们请求我们站内资源的时候，请求就会先经过 sw ，如果它恰好有缓存的话，直接返回，否则进行网络请求。当我们下一次访问这个站点的时候，如果 sw 的缓存没有过期，我们就可以接着使用缓存（和浏览器本身缓存很像）。</p>
+
+<p>说了这么多，那到底怎么才能使用 sw 呢？也非常简单，首选打开 <strong>站点配置文件</strong> ，在合适的位置加入 ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#75715e"># offline config passed to sw-precache</span>
+service-worker:
+  maximumFileSizeToCacheInBytes: <span style="color:#ae81ff">5242880</span>
+  staticFileGlobs:
+  - public/<span style="color:#75715e">**/*.{js,html,css,png,jpg,gif,webp,svg,eot,ttf,woff,woff2}</span>
+  stripPrefix: public
+  verbose: <span style="color:#66d9ef">true</span></code></pre></div>
+<p>然后安装 <code>hexo-offline</code> 插件就可以了，这时候执行 <code>hexo g</code> 可以看到类似 “ INFO  Total precache size is about 5.17 MB for 153 resources ” 的字样，然后在 public 目录下会出现一个 <code>service-worker.js</code> 文件，这就表示它能缓存我们整个站点的文件。</p>
+
+<h3 id="启用-https">启用 HTTPS</h3>
+
+<p>PWA 要求站内所有资源都通过 HTTPS 传输，如果使用的 GithubPages 的话，默认开启 HTTPS ，不需要我们操心。但是如果配置了自定义域名，GitHub 提供的 HTTPS 就无法开启了，如果你也和我一样想省时省钱的话，就是用 cloudflare 来提供 HTTPS 服务吧。具体怎么玩，大家自己亲自去实践吧hhh。</p>
+
+<p>到现在应该是写得差不多了，写教程类的文章总是最累的（所以我偷工减料），即怕说得不够清楚，又怕说得太多不利于读者思考，更怕误导读者，所以还是向所有为人师者致敬。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/next"><span class="tag">Next</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/github-pages"><span class="tag">Github Pages</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/hexo"><span class="tag">Hexo</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>489</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

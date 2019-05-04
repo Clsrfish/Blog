@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Annotation Processor on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/annotation-processor/</link>
+    <description>Recent content in Annotation Processor on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 30 Dec 2017 22:32:32 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/annotation-processor/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Annotation 基础</title>
+      <link>https://clsrfish.github.io/Blog/post/5ccb233a/</link>
+      <pubDate>Sat, 30 Dec 2017 22:32:32 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/5ccb233a/</guid>
+      <description>&lt;p&gt;注解是一种元数据（metadata），它在虽然能提供关于程序的一些信息，但并不是程序本身的一部分。注解对被其标注的对象没有任何副作用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Butterknife 剖析</title>
+      <link>https://clsrfish.github.io/Blog/post/c350d50c/</link>
+      <pubDate>Sat, 30 Dec 2017 00:45:35 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/c350d50c/</guid>
+      <description>&lt;p&gt;在初学 Android 的时候，写一个 Activity，就要写好几句 &lt;code&gt;findViewById&lt;/code&gt; （现在 support 包使用泛型避免强转），慢地就变得厌倦这些模板代码，但是又不能不写。ButterKnife 使用注解的方式来避免这一类模板代码，比如事件监听器等。代码变得好看了，也就开始思考它内部的工作原理。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

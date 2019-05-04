@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Picasso 加载流程</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="自己第一次写比较完整 app 还是去年暑假，当时参加现在的团队夏令营，组长要求我们不能使用第三方库（亏得自己还苦哈哈地看了几天各种第三方库），所以就得自己手写图片加载逻辑，所以也就遇到很多问题，比如错位、加载慢等。不过使用第三方库的话，一行代码就能解决这些问题。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Picasso 加载流程" />
+    <meta name="twitter:description" content="自己第一次写比较完整 app 还是去年暑假，当时参加现在的团队夏令营，组长要求我们不能使用第三方库（亏得自己还苦哈哈地看了几天各种第三方库），所以就得自己手写图片加载逻辑，所以也就遇到很多问题，比如错位、加载慢等。不过使用第三方库的话，一行代码就能解决这些问题。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Picasso 加载流程" />
+  <meta property="og:description" content="自己第一次写比较完整 app 还是去年暑假，当时参加现在的团队夏令营，组长要求我们不能使用第三方库（亏得自己还苦哈哈地看了几天各种第三方库），所以就得自己手写图片加载逻辑，所以也就遇到很多问题，比如错位、加载慢等。不过使用第三方库的话，一行代码就能解决这些问题。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/82cb002a/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/82cb002a/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Picasso 加载流程</h1>
+      <p class="post-meta">@Clsrfish · Dec 30, 2017 · 5 min read</p>
+    </header>
+    <article class="post-content"><p>自己第一次写比较完整 app 还是去年暑假，当时参加现在的团队夏令营，组长要求我们不能使用第三方库（亏得自己还苦哈哈地看了几天各种第三方库），所以就得自己手写图片加载逻辑，所以也就遇到很多问题，比如错位、加载慢等。不过使用第三方库的话，一行代码就能解决这些问题。</p>
+
+<p>不废话了，从我的角度来看，网上目前流行的图片加载库也就三款，Picasso、Glide 和 Fresco，而它们的功能也是依次递增。Glide 是 Google 员工基于 Picasso 进行的二次开发，Google 在自己的应用里面也大量使用；Fresco 则出自 Facebook 之手，由于使用 Native/C 来缓存图片，所以一定程度上减少了 OOM 的可能。</p>
+
+<p>现在大概清楚了三款库的定位，前两者专业性显然不如 Fresco，但是使用上简单，如果是应用内有大量的图片加载场景，如图库类应用，使用 Fresco 应该是个不错的选择。所以这次我们就选最简单的 Picasso 来分析，认怂。。。</p>
+
+<p>图片加载库最经典的场景就是 <strong>从网络加载一张图片到 ImageView</strong> ， Picasso 对此给出了最简单的解决方案：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">with</span><span style="color:#f92672">(</span>context<span style="color:#f92672">)</span>
+    <span style="color:#f92672">.</span><span style="color:#a6e22e">load</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;http://i.imgur.com/DvpvklR.png&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#f92672">.</span><span style="color:#a6e22e">into</span><span style="color:#f92672">(</span>imageView<span style="color:#f92672">);</span></code></pre></div>
+<p>那么我们的分析也就针对这几行代码。</p>
+
+<h2 id="平台">平台</h2>
+
+<ul>
+<li>OS：Ubuntu 17.04</li>
+<li>IDE：Android Studio</li>
+<li>Picasso：3.0.0-SNAPSHOT</li>
+</ul>
+
+<h2 id="整体流程">整体流程</h2>
+
+<p>还是先看看一个简单的流程图：
+<img src="https://i.loli.net/2017/12/30/5a46800033c20.png" alt="" /></p>
+
+<h2 id="关键类剖析">关键类剖析</h2>
+
+<p>真正开始分析源码之前先简单地解下一些重要的类，以及相关的接口。</p>
+
+<h3 id="picasso">Picasso</h3>
+
+<p>图片加载的入口，主要是完成诸如 <strong>Downloader</strong> 、<strong>ExecutorService</strong> 、 <strong>Cache</strong> 、 <strong>RequestHandler</strong> 、<strong>Bitmap.Config</strong> 等的配置，如果没有使用自定义的配置，Picasso内部都有默认配置。</p>
+
+<h3 id="requestcreator">RequestCreator</h3>
+
+<p>这个类主要职责是构造一次图片加载的配置，比如 url、大小、动画等等，最后提交请求。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RequestCreator</span><span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Picasso picasso<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Request<span style="color:#f92672">.</span><span style="color:#a6e22e">Builder</span> data<span style="color:#f92672">;</span>
+
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> noFade<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> deferred<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">boolean</span> setPlaceholder <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> placeholderResId<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> errorResId<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> memoryPolicy<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">int</span> networkPolicy<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> Drawable placeholderDrawable<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> Drawable errorDrawable<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">private</span> Object tag<span style="color:#f92672">;</span>
+  
+  <span style="color:#66d9ef">boolean</span> willReplay<span style="color:#f92672">;</span>
+  <span style="color:#66d9ef">boolean</span> cancelled<span style="color:#f92672">;</span>
+  <span style="color:#f92672">...</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<h3 id="action">Action</h3>
+
+<p>针对图片加载的目标对象，Action 对此进行了一个抽象，具体的由实现类实现，比如简单加载图片到 <code>ImageView</code> 中，那么就是 <code>ImageViewAction</code>，同理，<code>NotificationAction</code> 就是加载图片到 <code>Notification</code> 中。我们本次要分析的是 <code>ImageViewAction</code></p>
+
+<h3 id="dispatcher">Dispatcher</h3>
+
+<p>加载任务的调度器，负责加载任务的开始、暂停、恢复以及失败之后的回调处理。</p>
+
+<h3 id="bitmaphunter">BitmapHunter</h3>
+
+<p>Runnable 子类，具体图片加载的抽象，内部调用 Cache 、Downloader 提供的接口来完成 bitmap 的获取，也完成一些图片的转换操作。</p>
+
+<h3 id="requesthandler">RequestHandler</h3>
+
+<p>针对图片不同来源，比如从网络、磁盘、assets、resources 等获取，会有不同的 RequestHandler 子类处理。 Picasso 内部有个 RequestHandler 的集合，到遇到一个加载任务时，遍历这个集合并调用 <code>RequestHandler#canHandleRequest(Request data)</code> 方法来判断是否可以处理这个请求，当找到可以处理的就立即中断循环，没有则会得到一个 ERRORING_HANDLER 。而判断是否可以处理请求的依据就是我们传入的图片 uri ，源码中都很清晰。</p>
+
+<p>这里我们的分析 <code>NetworkRequestHandler</code> 。</p>
+
+<h3 id="downloader">Downloader</h3>
+
+<p>下载网络图片的下载器接口，Picasso 默认实现是 OkHttp3Downloader。因为我们主要是分析图片加载流程，所以这一部分大概知道就行了。</p>
+
+<h3 id="transformation">Transformation</h3>
+
+<p>图片转换接口，在配置加载的时候传入自定义的 Transformation 实现可以实现诸如 <strong>圆形</strong>、<strong>高斯模糊</strong> 等。</p>
+
+<h3 id="cache">Cache</h3>
+
+<p>内存缓存接口，默认实现是 LruCache。Picasso 没有自己实现磁盘缓存，而是直接使用 OkHttp3 的磁盘缓存。</p>
+
+<h3 id="callback">Callback</h3>
+
+<p>图片加载完成之后的回调。</p>
+
+<h2 id="流程剖析">流程剖析</h2>
+
+<p>关于 Picasso 初始化配置也有太多必要去看，直接从 <code>picasso#load()</code> 方法开始。</p>
+
+<h3 id="创建请求并提交">创建请求并提交</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> RequestCreator <span style="color:#a6e22e">load</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@Nullable</span> Uri uri<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> RequestCreator<span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> uri<span style="color:#f92672">,</span> 0<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>所有的 <code>picasso#load()</code> 最终都会创建一个 <code>RequestCreator</code> 实例。然后调用 <code>RequestCreator#into()</code> 方法提交一个加载请求。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">into</span><span style="color:#f92672">(</span>ImageView target<span style="color:#f92672">,</span> Callback callback<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">long</span> started <span style="color:#f92672">=</span> System<span style="color:#f92672">.</span><span style="color:#a6e22e">nanoTime</span><span style="color:#f92672">();</span>
+  checkMain<span style="color:#f92672">();</span>
+
+  Request request <span style="color:#f92672">=</span> createRequest<span style="color:#f92672">(</span>started<span style="color:#f92672">);</span>
+  String requestKey <span style="color:#f92672">=</span> createKey<span style="color:#f92672">(</span>request<span style="color:#f92672">);</span>
+
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>shouldReadFromMemoryCache<span style="color:#f92672">(</span>memoryPolicy<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+    Bitmap bitmap <span style="color:#f92672">=</span> picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">quickMemoryCacheCheck</span><span style="color:#f92672">(</span>requestKey<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bitmap <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">cancelRequest</span><span style="color:#f92672">(</span>target<span style="color:#f92672">);</span>
+      setBitmap<span style="color:#f92672">(</span>target<span style="color:#f92672">,</span> picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">context</span><span style="color:#f92672">,</span> bitmap<span style="color:#f92672">,</span> MEMORY<span style="color:#f92672">,</span> noFade<span style="color:#f92672">,</span> picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">indicatorsEnabled</span><span style="color:#f92672">);</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>callback <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        callback<span style="color:#f92672">.</span><span style="color:#a6e22e">onSuccess</span><span style="color:#f92672">();</span>
+      <span style="color:#f92672">}</span>
+      <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+
+  Action action <span style="color:#f92672">=</span>
+      <span style="color:#66d9ef">new</span> ImageViewAction<span style="color:#f92672">(</span>picasso<span style="color:#f92672">,</span> target<span style="color:#f92672">,</span> request<span style="color:#f92672">,</span> memoryPolicy<span style="color:#f92672">,</span> networkPolicy<span style="color:#f92672">,</span> errorResId<span style="color:#f92672">,</span>
+          errorDrawable<span style="color:#f92672">,</span> requestKey<span style="color:#f92672">,</span> tag<span style="color:#f92672">,</span> callback<span style="color:#f92672">,</span> noFade<span style="color:#f92672">);</span>
+
+  picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">enqueueAndSubmit</span><span style="color:#f92672">(</span>action<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>上面代码有删改，只保留了和本次分析有关的关键代码。
+首先是创建一个请求，但是并没有立即提交。然后查询 <strong>内存缓存</strong> ，如果内存有可用的缓存，设置 Bitmap 并回调；这里的 <strong>key</strong> 是根据 <code>Request</code> 来创建的，不同的请求配置，key 也会不一样。当缓存不可用时，就把 Request 封装成 <strong>Action</strong> ，然后交由 Picasso 来进行提交。</p>
+
+<h3 id="提交过程">提交过程</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">enqueueAndSubmit</span><span style="color:#f92672">(</span>Action action<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    Object target <span style="color:#f92672">=</span> action<span style="color:#f92672">.</span><span style="color:#a6e22e">getTarget</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>target <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> targetToAction<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>target<span style="color:#f92672">)</span> <span style="color:#f92672">!=</span> action<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        cancelExistingRequest<span style="color:#f92672">(</span>target<span style="color:#f92672">);</span>
+        targetToAction<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>target<span style="color:#f92672">,</span> action<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    submit<span style="color:#f92672">(</span>action<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">submit</span><span style="color:#f92672">(</span>Action action<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    dispatcher<span style="color:#f92672">.</span><span style="color:#a6e22e">dispatchSubmit</span><span style="color:#f92672">(</span>action<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>提交时需要取消当前 ImageView 可能存的加载请求，同时放入 <strong>targetToAction</strong> 这个 Map 容器里，最后由 <strong>Dispatcher</strong> 进行调度。</p>
+
+<h3 id="dispatcher-中转">Dispatcher 中转</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">dispatchSubmit</span><span style="color:#f92672">(</span>Action action<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  handler<span style="color:#f92672">.</span><span style="color:#a6e22e">sendMessage</span><span style="color:#f92672">(</span>handler<span style="color:#f92672">.</span><span style="color:#a6e22e">obtainMessage</span><span style="color:#f92672">(</span>REQUEST_SUBMIT<span style="color:#f92672">,</span> action<span style="color:#f92672">));</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">performSubmit</span><span style="color:#f92672">(</span>Action action<span style="color:#f92672">,</span> <span style="color:#66d9ef">boolean</span> dismissFailed<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>pausedTags<span style="color:#f92672">.</span><span style="color:#a6e22e">contains</span><span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">getTag</span><span style="color:#f92672">()))</span> <span style="color:#f92672">{</span>
+    pausedActions<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">getTarget</span><span style="color:#f92672">(),</span> action<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+
+  BitmapHunter hunter <span style="color:#f92672">=</span> hunterMap<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">getKey</span><span style="color:#f92672">());</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>hunter <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">attach</span><span style="color:#f92672">(</span>action<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+
+  hunter <span style="color:#f92672">=</span> forRequest<span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">getPicasso</span><span style="color:#f92672">(),</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">,</span> cache<span style="color:#f92672">,</span> stats<span style="color:#f92672">,</span> action<span style="color:#f92672">);</span>
+  hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">future</span> <span style="color:#f92672">=</span> service<span style="color:#f92672">.</span><span style="color:#a6e22e">submit</span><span style="color:#f92672">(</span>hunter<span style="color:#f92672">);</span>
+  hunterMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">getKey</span><span style="color:#f92672">(),</span> hunter<span style="color:#f92672">);</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>dismissFailed<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    failedActions<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">getTarget</span><span style="color:#f92672">());</span>
+  <span style="color:#f92672">}</span>
+
+<span style="color:#f92672">}</span></code></pre></div>
+<p>Dispatcher 内部有一个用于消息转发的 <strong>Handler</strong> ，与此出现的是多对 <code>dispatchXXX()</code> 和 <code>performXXX()</code> 函数，利用 handler 的消息队列的特性，可以提高单个任务的处理速度。
+至于这一对函数的工作就是拿到/创建一个 BitmapHunter ，然后交由线程池执行加载任务。如果之前有相同的加载任务被暂停，那这次的加载任务也不会被执行，除非是执行 <code>Picasso.resumeXXX()</code> 操作。</p>
+
+<p>BitmapHunter 的创建是由 <code>BitmapHunter#forRequest()</code> 来完成的：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">static</span> BitmapHunter <span style="color:#a6e22e">forRequest</span><span style="color:#f92672">(</span>Picasso picasso<span style="color:#f92672">,</span> Dispatcher dispatcher<span style="color:#f92672">,</span> Cache cache<span style="color:#f92672">,</span> Stats stats<span style="color:#f92672">,</span>
+                               Action action<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    Request request <span style="color:#f92672">=</span> action<span style="color:#f92672">.</span><span style="color:#a6e22e">getRequest</span><span style="color:#f92672">();</span>
+    List<span style="color:#f92672">&lt;</span>RequestHandler<span style="color:#f92672">&gt;</span> requestHandlers <span style="color:#f92672">=</span> picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">getRequestHandlers</span><span style="color:#f92672">();</span>
+
+    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">,</span> count <span style="color:#f92672">=</span> requestHandlers<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">();</span> i <span style="color:#f92672">&lt;</span> count<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+        RequestHandler requestHandler <span style="color:#f92672">=</span> requestHandlers<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>requestHandler<span style="color:#f92672">.</span><span style="color:#a6e22e">canHandleRequest</span><span style="color:#f92672">(</span>request<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> BitmapHunter<span style="color:#f92672">(</span>picasso<span style="color:#f92672">,</span> dispatcher<span style="color:#f92672">,</span> cache<span style="color:#f92672">,</span> stats<span style="color:#f92672">,</span> action<span style="color:#f92672">,</span> requestHandler<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> BitmapHunter<span style="color:#f92672">(</span>picasso<span style="color:#f92672">,</span> dispatcher<span style="color:#f92672">,</span> cache<span style="color:#f92672">,</span> stats<span style="color:#f92672">,</span> action<span style="color:#f92672">,</span> ERRORING_HANDLER<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>在这里会遍历内置的 RequestHandler，然后确定 BitmapHunter 的需要的 RequestHandler。</p>
+
+<h3 id="bitmaphunter-加载工作">BitmapHunter 加载工作</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Override</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">try</span> <span style="color:#f92672">{</span>
+        updateThreadName<span style="color:#f92672">(</span>data<span style="color:#f92672">);</span>
+        result <span style="color:#f92672">=</span> hunt<span style="color:#f92672">();</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>result <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            dispatcher<span style="color:#f92672">.</span><span style="color:#a6e22e">dispatchFailed</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            dispatcher<span style="color:#f92672">.</span><span style="color:#a6e22e">dispatchComplete</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">catch</span> <span style="color:#f92672">(</span>Exception e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        exception <span style="color:#f92672">=</span> e<span style="color:#f92672">;</span>
+        dispatcher<span style="color:#f92672">.</span><span style="color:#a6e22e">dispatchFailed</span><span style="color:#f92672">(</span><span style="color:#66d9ef">this</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+Bitmap <span style="color:#a6e22e">hunt</span><span style="color:#f92672">()</span> <span style="color:#66d9ef">throws</span> IOException <span style="color:#f92672">{</span>
+    Bitmap bitmap <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>shouldReadFromMemoryCache<span style="color:#f92672">(</span>memoryPolicy<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+        bitmap <span style="color:#f92672">=</span> cache<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bitmap <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            loadedFrom <span style="color:#f92672">=</span> MEMORY<span style="color:#f92672">;</span>
+            <span style="color:#66d9ef">return</span> bitmap<span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    networkPolicy <span style="color:#f92672">=</span> retryCount <span style="color:#f92672">==</span> 0 <span style="color:#f92672">?</span> NetworkPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">OFFLINE</span><span style="color:#f92672">.</span><span style="color:#a6e22e">index</span> <span style="color:#f92672">:</span> networkPolicy<span style="color:#f92672">;</span>
+    RequestHandler<span style="color:#f92672">.</span><span style="color:#a6e22e">Result</span> result <span style="color:#f92672">=</span> requestHandler<span style="color:#f92672">.</span><span style="color:#a6e22e">load</span><span style="color:#f92672">(</span>data<span style="color:#f92672">,</span> networkPolicy<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>result <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        loadedFrom <span style="color:#f92672">=</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getLoadedFrom</span><span style="color:#f92672">();</span>
+        exifOrientation <span style="color:#f92672">=</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getExifOrientation</span><span style="color:#f92672">();</span>
+        bitmap <span style="color:#f92672">=</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getBitmap</span><span style="color:#f92672">();</span>
+
+        <span style="color:#75715e">// If there was no Bitmap then we need to decode it from the stream.
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bitmap <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            Source source <span style="color:#f92672">=</span> result<span style="color:#f92672">.</span><span style="color:#a6e22e">getSource</span><span style="color:#f92672">();</span>
+            bitmap <span style="color:#f92672">=</span> decodeStream<span style="color:#f92672">(</span>source<span style="color:#f92672">,</span> data<span style="color:#f92672">);</span>
+            source<span style="color:#f92672">.</span><span style="color:#a6e22e">close</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bitmap <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>data<span style="color:#f92672">.</span><span style="color:#a6e22e">needsTransformation</span><span style="color:#f92672">()</span> <span style="color:#f92672">||</span> exifOrientation <span style="color:#f92672">!=</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">synchronized</span> <span style="color:#f92672">(</span>DECODE_LOCK<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>data<span style="color:#f92672">.</span><span style="color:#a6e22e">needsMatrixTransform</span><span style="color:#f92672">()</span> <span style="color:#f92672">||</span> exifOrientation <span style="color:#f92672">!=</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    bitmap <span style="color:#f92672">=</span> transformResult<span style="color:#f92672">(</span>data<span style="color:#f92672">,</span> bitmap<span style="color:#f92672">,</span> exifOrientation<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>data<span style="color:#f92672">.</span><span style="color:#a6e22e">hasCustomTransformations</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+                    bitmap <span style="color:#f92672">=</span> applyCustomTransformations<span style="color:#f92672">(</span>data<span style="color:#f92672">.</span><span style="color:#a6e22e">transformations</span><span style="color:#f92672">,</span> bitmap<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">return</span> bitmap<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>加载逻辑在 <code>hunt()</code> 里面，这里会先再查询一次内存缓存，没找到就会去从网络下载（不同的Uri可能不同），从网络下载完之后可能需要对图片的方向进行一些调整，然后如果又配置 Transformation 的话，也会进行一些转换。bitmap 的后续操作都用 DECODE_LOCK 锁住，同一时间只有一张 bitmap 被处理，这样保证了不会对内存和 CPU 造成太大的压力。</p>
+
+<h3 id="获取之后">获取之后</h3>
+
+<p>在获取到 bitmap 之后，又需要借助 Dispatcher 来完成后续的中转操作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">dispatchComplete</span><span style="color:#f92672">(</span>BitmapHunter hunter<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  handler<span style="color:#f92672">.</span><span style="color:#a6e22e">sendMessage</span><span style="color:#f92672">(</span>handler<span style="color:#f92672">.</span><span style="color:#a6e22e">obtainMessage</span><span style="color:#f92672">(</span>HUNTER_COMPLETE<span style="color:#f92672">,</span> hunter<span style="color:#f92672">));</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">performComplete</span><span style="color:#f92672">(</span>BitmapHunter hunter<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>shouldWriteToMemoryCache<span style="color:#f92672">(</span>hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getMemoryPolicy</span><span style="color:#f92672">()))</span> <span style="color:#f92672">{</span>
+    cache<span style="color:#f92672">.</span><span style="color:#a6e22e">set</span><span style="color:#f92672">(</span>hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getKey</span><span style="color:#f92672">(),</span> hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getResult</span><span style="color:#f92672">());</span>
+  <span style="color:#f92672">}</span>
+  hunterMap<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getKey</span><span style="color:#f92672">());</span>
+  batch<span style="color:#f92672">(</span>hunter<span style="color:#f92672">);</span>
+
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">batch</span><span style="color:#f92672">(</span>BitmapHunter hunter<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">isCancelled</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+  <span style="color:#f92672">}</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">result</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">result</span><span style="color:#f92672">.</span><span style="color:#a6e22e">prepareToDraw</span><span style="color:#f92672">();</span>
+  <span style="color:#f92672">}</span>
+  batch<span style="color:#f92672">.</span><span style="color:#a6e22e">add</span><span style="color:#f92672">(</span>hunter<span style="color:#f92672">);</span>
+  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>handler<span style="color:#f92672">.</span><span style="color:#a6e22e">hasMessages</span><span style="color:#f92672">(</span>HUNTER_DELAY_NEXT_BATCH<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+    handler<span style="color:#f92672">.</span><span style="color:#a6e22e">sendEmptyMessageDelayed</span><span style="color:#f92672">(</span>HUNTER_DELAY_NEXT_BATCH<span style="color:#f92672">,</span> BATCH_DELAY<span style="color:#f92672">);</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">performBatchComplete</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+  List<span style="color:#f92672">&lt;</span>BitmapHunter<span style="color:#f92672">&gt;</span> copy <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ArrayList<span style="color:#f92672">&lt;&gt;(</span>batch<span style="color:#f92672">);</span>
+  batch<span style="color:#f92672">.</span><span style="color:#a6e22e">clear</span><span style="color:#f92672">();</span>
+  mainThreadHandler<span style="color:#f92672">.</span><span style="color:#a6e22e">sendMessage</span><span style="color:#f92672">(</span>mainThreadHandler<span style="color:#f92672">.</span><span style="color:#a6e22e">obtainMessage</span><span style="color:#f92672">(</span>HUNTER_BATCH_COMPLETE<span style="color:#f92672">,</span> copy<span style="color:#f92672">));</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这些方法会依次被调用，首先将 bitmap 写入缓存，然后将 bitmapHunter 保存到 batch 这个容器里面，然后进行 <strong>批量处理</strong> ，批量处理可以减少消息数量，提高效率。</p>
+
+<h3 id="主线程处理">主线程处理</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">complete</span><span style="color:#f92672">(</span>BitmapHunter hunter<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    Action single <span style="color:#f92672">=</span> hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getAction</span><span style="color:#f92672">();</span>
+    List<span style="color:#f92672">&lt;</span>Action<span style="color:#f92672">&gt;</span> joined <span style="color:#f92672">=</span> hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getActions</span><span style="color:#f92672">();</span>
+
+    <span style="color:#66d9ef">boolean</span> hasMultiple <span style="color:#f92672">=</span> joined <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>joined<span style="color:#f92672">.</span><span style="color:#a6e22e">isEmpty</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">boolean</span> shouldDeliver <span style="color:#f92672">=</span> single <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> hasMultiple<span style="color:#f92672">;</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>shouldDeliver<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    Uri uri <span style="color:#f92672">=</span> hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getData</span><span style="color:#f92672">().</span><span style="color:#a6e22e">uri</span><span style="color:#f92672">;</span>
+    Exception exception <span style="color:#f92672">=</span> hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getException</span><span style="color:#f92672">();</span>
+    Bitmap result <span style="color:#f92672">=</span> hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getResult</span><span style="color:#f92672">();</span>
+    LoadedFrom from <span style="color:#f92672">=</span> hunter<span style="color:#f92672">.</span><span style="color:#a6e22e">getLoadedFrom</span><span style="color:#f92672">();</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>single <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        deliverAction<span style="color:#f92672">(</span>result<span style="color:#f92672">,</span> from<span style="color:#f92672">,</span> single<span style="color:#f92672">,</span> exception<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>hasMultiple<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">,</span> n <span style="color:#f92672">=</span> joined<span style="color:#f92672">.</span><span style="color:#a6e22e">size</span><span style="color:#f92672">();</span> i <span style="color:#f92672">&lt;</span> n<span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+            Action join <span style="color:#f92672">=</span> joined<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>i<span style="color:#f92672">);</span>
+            deliverAction<span style="color:#f92672">(</span>result<span style="color:#f92672">,</span> from<span style="color:#f92672">,</span> join<span style="color:#f92672">,</span> exception<span style="color:#f92672">);</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">deliverAction</span><span style="color:#f92672">(</span>Bitmap result<span style="color:#f92672">,</span> LoadedFrom from<span style="color:#f92672">,</span> Action action<span style="color:#f92672">,</span> Exception e<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">isCancelled</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">willReplay</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+        targetToAction<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>action<span style="color:#f92672">.</span><span style="color:#a6e22e">getTarget</span><span style="color:#f92672">());</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>result <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        action<span style="color:#f92672">.</span><span style="color:#a6e22e">complete</span><span style="color:#f92672">(</span>result<span style="color:#f92672">,</span> from<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+        action<span style="color:#f92672">.</span><span style="color:#a6e22e">error</span><span style="color:#f92672">(</span>e<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里代码没有什么好讲，就是一些 action 后续处理，是否该取消操作、是否移出列表啥的。最重要的就是 <code>action.complete()</code> 这句。</p>
+
+<h3 id="最后的工作">最后的工作</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">complete</span><span style="color:#f92672">(</span>Bitmap result<span style="color:#f92672">,</span> Picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">LoadedFrom</span> from<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    ImageView target <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">target</span><span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">();</span>
+
+    Context context <span style="color:#f92672">=</span> picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">context</span><span style="color:#f92672">;</span>
+    <span style="color:#66d9ef">boolean</span> indicatorsEnabled <span style="color:#f92672">=</span> picasso<span style="color:#f92672">.</span><span style="color:#a6e22e">indicatorsEnabled</span><span style="color:#f92672">;</span>
+    PicassoDrawable<span style="color:#f92672">.</span><span style="color:#a6e22e">setBitmap</span><span style="color:#f92672">(</span>target<span style="color:#f92672">,</span> context<span style="color:#f92672">,</span> result<span style="color:#f92672">,</span> from<span style="color:#f92672">,</span> noFade<span style="color:#f92672">,</span> indicatorsEnabled<span style="color:#f92672">);</span>
+
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>callback <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        callback<span style="color:#f92672">.</span><span style="color:#a6e22e">onSuccess</span><span style="color:#f92672">();</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>设置 bitmap ，回调。整个流程到这里算是完成了。</p>
+
+<blockquote>
+<p>大概的流程很简单，看完这再看 Glide 应该会顺利很多</p>
+</blockquote></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/picasso"><span class="tag">Picasso</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>490</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

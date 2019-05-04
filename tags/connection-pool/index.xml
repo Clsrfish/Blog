@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Connection Pool on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/connection-pool/</link>
+    <description>Recent content in Connection Pool on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 30 Dec 2017 22:25:36 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/connection-pool/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>OkHttp 拆轮子之连接池</title>
+      <link>https://clsrfish.github.io/Blog/post/f4a6041/</link>
+      <pubDate>Sat, 30 Dec 2017 22:25:36 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/f4a6041/</guid>
+      <description>&lt;p&gt;OkHttp 内部还维护了一个连接池，用于缓存一定数量的连接，以减少与服务器建立连接时的资源开销。同时，为了保证缓存的连接数在一个合理的水平，连接池有一个最多闲置连接数量和最长连接闲置时长。这里我们还是通过分析一些关键方法来分析它的连接池机制：&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

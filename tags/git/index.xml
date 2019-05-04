@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Git on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/git/</link>
+    <description>Recent content in Git on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sun, 16 Dec 2018 16:29:01 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>[Git] 实用操作</title>
+      <link>https://clsrfish.github.io/Blog/post/1c1807b38fe877462f697ffc00897c25/</link>
+      <pubDate>Sun, 16 Dec 2018 16:29:01 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/1c1807b38fe877462f697ffc00897c25/</guid>
+      <description>&lt;p&gt;平常用 Git 就 add、commit、push，遇到一些少用的就很麻烦，不是查文档就是搜 Google。简单记下，未雨绸缪。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>GitLab Flow</title>
+      <link>https://clsrfish.github.io/Blog/post/10f1b717/</link>
+      <pubDate>Sat, 31 Mar 2018 09:44:27 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/10f1b717/</guid>
+      <description>&lt;p&gt;GitLab Flow 在 Git Flow 和 GitHub Flow 中进行了一个折衷，避免了 Git Flow 的复杂性，又使得 GitHub Flow 不便于发版审核的问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>GitHub Flow</title>
+      <link>https://clsrfish.github.io/Blog/post/72a0130/</link>
+      <pubDate>Sat, 31 Mar 2018 09:44:20 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/72a0130/</guid>
+      <description>&lt;p&gt;在 &lt;a href=&#34;http://xinsbackyard.tech/posts/9144d7b5.html&#34;&gt;这篇&lt;/a&gt; 文章中，Git Flow 整体管理看起来非常规范，但是一个很明显的问题就是太复杂并需要长期维护两个分支，分支太多，导致需要频繁的进行分支切换，这些过程中难免不会出问题；特别是现在的大型工程都采用持续集成/交付进行管理，这样就需要有一个分支能够保证上面的代码都是随时都可以发布的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Git Flow（译）</title>
+      <link>https://clsrfish.github.io/Blog/post/2018-03-31-git-flow/</link>
+      <pubDate>Sat, 31 Mar 2018 00:35:31 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/2018-03-31-git-flow/</guid>
+      <description>&lt;p&gt;在这篇文章中，我将会向大家讲解我大约一年前引入一些项目（公司或者私有的）里并且被事实证明为非常成功的开发模式。我早就想写一些关于这方面的东西，但是直到现在才找到时间来完整地完成这些东西。这里我不会讨论任何项目细节方面的东西，仅仅讨论分支策略和发版管理。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

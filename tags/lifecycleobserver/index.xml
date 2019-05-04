@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>LifeCycleObserver on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/lifecycleobserver/</link>
+    <description>Recent content in LifeCycleObserver on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Thu, 21 Dec 2017 23:53:58 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/lifecycleobserver/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Android Architecture Components 之 Lifecycle</title>
+      <link>https://clsrfish.github.io/Blog/post/61434b2a/</link>
+      <pubDate>Thu, 21 Dec 2017 23:53:58 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/61434b2a/</guid>
+      <description>&lt;p&gt;现在都流行 MVP + RxJava2 开发，然后 RxJava 带来的一个问题就是需要在适当的时候取消订阅关系以避免 &lt;strong&gt;内存泄露&lt;/strong&gt; ，最常见的做法就是在 &lt;code&gt;Activity/Fragment#onDestroy()&lt;/code&gt; 方法中调用 &lt;code&gt;disposable.dispose()&lt;/code&gt; 来解决。然后，官方文档中是用 &lt;code&gt;LocationManager&lt;/code&gt; 来举例，这种情况就比较典型，需要重写 Activity/Fragment 的每个生命周期方法来处理它的状态。官方文档中又单独封装了一个类来处理，保持生命周期方法中的代码不会太臃肿。但是这还是没有彻底解决问题，毕竟还是要重写方法，难免不会有一次忘记重写某个生命周期函数。最理想的情况就是，我们封装的类能够 &lt;strong&gt;自动察觉&lt;/strong&gt; 到生命周期的变化。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

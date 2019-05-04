@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>SSH 免密登录</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="今天重装 CentOS 后发现按照之前的步骤来配置 SSH 后一直提示 Permission denied ，第一反应反应就是 /etc/ssh/sshd_config 配置出错，但是仔细检查一遍之后并没有发现什么错误。后来网上找到原因是权限问题，赶快记笔记，防止以后再遇上这个坑而不知道。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="SSH 免密登录" />
+    <meta name="twitter:description" content="今天重装 CentOS 后发现按照之前的步骤来配置 SSH 后一直提示 Permission denied ，第一反应反应就是 /etc/ssh/sshd_config 配置出错，但是仔细检查一遍之后并没有发现什么错误。后来网上找到原因是权限问题，赶快记笔记，防止以后再遇上这个坑而不知道。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="SSH 免密登录" />
+  <meta property="og:description" content="今天重装 CentOS 后发现按照之前的步骤来配置 SSH 后一直提示 Permission denied ，第一反应反应就是 /etc/ssh/sshd_config 配置出错，但是仔细检查一遍之后并没有发现什么错误。后来网上找到原因是权限问题，赶快记笔记，防止以后再遇上这个坑而不知道。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/1d2298d7/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/1d2298d7/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">SSH 免密登录</h1>
+      <p class="post-meta">@Clsrfish · Jan 27, 2018 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>今天重装 CentOS 后发现按照之前的步骤来配置 SSH 后一直提示 <code>Permission denied</code> ，第一反应反应就是 <code>/etc/ssh/sshd_config</code> 配置出错，但是仔细检查一遍之后并没有发现什么错误。后来网上找到原因是权限问题，赶快记笔记，防止以后再遇上这个坑而不知道。</p>
+
+<blockquote>
+<p>索性把配置 SSH 服务端的流程都过一遍，这里以 CentOS 为例，其它发行版只是包管理器的差别。</p>
+</blockquote>
+
+<h2 id="安装-openssh">安装 openssh</h2>
+
+<p>这一步一般情况下不需要，以为几乎全部的 Linux 发行版都自带的 SSH。当然，如果机器上没有安装，可以手动安装。</p>
+
+<p>在服务器上执行以下命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo yum install -y vim openssh net-tools</code></pre></div>
+<p>这里除了安装 openssh 之外还安装 vim 用来修改配置文件以及 net-tools 获取服务器的公网/内网 IP。</p>
+
+<h2 id="创建-ssh-密钥">创建 SSH 密钥</h2>
+
+<p>要实现免密登录，我们需要把自己机器（这里使用的是MacOS，其它平台一样）产生的 SSH 公钥部署到服务器上。回到客户端，执行命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ ssh-keygen -t rsa -C <span style="color:#e6db74">&#34;your identification&#34;</span>
+Generating public/private rsa key pair.
+Enter file in which to save the key <span style="color:#f92672">(</span>/Users/dashmrl/.ssh/id_rsa<span style="color:#f92672">)</span>: 
+Enter passphrase <span style="color:#f92672">(</span>empty <span style="color:#66d9ef">for</span> no passphrase<span style="color:#f92672">)</span>: 
+Enter same passphrase again: 
+Your identification has been saved in /Users/dashmrl/.ssh/id_rsa.
+Your public key has been saved in /Users/dashmrl/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:FswSkdc/aU/axbfdudyclEbzuAXW1+hiYDeWsOJtplw <span style="color:#ae81ff">2333</span>
+The key<span style="color:#960050;background-color:#1e0010">&#39;</span>s randomart image is:
++---<span style="color:#f92672">[</span>RSA <span style="color:#ae81ff">2048</span><span style="color:#f92672">]</span>----+
+|      oo .       |
+|      .+. o      |
+|      ..+  + o +.|
+|       ...+ X <span style="color:#f92672">=</span>oB|
+|       .S+ <span style="color:#f92672">=</span> X.+@|
+|       .. E + <span style="color:#f92672">=</span>*<span style="color:#f92672">=</span>|
+|       . <span style="color:#f92672">=</span> . .+++|
+|        o     .+o|
+|                 |
++----<span style="color:#f92672">[</span>SHA256<span style="color:#f92672">]</span>-----+</code></pre></div>
+<p>选择默认的路径和文件保存密钥对，提示输入 passphrase 时，可以直接回车不设置，但 <strong>更好的实践方式</strong> 还是设置一个密码来提高安全性。执行完后会在 <code>~/.ssh</code> 目录下生成两个文件：<code>id_rsa</code> 、 <code>id_rsa.pub</code> ，第二个文件就是我们需要部署到服务器上的公钥。</p>
+
+<blockquote>
+<p>使用 GitHub 应该都会经过这一步骤</p>
+</blockquote>
+
+<h2 id="部署本机-ssh-公钥">部署本机 SSH 公钥</h2>
+
+<p>SSH 服务端有了，客户端密钥也有了，还需要把公钥部署到服务器上才可以实现 SSH 秘钥登录。先登录服务器，执行 <code>ifconfig</code> 获取到 IP 地址，然后在 <strong>客户端</strong> 执行 <code>ssh &lt;servername&gt;@&lt;ip&gt;</code> 进行登录，这时候是可以通过 &lt;servername&gt; 的密码进行登录的。</p>
+
+<p>登录后，执行 <code>sudo vim /etc/ssh/sshd_config</code> 打开 SSH 服务端配置文件，搜索 <code>PubkeyAuthentication</code> ，修改值为 <code>yes</code> ，搜索 <code>PasswordAuthentication</code> ，修改值为 <code>no</code> ，最后搜索 <code>PermitRootLogin</code> 并修改为 <code>no</code> ，然后保存。实现的效果是不允许使用密码登录，不予许使用 root 用户进行登录，只可以使用 <strong>公钥</strong> 的方式进行登录。</p>
+
+<p>在配置文件中还可以看到 <code>AuthorizedKeysFile .ssh/authorized_keys</code> 这样的键值对，这里指明了保存公钥的文件路劲。那么接着执行 <code>mkdir ~/.ssh &amp;&amp; touch ~/.ssh/authorized_keys</code> 来创建保存公钥的文件，然后打开它 <code>vim ~/.ssh/authorized_keys</code> ，把客户端生成公钥粘贴进去，保存即可。</p>
+
+<p>然后执行 <code>sudo service sshd restart</code> 重启 SSH 服务。</p>
+
+<p>核心的步骤到这里就都完成了。</p>
+
+<h2 id="权限问题">权限问题</h2>
+
+<p>完成到上一步理论上免密登录的基础就打好了，但是这时登录会提示 <code>Permission denied XXX</code> ，这其实是 <code>.ssh</code> 目录的权限问题， 所以造成了 SSH 不认可这个目录及里面的文件。所以还需要修改权限：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ chmod <span style="color:#ae81ff">700</span> ~/.ssh <span style="color:#f92672">&amp;&amp;</span> chmod <span style="color:#ae81ff">0600</span> ~/.ssh/authorized_keys</code></pre></div>
+<p>完成后就可以开心的使用 SSH 公钥进行服务器登录了。</p>
+
+<blockquote>
+<p>踩了一个坑，对 SSH 的了解更多，然后也发现自己在 Linux 权限方面的不足</p>
+</blockquote></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/ssh"><span class="tag">SSH</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/linux"><span class="tag">Linux</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>462</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Retrofit 拆轮子之构建流程分析</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="在使用 OkHttp 的时候，还是要自己构建 Request 的，我们的目的是请求一个 url 并拿到数据，构建流程不利于逻辑清晰，特别是当需要 Post 上传数据的时候。Square 显然是看到了这个问题，便推出了 Retrofit 来解决这个问题。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Retrofit 拆轮子之构建流程分析" />
+    <meta name="twitter:description" content="在使用 OkHttp 的时候，还是要自己构建 Request 的，我们的目的是请求一个 url 并拿到数据，构建流程不利于逻辑清晰，特别是当需要 Post 上传数据的时候。Square 显然是看到了这个问题，便推出了 Retrofit 来解决这个问题。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Retrofit 拆轮子之构建流程分析" />
+  <meta property="og:description" content="在使用 OkHttp 的时候，还是要自己构建 Request 的，我们的目的是请求一个 url 并拿到数据，构建流程不利于逻辑清晰，特别是当需要 Post 上传数据的时候。Square 显然是看到了这个问题，便推出了 Retrofit 来解决这个问题。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/56a1ff9/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/56a1ff9/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Retrofit 拆轮子之构建流程分析</h1>
+      <p class="post-meta">@Clsrfish · Jan 6, 2018 · 1 min read</p>
+    </header>
+    <article class="post-content"><p>在使用 OkHttp 的时候，还是要自己构建 Request 的，我们的目的是请求一个 url 并拿到数据，构建流程不利于逻辑清晰，特别是当需要 Post 上传数据的时候。Square 显然是看到了这个问题，便推出了 Retrofit 来解决这个问题。</p>
+
+<p>Retrofit 使用注解的方式来定义一个后端接口，在 <strong>运行时</strong> 解析，动态构建出请求逻辑并执行。有时候还是会遇上一些坑，所以最快捷的方式就是阅读它的源码，知道了内部逻辑，自然而然就知道了问题出在哪里。</p>
+
+<blockquote>
+<p>这里基于 Retrofit：2.4.0-SNAPSHOT 分析</p>
+</blockquote>
+
+<h1 id="构建流程分析">构建流程分析</h1>
+
+<p>Retrofit 简化请求的构建，使得网络请求就像简单的函数调用一样。这次就分析下面的案例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">MyService</span> <span style="color:#f92672">{</span>
+  <span style="color:#a6e22e">@GET</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;/user&#34;</span><span style="color:#f92672">)</span>
+  Observable<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">getUser</span><span style="color:#f92672">();</span>
+<span style="color:#f92672">}</span>
+
+Retrofit retrofit <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Retrofit<span style="color:#f92672">.</span><span style="color:#a6e22e">Builder</span><span style="color:#f92672">()</span>
+    <span style="color:#f92672">.</span><span style="color:#a6e22e">baseUrl</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;https://example.com/&#34;</span><span style="color:#f92672">)</span>
+    <span style="color:#f92672">.</span><span style="color:#a6e22e">addConverterFactory</span><span style="color:#f92672">(</span>GsonConverterFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">())</span>
+    <span style="color:#f92672">.</span><span style="color:#a6e22e">addCallAdapterFactory</span><span style="color:#f92672">(</span>RxJava2CallAdapterFactory<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">())</span>
+    <span style="color:#f92672">.</span><span style="color:#a6e22e">build</span><span style="color:#f92672">();</span>
+    
+MyService service <span style="color:#f92672">=</span> retrofit<span style="color:#f92672">.</span><span style="color:#a6e22e">create</span><span style="color:#f92672">(</span>MyService<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+
+Observable<span style="color:#f92672">&lt;</span>User<span style="color:#f92672">&gt;</span> observable <span style="color:#f92672">=</span> service<span style="color:#f92672">.</span><span style="color:#a6e22e">getUser</span><span style="color:#f92672">();</span></code></pre></div>
+<ul>
+<li>Retrofit：2.4.0-SNAPSHOT</li>
+</ul>
+
+<h2 id="请求流程概览">请求流程概览</h2>
+
+<p>忽略前面 Retrofit 实例的配置和构建，直接分析后面的请求发起过程，下面是整个流程的概览图：
+<img src="https://i.loli.net/2018/01/06/5a4fbb5eeba30.png" alt="" /></p>
+
+<blockquote>
+<p>参照<a href="http://www.jianshu.com/p/fb8d21978e38">@stay4it</a> 的流程图作了简化。</p>
+</blockquote>
+
+<h2 id="重要类剖析">重要类剖析</h2>
+
+<h3 id="servicemethod">ServiceMethod</h3>
+
+<p>JavaDoc 中的注释是这样的：Adapts an invocation of an interface method into an HTTP call。大概意思就是把我们定义的接口方法包装成一个 HTTP 请求。在构建一个 ServiceMethod 实例时会解析我们定义的接口方法，解析注解以及返回值等等并确定 CallAdapter 和 Converter。</p>
+
+<h3 id="calladapter">CallAdapter</h3>
+
+<p>CallAdapter 是个接口，在 retrofit-calladapters 这个 module 下有它的实现类。这个类的作用是将一个 Call<R> 转换成一个 T，比如 Call<User> -&gt; Observable<User> ，从而直接拿到想要的类型值。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">CallAdapter</span><span style="color:#f92672">&lt;</span>R<span style="color:#f92672">,</span> T<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+  Type <span style="color:#a6e22e">responseType</span><span style="color:#f92672">();</span>
+  <span style="color:#75715e">//核心方法
+</span><span style="color:#75715e"></span>  T <span style="color:#a6e22e">adapt</span><span style="color:#f92672">(</span>Call<span style="color:#f92672">&lt;</span>R<span style="color:#f92672">&gt;</span> call<span style="color:#f92672">);</span>
+  
+  <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Factory</span> <span style="color:#f92672">{</span>
+ 
+  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">abstract</span> <span style="color:#a6e22e">@Nullable</span> CallAdapter<span style="color:#f92672">&lt;?,</span> <span style="color:#f92672">?&gt;</span> get<span style="color:#f92672">(</span>Type returnType<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span>
+        Retrofit retrofit<span style="color:#f92672">);</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<h3 id="converter">Converter</h3>
+
+<p>请求/响应体转换，将实例转换成 HTTP 能接受的形式，或者从 HTTP 中转换出想要的类型。在 retrofit-converters 这个 Module 下有它的一些实现类，如 GsonXXXBodyConverter，它能实现 Call<ResponseBody> -&gt; Call<User> 的转换。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Converter</span><span style="color:#f92672">&lt;</span>F<span style="color:#f92672">,</span> T<span style="color:#f92672">&gt;</span> <span style="color:#f92672">{</span>
+  T <span style="color:#a6e22e">convert</span><span style="color:#f92672">(</span>F value<span style="color:#f92672">)</span> <span style="color:#66d9ef">throws</span> IOException<span style="color:#f92672">;</span>
+
+  <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Factory</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@Nullable</span> Converter<span style="color:#f92672">&lt;</span>ResponseBody<span style="color:#f92672">,</span> <span style="color:#f92672">?&gt;</span> responseBodyConverter<span style="color:#f92672">(</span>Type type<span style="color:#f92672">,</span>
+        Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span> Retrofit retrofit<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@Nullable</span> Converter<span style="color:#f92672">&lt;?,</span> RequestBody<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">requestBodyConverter</span><span style="color:#f92672">(</span>Type type<span style="color:#f92672">,</span>
+        Annotation<span style="color:#f92672">[]</span> parameterAnnotations<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> methodAnnotations<span style="color:#f92672">,</span> Retrofit retrofit<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@Nullable</span> Converter<span style="color:#f92672">&lt;?,</span> String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">stringConverter</span><span style="color:#f92672">(</span>Type type<span style="color:#f92672">,</span> Annotation<span style="color:#f92672">[]</span> annotations<span style="color:#f92672">,</span>
+        Retrofit retrofit<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<h3 id="okhttpcall">OkHttpCall</h3>
+
+<p>对 OkHttp 的Call 进行了一个包装，然后完成一些 Call 的操作，这里的 Call 是指 okhttp3.Call。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/retrofit"><span class="tag">Retrofit</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/java"><span class="tag">Java</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>483</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

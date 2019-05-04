@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>HTTP on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/http/</link>
+    <description>Recent content in HTTP on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 29 Sep 2018 10:52:51 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/http/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>[Android 踩坑] 明文传输</title>
+      <link>https://clsrfish.github.io/Blog/post/1e22c8b00480263c039de844c3ecef68/</link>
+      <pubDate>Sat, 29 Sep 2018 10:52:51 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/1e22c8b00480263c039de844c3ecef68/</guid>
+      <description>&lt;p&gt;昨天晚上 Glide 加载图片突然出现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Exception: IOException java.io.IOException: Cleartext HTTP traffic to * not permitted
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;明确指出不允许明文传输，测试机器是 Android P 的模拟器。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

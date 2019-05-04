@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Android 磁盘目录</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="每次遇到存储这一块的时候，都要去看 官方文档 ；但是这里有一个蛋疼的问题就是，官方文档中没有对特定方法返回的路径进行说明。所以每次都会在这个问题上耗费十多分钟来 看文档 和 写 Demo 来找到符合要求的方法，这次就做个笔记，以防不时之需。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Android 磁盘目录" />
+    <meta name="twitter:description" content="每次遇到存储这一块的时候，都要去看 官方文档 ；但是这里有一个蛋疼的问题就是，官方文档中没有对特定方法返回的路径进行说明。所以每次都会在这个问题上耗费十多分钟来 看文档 和 写 Demo 来找到符合要求的方法，这次就做个笔记，以防不时之需。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Android 磁盘目录" />
+  <meta property="og:description" content="每次遇到存储这一块的时候，都要去看 官方文档 ；但是这里有一个蛋疼的问题就是，官方文档中没有对特定方法返回的路径进行说明。所以每次都会在这个问题上耗费十多分钟来 看文档 和 写 Demo 来找到符合要求的方法，这次就做个笔记，以防不时之需。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/8a73e0d4/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/8a73e0d4/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Android 磁盘目录</h1>
+      <p class="post-meta">@Clsrfish · Dec 26, 2017 · 1 min read</p>
+    </header>
+    <article class="post-content"><p>每次遇到存储这一块的时候，都要去看 <a href="https://developer.android.com/training/basics/data-storage/files.html">官方文档</a> ；但是这里有一个蛋疼的问题就是，官方文档中没有对特定方法返回的路径进行说明。所以每次都会在这个问题上耗费十多分钟来 <strong>看文档</strong> 和 <strong>写 Demo</strong> 来找到符合要求的方法，这次就做个笔记，以防不时之需。</p>
+
+<h2 id="内部存储">内部存储</h2>
+
+<p>官方术语：<strong>Internal Storage</strong>
+我的理解就是 <strong>系统存储空间</strong> ，也就是一般情况下，用户无法通过文件管理器查看。应用安装的时候会分配这样的一个空间，当用户卸载的时候系统会清理掉这部分存储空间。
+获取方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// /data/user/0/your.package.name/cache
+</span><span style="color:#75715e"></span>Context<span style="color:#f92672">.</span><span style="color:#a6e22e">getCacheDir</span><span style="color:#f92672">().</span><span style="color:#a6e22e">absolutePath</span><span style="color:#f92672">()</span>
+
+<span style="color:#75715e">// /data/user/0/your.package.name/files
+</span><span style="color:#75715e"></span>Context<span style="color:#f92672">.</span><span style="color:#a6e22e">getFilesDir</span><span style="color:#f92672">().</span><span style="color:#a6e22e">absolutePath</span><span style="color:#f92672">()</span></code></pre></div>
+<p>这两种也能够满足大部分的需求了。</p>
+
+<h2 id="外部存储">外部存储</h2>
+
+<p>官方术语： <strong>External Storage</strong>
+理解成 <strong>用户存储空间</strong> 可能比较恰当，因为用户通过一个文件管理器就可以把这部分存储空间看个遍（除非有这么闲）。
+这部分空间又要分成两部分：<strong>private</strong> + <strong>public</strong></p>
+
+<h3 id="private-外部存储">private 外部存储</h3>
+
+<p>这部分空间通常用来进行缓存或一些私有的文件。虽然系统没有提供 API 来读取其他应用的这部分空间，但是可以简单通过 <strong>字符串拼接</strong> 的方式来直接操作其他应用的这部分空间，所以这部分空间的 <strong>安全性不是很高</strong> ，所以一些关乎应用正常运行的文件还是会被丢到 <strong>internal Storage</strong> 。
+当应用被用户卸载的时候，这部分空间也会像内部存储一样被清理。
+获取方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">// /storage/emulated/0/Android/data/your.package.name/cache
+</span><span style="color:#75715e"></span>Context<span style="color:#f92672">.</span><span style="color:#a6e22e">getExternalCacheDir</span><span style="color:#f92672">()</span>
+
+<span style="color:#75715e">// /storage/emulated/0/Android/data/your.package.name/files
+</span><span style="color:#75715e"></span>Context<span style="color:#f92672">.</span><span style="color:#a6e22e">getExternalFilesDir</span><span style="color:#f92672">(</span><span style="color:#66d9ef">null</span><span style="color:#f92672">)</span>
+Context<span style="color:#f92672">.</span><span style="color:#a6e22e">getExternalFilesDir</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">)</span>
+
+<span style="color:#75715e">// /storage/emulated/0/Android/data/your.package.name/files/dirName
+</span><span style="color:#75715e"></span>Context<span style="color:#f92672">.</span><span style="color:#a6e22e">getExternalFilesDir</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;dirName&#34;</span><span style="color:#f92672">)</span></code></pre></div>
+<h3 id="public-外部存储">public 外部存储</h3>
+
+<p>这部分空间所有应用都能共享，会有一些诸如：Alarms、Music、Pictures 等为命名的文件夹，这也是用户最容易接触到的存储空间。如果应用在这里放了啥东西，就算应用被卸载这些文件还是会继续留着，所以很多 app 就在这里放一些缓存或者配置文件啥的，如果用户重新安装应用，能够继续使用一些配置或者缓存。
+获取方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">Environment<span style="color:#f92672">.</span><span style="color:#a6e22e">getExternalStorageDirectory</span><span style="color:#f92672">();</span>
+
+
+Environment<span style="color:#f92672">.</span><span style="color:#a6e22e">getExternalStoragePublicDirectory</span><span style="color:#f92672">(</span>Environment<span style="color:#f92672">.</span><span style="color:#a6e22e">DIRECTORY_ALARMS</span><span style="color:#f92672">);</span></code></pre></div>
+<h3 id="外部存储的状态">外部存储的状态</h3>
+
+<p>在对外部存储进行操作之前还需要检测下它的状态，比如 SD 卡被移除（现在手机都没SD 卡槽了）、PC 通过 USB 读取这部分空间的时候。
+检测方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">String state <span style="color:#f92672">=</span> Environment<span style="color:#f92672">.</span><span style="color:#a6e22e">getExternalStorageState</span><span style="color:#f92672">();</span>
+
+<span style="color:#75715e">// 当外部存储 可读可写 时语句返回值为 true
+</span><span style="color:#75715e"></span>state<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>Environment<span style="color:#f92672">.</span><span style="color:#a6e22e">MEDIA_MOUNTED</span><span style="color:#f92672">)</span><span style="color:#960050;background-color:#1e0010">；</span>
+
+<span style="color:#75715e">// 当外部存储 至少可读 时语句返回值为 true
+</span><span style="color:#75715e"></span>state<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>Environment<span style="color:#f92672">.</span><span style="color:#a6e22e">MEDIA_MOUNTED</span><span style="color:#f92672">)||</span>state<span style="color:#f92672">.</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span>Environment<span style="color:#f92672">.</span><span style="color:#a6e22e">MEDIA_MOUNTED_READ_ONLY</span><span style="color:#f92672">);</span></code></pre></div>
+<hr />
+
+<p>这些 api 应该能够满足大部分需求，然对应的路径不同的系统可能会有不同，所以通过字符串硬编码读取这些路径是绝对不可取的。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/disk"><span class="tag">Disk</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>494</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

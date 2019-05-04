@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hadoop on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/hadoop/</link>
+    <description>Recent content in Hadoop on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Fri, 11 Jan 2019 01:03:43 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/hadoop/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hadoop 集群配置</title>
+      <link>https://clsrfish.github.io/Blog/post/ad17de716cda5955d954080c19ba4af7/</link>
+      <pubDate>Fri, 11 Jan 2019 01:03:43 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/ad17de716cda5955d954080c19ba4af7/</guid>
+      <description>&lt;p&gt;下半学期开了“大数据与云计算”的课程，一次实验课要求配置 Hadoop 分布式集群。配环境这东西真的不好说，运气好一气呵成，运气不好，真的要杠上两三天。所以这篇就给踩的坑做一个笔记。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

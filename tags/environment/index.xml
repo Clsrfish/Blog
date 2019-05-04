@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Environment on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/environment/</link>
+    <description>Recent content in Environment on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Tue, 26 Dec 2017 11:01:59 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/environment/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>React Native 之环境搭建</title>
+      <link>https://clsrfish.github.io/Blog/post/2e90c800/</link>
+      <pubDate>Tue, 26 Dec 2017 11:01:59 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/2e90c800/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;来自 GitBook，完成第一篇迁移&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;最近 React Native、weex 等跨平台框架都好火的样子，要是再不看看，可能就要听不懂他们前端的话了。万事开头难，搭环境、跑 Demo 啥的基本上没有不遇坑，当然解决之后也是蛮开心的。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

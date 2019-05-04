@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Android SDK Manager on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/android-sdk-manager/</link>
+    <description>Recent content in Android SDK Manager on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Tue, 16 Jan 2018 17:34:40 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/android-sdk-manager/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Android SDK Manager 命令行工具使用</title>
+      <link>https://clsrfish.github.io/Blog/post/cffbd71/</link>
+      <pubDate>Tue, 16 Jan 2018 17:34:40 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/cffbd71/</guid>
+      <description>&lt;p&gt;一般情况下，我们都是通过 Android Studio 来进行 Android SDK 的管理的，更新啥的都是点点鼠标完成了，当然，我们知道 AS 只是做了一个封装。不过有时候，我们只是想安装更新，并不想启动 AS，那么这时候通过命令行就会轻量很多；在 CI 中，更加是没有 AS 的，那么这时候命令行操作成为了唯一的选择。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

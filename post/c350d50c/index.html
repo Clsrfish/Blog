@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Butterknife 剖析</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="在初学 Android 的时候，写一个 Activity，就要写好几句 findViewById （现在 support 包使用泛型避免强转），慢地就变得厌倦这些模板代码，但是又不能不写。ButterKnife 使用注解的方式来避免这一类模板代码，比如事件监听器等。代码变得好看了，也就开始思考它内部的工作原理。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Butterknife 剖析" />
+    <meta name="twitter:description" content="在初学 Android 的时候，写一个 Activity，就要写好几句 findViewById （现在 support 包使用泛型避免强转），慢地就变得厌倦这些模板代码，但是又不能不写。ButterKnife 使用注解的方式来避免这一类模板代码，比如事件监听器等。代码变得好看了，也就开始思考它内部的工作原理。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Butterknife 剖析" />
+  <meta property="og:description" content="在初学 Android 的时候，写一个 Activity，就要写好几句 findViewById （现在 support 包使用泛型避免强转），慢地就变得厌倦这些模板代码，但是又不能不写。ButterKnife 使用注解的方式来避免这一类模板代码，比如事件监听器等。代码变得好看了，也就开始思考它内部的工作原理。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/c350d50c/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/c350d50c/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Butterknife 剖析</h1>
+      <p class="post-meta">@Clsrfish · Dec 30, 2017 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>在初学 Android 的时候，写一个 Activity，就要写好几句 <code>findViewById</code> （现在 support 包使用泛型避免强转），慢地就变得厌倦这些模板代码，但是又不能不写。ButterKnife 使用注解的方式来避免这一类模板代码，比如事件监听器等。代码变得好看了，也就开始思考它内部的工作原理。</p>
+
+<blockquote>
+<p>学习源码最重要的是学习它的设计思想，然后帮助我们在以后学习中打开思路，多一种解决问题的可能。我觉得 ButterKnife 告诉我们要学会偷懒，能少写的代码绝不多写一句。</p>
+
+<p>另外，Kotlin 可以直接使用 xml 里面的 id 来操作控件。</p>
+</blockquote>
+
+<h2 id="平台和工具">平台和工具</h2>
+
+<blockquote>
+<p>OS：Ubuntu 17.04<br />
+Android Studio：<a href="https://developer.android.com/studio/archive.html">Android Studio 2.4 Preview7</a><br />
+ButterKnife：8.5.1</p>
+</blockquote>
+
+<h2 id="butterknife-做了啥">ButterKnife 做了啥</h2>
+
+<p>这里我们创建一个简单的工程，布局文件里面就放一个 id 为 button 的按钮。MainActivity 里面的代码如下。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainActivity</span> <span style="color:#66d9ef">extends</span> AppCompatActivity <span style="color:#f92672">{</span>
+<span style="color:#75715e">//    @BindView(R.id.button)
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">protected</span> Button mButton<span style="color:#f92672">;</span>
+    <span style="color:#a6e22e">@Override</span>
+    <span style="color:#66d9ef">protected</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>Bundle savedInstanceState<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">super</span><span style="color:#f92672">.</span><span style="color:#a6e22e">onCreate</span><span style="color:#f92672">(</span>savedInstanceState<span style="color:#f92672">);</span>
+        setContentView<span style="color:#f92672">(</span>R<span style="color:#f92672">.</span><span style="color:#a6e22e">layout</span><span style="color:#f92672">.</span><span style="color:#a6e22e">activity_main</span><span style="color:#f92672">);</span>
+<span style="color:#75715e">//        ButterKnife.bind(this);
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>然后我们 <code>Ctrl + F9</code> 对项目进行编译，然后我们进入 /app/build/intermediates/classes/debug/com/xiansenliu/test 目录，会有下面这些文件(去掉了一些):</p>
+
+<pre><code>├── BuildConfig.class
+├── MainActivity.class
+└── R.class
+</code></pre>
+
+<p>然后去掉 <code>@BindView(R.id.button)</code> 的注释，再次编译，这次我们发现这个目录有了变化:</p>
+
+<pre><code>├── BuildConfig.class
+├── MainActivity.class
+├── MainActivity_ViewBinding.class    //多的文件
+└── R.class
+</code></pre>
+
+<p>明眼人都知道多了一个 <code>MainActivity_ViewBinding.class</code> 文件，我们接着看这里面又做了哪些小动作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//    这里删减了一点点代码
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MainActivity_ViewBinding</span> <span style="color:#66d9ef">implements</span> Unbinder <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> MainActivity target<span style="color:#f92672">;</span>
+    <span style="color:#a6e22e">@UiThread</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">MainActivity_ViewBinding</span><span style="color:#f92672">(</span>MainActivity target<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">(</span>target<span style="color:#f92672">,</span> target<span style="color:#f92672">.</span><span style="color:#a6e22e">getWindow</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getDecorView</span><span style="color:#f92672">());</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#a6e22e">@UiThread</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">MainActivity_ViewBinding</span><span style="color:#f92672">(</span>MainActivity target<span style="color:#f92672">,</span> View source<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">target</span> <span style="color:#f92672">=</span> target<span style="color:#f92672">;</span>
+        target<span style="color:#f92672">.</span><span style="color:#a6e22e">mButton</span> <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Button<span style="color:#f92672">)</span>Utils<span style="color:#f92672">.</span><span style="color:#a6e22e">findRequiredViewAsType</span><span style="color:#f92672">(</span>source<span style="color:#f92672">,</span> 2131427414<span style="color:#f92672">,</span> <span style="color:#e6db74">&#34;field &#39;mButton&#39;&#34;</span><span style="color:#f92672">,</span> Button<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+    <span style="color:#a6e22e">@CallSuper</span>
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">unbind</span><span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+        MainActivity target <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">target</span><span style="color:#f92672">;</span>
+        <span style="color:#66d9ef">this</span><span style="color:#f92672">.</span><span style="color:#a6e22e">target</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+        target<span style="color:#f92672">.</span><span style="color:#a6e22e">mButton</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>我们看到这一句：<code>target.mButton = ...</code>，这里就完成了 View 的绑定工作。<br />
+我们接着看 <code>Utils.findRequiredViewAsType()</code> 方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//    去掉了一些检查代码
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">findRequiredViewAsType</span><span style="color:#f92672">(</span>View source<span style="color:#f92672">,</span> <span style="color:#a6e22e">@IdRes</span> <span style="color:#66d9ef">int</span> id<span style="color:#f92672">,</span> String who<span style="color:#f92672">,</span>
+      Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> cls<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    View view <span style="color:#f92672">=</span> findRequiredView<span style="color:#f92672">(</span>source<span style="color:#f92672">,</span> id<span style="color:#f92672">,</span> who<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span> castView<span style="color:#f92672">(</span>view<span style="color:#f92672">,</span> id<span style="color:#f92672">,</span> who<span style="color:#f92672">,</span> cls<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> View <span style="color:#a6e22e">findRequiredView</span><span style="color:#f92672">(</span>View source<span style="color:#f92672">,</span> <span style="color:#a6e22e">@IdRes</span> <span style="color:#66d9ef">int</span> id<span style="color:#f92672">,</span> String who<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    View view <span style="color:#f92672">=</span> source<span style="color:#f92672">.</span><span style="color:#a6e22e">findViewById</span><span style="color:#f92672">(</span>id<span style="color:#f92672">);</span>    <span style="color:#75715e">//发现了
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">return</span> view<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">castView</span><span style="color:#f92672">(</span>View view<span style="color:#f92672">,</span> <span style="color:#a6e22e">@IdRes</span> <span style="color:#66d9ef">int</span> id<span style="color:#f92672">,</span> String who<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> cls<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> cls<span style="color:#f92672">.</span><span style="color:#a6e22e">cast</span><span style="color:#f92672">(</span>view<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这几个函数的作用就是 <code>(Button)findViewById(...)</code> , 还是蛮简单的。</p>
+
+<h2 id="butterknife-绑定触发">ButterKnife 绑定触发</h2>
+
+<p>辅助类生成了，绑定逻辑也清楚了，那么这些逻辑是怎么调用的呢？用过的朋友可能知道 <code>ButterKnife.bind(this);</code> 这句就是整个绑定逻辑起点，我们再看看触发过程的内部逻辑。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#75715e">//    已省略健壮性代码
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> Unbinder <span style="color:#a6e22e">bind</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NonNull</span> Activity target<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    View sourceView <span style="color:#f92672">=</span> target<span style="color:#f92672">.</span><span style="color:#a6e22e">getWindow</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getDecorView</span><span style="color:#f92672">();</span>
+    <span style="color:#66d9ef">return</span> createBinding<span style="color:#f92672">(</span>target<span style="color:#f92672">,</span> sourceView<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Unbinder <span style="color:#a6e22e">createBinding</span><span style="color:#f92672">(</span><span style="color:#a6e22e">@NonNull</span> Object target<span style="color:#f92672">,</span> <span style="color:#a6e22e">@NonNull</span> View source<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    Class<span style="color:#f92672">&lt;?&gt;</span> targetClass <span style="color:#f92672">=</span> target<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">();</span>
+    Constructor<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Unbinder<span style="color:#f92672">&gt;</span> constructor <span style="color:#f92672">=</span> findBindingConstructorForClass<span style="color:#f92672">(</span>targetClass<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span> constructor<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>target<span style="color:#f92672">,</span> source<span style="color:#f92672">);</span>
+<span style="color:#f92672">}</span>
+
+<span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> Constructor<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Unbinder<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">findBindingConstructorForClass</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;?&gt;</span> cls<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+    Constructor<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Unbinder<span style="color:#f92672">&gt;</span> bindingCtor <span style="color:#f92672">=</span> BINDINGS<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>cls<span style="color:#f92672">)</span><span style="color:#960050;background-color:#1e0010">；</span>
+    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>bindingCtor <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+      <span style="color:#66d9ef">return</span> bindingCtor<span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+    String clsName <span style="color:#f92672">=</span> cls<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">();</span>
+    Class<span style="color:#f92672">&lt;?&gt;</span> bindingClass <span style="color:#f92672">=</span> Class<span style="color:#f92672">.</span><span style="color:#a6e22e">forName</span><span style="color:#f92672">(</span>clsName <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;_ViewBinding&#34;</span><span style="color:#f92672">);</span>    <span style="color:#75715e">//敲黑板
+</span><span style="color:#75715e"></span>    bindingCtor <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>Constructor<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Unbinder<span style="color:#f92672">&gt;)</span> bindingClass<span style="color:#f92672">.</span><span style="color:#a6e22e">getConstructor</span><span style="color:#f92672">(</span>cls<span style="color:#f92672">,</span> View<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+    BINDINGS<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>cls<span style="color:#f92672">,</span> bindingCtor<span style="color:#f92672">);</span>
+    <span style="color:#66d9ef">return</span> bindingCtor<span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>核心代码就是 <code>Class&lt;?&gt; bindingClass = Class.forName(clsName + &quot;_ViewBinding&quot;)</code> ，<strong>通过类名</strong> 找到对应的辅助类，然后通过 <strong>反射</strong> 得到构造器，并 <strong>缓存</strong> 到 BINDINGS 这个 Map 中去，最后通过这个构造器完成辅助类的实例化，同时完成View的注入工作。</p>
+
+<blockquote>
+<p>至于其它的绑定，如监听器绑定等，</p>
+</blockquote>
+
+<h2 id="辅助类的生成">辅助类的生成</h2>
+
+<p>最后一个可能的疑问就是：辅助类是哪里来的？<br />
+我们知道要引入 ButterKnife 的依赖，我们除了需要像一般依赖添加之外，还要添加 <code>annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'</code> ，谜底就在这一行脚本里面。这一行脚本告知 Gradle：我要使用 ButterKnife 的注解处理器，然后当我们按下 <code>Ctrl + F9</code> 的时候，这个注解器就会提取那些 BindView 之类的注解，然后解析并生成辅助类。<br />
+如果想具体了解辅助类的生成过程，请移步</p>
+
+<p>看到这里，不知道你有没有豁然开朗的感觉，其实 ButterKnife 是一个非常轻量的注解库，因为核心代码就这么多，真正高大上的代码都在注解处理器里面，不需要编译进最终的 Android 工程。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/butter-knife"><span class="tag">Butter Knife</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/annotation-processor"><span class="tag">Annotation Processor</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>490</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

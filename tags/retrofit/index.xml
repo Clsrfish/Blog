@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Retrofit on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/retrofit/</link>
+    <description>Recent content in Retrofit on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 06 Jan 2018 01:49:39 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/retrofit/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Retrofit 拆轮子之构建流程分析</title>
+      <link>https://clsrfish.github.io/Blog/post/56a1ff9/</link>
+      <pubDate>Sat, 06 Jan 2018 01:49:39 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/56a1ff9/</guid>
+      <description>&lt;p&gt;在使用 OkHttp 的时候，还是要自己构建 Request 的，我们的目的是请求一个 url 并拿到数据，构建流程不利于逻辑清晰，特别是当需要 Post 上传数据的时候。Square 显然是看到了这个问题，便推出了 Retrofit 来解决这个问题。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

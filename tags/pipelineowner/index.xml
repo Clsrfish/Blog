@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PipelineOwner on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/pipelineowner/</link>
+    <description>Recent content in PipelineOwner on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sun, 02 Dec 2018 15:09:37 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/pipelineowner/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>[Flutter] UI 刷新</title>
+      <link>https://clsrfish.github.io/Blog/post/975a96b8a4ec2c8a773c4705a43f95dd/</link>
+      <pubDate>Sun, 02 Dec 2018 15:09:37 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/975a96b8a4ec2c8a773c4705a43f95dd/</guid>
+      <description>&lt;p&gt;Flutter 在 Framework 上打设计大量借鉴 React，做到通过声明的方式编写 UI 代码，让开发者围绕 Widget 进行开发。但仅仅这样是不够的，我们知道 Flutter 相比于 React 还多了关于测量、布局以及绘制的逻辑，而这些都是在前端开发中很难触碰到的，既然 Flutter 提供了这样的机会，理解其中的原理就显得尤为必要了。
+这篇文章主要分析 Flutter UI 更新背后的逻辑。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

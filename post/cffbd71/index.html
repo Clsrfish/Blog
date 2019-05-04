@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Android SDK Manager 命令行工具使用</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="一般情况下，我们都是通过 Android Studio 来进行 Android SDK 的管理的，更新啥的都是点点鼠标完成了，当然，我们知道 AS 只是做了一个封装。不过有时候，我们只是想安装更新，并不想启动 AS，那么这时候通过命令行就会轻量很多；在 CI 中，更加是没有 AS 的，那么这时候命令行操作成为了唯一的选择。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Android SDK Manager 命令行工具使用" />
+    <meta name="twitter:description" content="一般情况下，我们都是通过 Android Studio 来进行 Android SDK 的管理的，更新啥的都是点点鼠标完成了，当然，我们知道 AS 只是做了一个封装。不过有时候，我们只是想安装更新，并不想启动 AS，那么这时候通过命令行就会轻量很多；在 CI 中，更加是没有 AS 的，那么这时候命令行操作成为了唯一的选择。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Android SDK Manager 命令行工具使用" />
+  <meta property="og:description" content="一般情况下，我们都是通过 Android Studio 来进行 Android SDK 的管理的，更新啥的都是点点鼠标完成了，当然，我们知道 AS 只是做了一个封装。不过有时候，我们只是想安装更新，并不想启动 AS，那么这时候通过命令行就会轻量很多；在 CI 中，更加是没有 AS 的，那么这时候命令行操作成为了唯一的选择。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/cffbd71/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/cffbd71/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Android SDK Manager 命令行工具使用</h1>
+      <p class="post-meta">@Clsrfish · Jan 16, 2018 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>一般情况下，我们都是通过 Android Studio 来进行 Android SDK 的管理的，更新啥的都是点点鼠标完成了，当然，我们知道 AS 只是做了一个封装。不过有时候，我们只是想安装更新，并不想启动 AS，那么这时候通过命令行就会轻量很多；在 CI 中，更加是没有 AS 的，那么这时候命令行操作成为了唯一的选择。</p>
+
+<p>在 sdk 25.2.3 及以上，Android SDK 提供的了 <code>android_home/tools/bin/sdkmanager</code> 来代替原来的 <code>android</code> 。</p>
+
+<h2 id="概览">概览</h2>
+
+<p>先进入到 <code>android_home/tools/bin/sdkmanager</code> 来看看 <code>sdkmanager</code> 提供哪些操作选项：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ ./sdkmanager --help
+Usage: 
+  sdkmanager <span style="color:#f92672">[</span>--uninstall<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>&lt;common args&gt;<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--package_file<span style="color:#f92672">=</span>&lt;file&gt;<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>&lt;packages&gt;...<span style="color:#f92672">]</span>
+  sdkmanager --update <span style="color:#f92672">[</span>&lt;common args&gt;<span style="color:#f92672">]</span>
+  sdkmanager --list <span style="color:#f92672">[</span>&lt;common args&gt;<span style="color:#f92672">]</span>
+  sdkmanager --licenses <span style="color:#f92672">[</span>&lt;common args&gt;<span style="color:#f92672">]</span>
+  sdkmanager --version</code></pre></div>
+<p>这里看到 sdkmanager 只提供的几个操作，所以学习成本还是很少的，下面挨个学个遍。</p>
+
+<h2 id="显示-package">显示 package</h2>
+
+<p>执行 <code>./sdkmanager --list</code> 就能显示 <strong>已安装</strong> 和 <strong>可安装</strong> 的包。
+<img src="https://i.loli.net/2018/01/26/5a6a0fd31ef55.png" alt="" /></p>
+
+<h2 id="安装-package">安装 package</h2>
+
+<p>执行 <code>./sdkmanager &lt;packages&gt;</code> 就能安装指定的包了，其中 <packages> 替换成你要安装的包，如：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ ./sdkmanager <span style="color:#e6db74">&#34;build-tools;27.0.3&#34;</span> <span style="color:#e6db74">&#34;tools&#34;</span></code></pre></div>
+<p>这里包名就是 <code>--list</code> 输出中的 <strong>Path</strong> 。</p>
+
+<p>如果要安装的包很多，手动输这么包名肯定要疯了，而且每次 安装/更新 都要输一遍，sdk 也提供一个使用配置文件的方式来安装：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">./sdkmanager --package_file<span style="color:#f92672">=</span>packages.txt</code></pre></div>
+<p>只需要提供一个 <code>packages.txt</code> 文件就可以简化安装多个包的命令了，这个文件里面的内容就是你所要安装的所有包名，一个包占一行，像这样：</p>
+
+<pre><code>patcher;v4
+platforms;android-27
+build-tools;27.0.3
+platform-tools
+tools
+lldb;3.0
+cmake;3.6.4111459
+ndk-bundle
+extras;android;m2repository
+extras;google;m2repository
+extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2
+extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2
+emulator
+system-images;android-27;google_apis;x86
+</code></pre>
+
+<h2 id="卸载-package">卸载 package</h2>
+
+<p>执行 <code>./sdkmanager --uninstall &lt;packages&gt;</code> 可以卸载指定的 package，和安装过程类似，也支持通过配置文件来卸载。</p>
+
+<h2 id="更新-package">更新 package</h2>
+
+<p>执行 <code>./sdkmanager --update</code> 就可以升级所有已安装的 package。</p>
+
+<h2 id="其他">其他</h2>
+
+<p>执行 <code>./sdkmanager --licenses</code> 可以显示所有可安装包的但是没有同意的协议，并且提供一个接受的选项。
+建议在安装之前执行一遍。</p>
+
+<p>执行 <code>./sdkmanager --version</code> 显示信息，没啥好说的。</p>
+
+<h2 id="options">Options</h2>
+
+<p>sdkmanager 每条命令都提供一些命名参数，下面直接通过表格给出：</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">Options</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">&ndash;sdk_root=path</td>
+<td align="left">相当于覆盖 ANDROID_HOME 的值，下载到指定的 SDK 目录 ，不过一般情况下不会使用这个</td>
+</tr>
+
+<tr>
+<td align="left">&ndash;channel=channel_id</td>
+<td align="left">可选值 {0,1,2,3}，分别代表 {Stable,Beta,Dev,Cannary}</td>
+</tr>
+
+<tr>
+<td align="left">&ndash;include_obsolete</td>
+<td align="left">用于 <code>--list</code> 和 <code>--update</code>，是否显示一些过时的package</td>
+</tr>
+
+<tr>
+<td align="left">&ndash;no_https</td>
+<td align="left">强制使用 HTTP 而不是 HTTPS 进行传输</td>
+</tr>
+
+<tr>
+<td align="left">&ndash;verbose</td>
+<td align="left">啰嗦模式，输出详细信息</td>
+</tr>
+
+<tr>
+<td align="left">&ndash;proxy={http &#124; socks}</td>
+<td align="left">指定代理模式</td>
+</tr>
+
+<tr>
+<td align="left">&ndash;proxy_host={IP_address &#124; DNS_address}</td>
+<td align="left">代理服务器的 IP 地址</td>
+</tr>
+
+<tr>
+<td align="left">&ndash;proxy_port=port_number</td>
+<td align="left">代理服务器端口</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>Note: 如果想要安装一个非当前平台的 package , 可以设置环境变量 <code>REPO_OS_OVERRIDE</code> 的值（{&ldquo;windows&rdquo;, &ldquo;macosx&rdquo;,&ldquo;linux&rdquo;}）来指定。</p>
+</blockquote>
+
+<h2 id="最佳实践">最佳实践</h2>
+
+<p>最常见的操作就是安装和更新，卸载除了在某些磁盘空间极其紧张的情况下是不太可能会执行的，所以这里针对这两个操作做一些简单的配置。</p>
+
+<p><code>sdkmanager</code> 有一点比较坑，就是通过配置文件指定需要安装/更新的包，执行完后会把配置文件删除，所以最好每次拷贝一下在进行操作。
+为了方便的操作，我们可以在 <code>ANDROID_HOME</code> 目录下添加三个文件：packages.txt、install_packages.sh、update_packages.sh 来简化操作。</p>
+
+<p>直接看代码，先看 install_packages.sh：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span><span style="color:#75715e"># 保存当前路径</span>
+cwd<span style="color:#f92672">=</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span>
+<span style="color:#75715e"># 配置文件</span>
+package_file<span style="color:#f92672">=</span>packages.txt
+<span style="color:#75715e"># sdkmanager 所在的相对路径</span>
+manager_dir<span style="color:#f92672">=</span>tools/bin/
+<span style="color:#75715e"># 拷贝一份配置文件到 sdkmanager 所在目录</span>
+cp <span style="color:#e6db74">${</span>package_file<span style="color:#e6db74">}</span> <span style="color:#e6db74">${</span>manager_dir<span style="color:#e6db74">}</span>
+<span style="color:#75715e"># 进入 sdkmanager 所在目录</span>
+cd <span style="color:#e6db74">${</span>manager_dir<span style="color:#e6db74">}</span>
+<span style="color:#75715e"># 先签一下不平等条款</span>
+./sdkmanager --licenses
+<span style="color:#75715e"># 看看 sdkmanager 信息</span>
+./sdkmanager --version
+<span style="color:#75715e"># 逐个安装 package</span>
+<span style="color:#66d9ef">for</span> p in <span style="color:#66d9ef">$(</span>cat <span style="color:#e6db74">${</span>package_file<span style="color:#e6db74">}</span><span style="color:#66d9ef">)</span>
+<span style="color:#66d9ef">do</span>
+    ./sdkmanager <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>p<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --verbose --no_https 
+<span style="color:#66d9ef">done</span>
+<span style="color:#75715e"># 回到之前的目录</span>
+cd <span style="color:#e6db74">${</span>cwd<span style="color:#e6db74">}</span></code></pre></div>
+<p>再看 update_packages.sh：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>cwd<span style="color:#f92672">=</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span>
+manager_dir<span style="color:#f92672">=</span>tools/bin/
+cd <span style="color:#e6db74">${</span>manager_dir<span style="color:#e6db74">}</span>
+./sdkmanager --update --verbose --no_https
+cd <span style="color:#e6db74">${</span>cwd<span style="color:#e6db74">}</span></code></pre></div>
+<p>这个比安装的简单多了，就不赘述了。</p>
+
+<blockquote>
+<p>最近在搭建 Jenkins 时候，因为是登录到了真实的服务器上进行操作，意外地发现被墙了，泣不成声。然后想到了国内的镜像服务，不过都失败了，最后在 <a href="http://blog.csdn.net/lq18111292117/article/details/53447479">这里</a> 找到了答案。</p>
+
+<p>访问 <a href="http://ping.chinaz.com/">http://ping.chinaz.com/</a> ，然后测试 dl.google.com ，把你所在地区对应的 IP 写入 <code>/etc/hosts</code> ，然后重新执行命令就好了。</p>
+</blockquote></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android-sdk-manager"><span class="tag">Android SDK Manager</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>473</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

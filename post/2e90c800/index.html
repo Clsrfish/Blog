@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>React Native 之环境搭建</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content=" 来自 GitBook，完成第一篇迁移
+ 最近 React Native、weex 等跨平台框架都好火的样子，要是再不看看，可能就要听不懂他们前端的话了。万事开头难，搭环境、跑 Demo 啥的基本上没有不遇坑，当然解决之后也是蛮开心的。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="React Native 之环境搭建" />
+    <meta name="twitter:description" content=" 来自 GitBook，完成第一篇迁移
+ 最近 React Native、weex 等跨平台框架都好火的样子，要是再不看看，可能就要听不懂他们前端的话了。万事开头难，搭环境、跑 Demo 啥的基本上没有不遇坑，当然解决之后也是蛮开心的。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="React Native 之环境搭建" />
+  <meta property="og:description" content=" 来自 GitBook，完成第一篇迁移
+ 最近 React Native、weex 等跨平台框架都好火的样子，要是再不看看，可能就要听不懂他们前端的话了。万事开头难，搭环境、跑 Demo 啥的基本上没有不遇坑，当然解决之后也是蛮开心的。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/2e90c800/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/2e90c800/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">React Native 之环境搭建</h1>
+      <p class="post-meta">@Clsrfish · Dec 26, 2017 · 3 min read</p>
+    </header>
+    <article class="post-content"><blockquote>
+<p>来自 GitBook，完成第一篇迁移</p>
+</blockquote>
+
+<p>最近 React Native、weex 等跨平台框架都好火的样子，要是再不看看，可能就要听不懂他们前端的话了。万事开头难，搭环境、跑 Demo 啥的基本上没有不遇坑，当然解决之后也是蛮开心的。</p>
+
+<h2 id="平台">平台</h2>
+
+<p>OS：Ubuntu 17.04
+IDE：Android Studio</p>
+
+<blockquote>
+<p>本来呢，不想在主力机上装各种环境，便想在只有 Windows 小破旧电脑上装，结果还是受不了 Windows ，于是也给 旧电脑装了 Ubuntu。</p>
+</blockquote>
+
+<h2 id="配置过程">配置过程</h2>
+
+<p>我是按照ReactNative中文社区的 <a href="https://reactnative.cn/docs/0.47/getting-started.html#content">教程</a> 来配置的，一套流程走下来基本上也没什么问题。</p>
+
+<h3 id="node-安装">node 安装</h3>
+
+<p>打开 Terminal 执行下面几条命令就完成了 node 的安装：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo apt-get install -y build-essential    <span style="color:#75715e"># -y 表示不留缓存</span>
+$ curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
+$ sudo ln -s /usr/bin/nodejs /usr/bin/node    <span style="color:#75715e">#进行软链接</span></code></pre></div>
+<p>这里遇到了一个问题，在执行完第二条命令的时候，最后输出了一段提示：
+&gt;## Confirming &ldquo;zesty&rdquo; is supported&hellip;
+&gt;
+&gt;+ curl -sLf -o /dev/null &lsquo;<a href="https://deb.nodesource.com/node_5.x/dists/zesty/Release'">https://deb.nodesource.com/node_5.x/dists/zesty/Release'</a></p>
+
+<blockquote>
+<p>## Your distribution, identified as &ldquo;zesty&rdquo;, is not currently supported, please contact NodeSource at <a href="https://github.com/nodesource/distributions/issues">https://github.com/nodesource/distributions/issues</a> if you think this is incorrect or would like your distribution to be considered for support</p>
+</blockquote>
+
+<p>大概意思就是说当前的运行的 Ubuntu 发行版还没有得到正式的支持，不过也没有感觉到不兼容的问题，忽略就好了。如果是其他版本的操作系统，可能就没有这个问题了。</p>
+
+<h3 id="npm-yarn-react-native-cli-安装">npm 、yarn 、react-native-cli 安装</h3>
+
+<p>上一步安装完 node 似乎并没有帮我们一并安装 npm ，所以还得多一条命令：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo apt install -y npm
+$ sudo npm install -g yarn react-native-cli</code></pre></div>
+<p><strong>yarn</strong> 是 FB 提供的 npm 替代品，能够加速 node 模块的下载（照抄的）。
+<strong>react-native-cli</strong> 是 ReactNative 命令行工具，有他之后我们就可以在 Terminal 里面完成 创建、初始化、更新、运行打包服务（packager）等任务了。</p>
+
+<p>虽然说 yarn 加速node 模块下载，如果源在高墙之外，估计想快也快不起来。这里我们还要给 yarn 设置一下镜像源：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ yarn config set registry https://registry.npm.taobao.org --global
+$ yarn config set disturl https://npm.taobao.org/dist --global</code></pre></div>
+<blockquote>
+<p>其实我个人不是很喜欢这种更改镜像的办法，看自己梯子的速度吧</p>
+</blockquote>
+
+<h3 id="android-dev-环境">Android Dev 环境</h3>
+
+<h4 id="jdk">JDK</h4>
+
+<p>安装之前先下载可能存在的 OpenJDK，执行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$sudo apt purge openjdk-<span style="color:#ae81ff">\*</span></code></pre></div>
+<p>首先前往 <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">JDK 站点</a> 下载一个合适的 JDK tar.gz 压缩包。下载完之后我们执行命令来进行安装：</p>
+
+<pre><code># 解压到指定目录
+$ sudo mkdir -p /usr/local/java            #创建 JDK 安装目录
+$ tar -zxvf jdk-8u144-linux-x64.tar.gz -C /usr/local/java    #这里文件名可能不一样
+
+# 配置ubuntu的JDK和JRE的位置， jdk1.8.0_144 替换成你的目录名
+$ sudo update-alternatives --install &quot;/usr/bin/java&quot; &quot;java&quot; &quot;/usr/local/java/jdk1.8.0_144/bin/java&quot; 1        
+$ sudo update-alternatives --install &quot;/usr/bin/javac&quot; &quot;javac&quot; &quot;/usr/local/java/jdk1.8.0_144/bin/javac&quot; 1
+$ sudo update-alternatives --install &quot;/usr/bin/javaws&quot; &quot;javaws&quot; &quot;/usr/local/java/jdk1.8.0_144/bin/javaws&quot; 1
+
+# 配置Oracle为系统默认JDK/JRE
+$ sudo update-alternatives --set java /usr/local/java/jdk1.8.0_144/bin/java
+$ sudo update-alternatives --set javac /usr/local/java/jdk1.8.0_144/bin/javac
+$ sudo update-alternatives --set javaws /usr/local/java/jdk1.8.0_144/bin/javaws
+</code></pre>
+
+<p>完成这些步骤后 JDK 环境就配好了，有些文章可能说还要配置环境变量，不过不配置也能够正常使用。</p>
+
+<h4 id="android-studio">Android Studio</h4>
+
+<p>Linux 版本的 SDK 和 Studio 都只提供zip，非常友好（之前用 Windows 也一直用的这种）。
+先去 <a href="https://developer.android.com/studio/index.html">Android 官方文档网站</a> 下载好压缩包。下载好之后还是使用命令行进行解压(安装)：</p>
+
+<pre><code>$ wget https://dl.google.com/dl/android/studio/ide-zips/3.0.0.10/android-studio-ide-171.4263559-linux.zip -P ~/Downloads
+$ mkdir ~/Android
+$ unzip ~/Downloads/android-studio-ide-171.4263559-linux.zip -d ~/Android
+</code></pre>
+
+<p>解压完成也就安转好了，我之前安装一直都是下载 Studio 和 SDK 两个压缩包，刚刚看文旦才知道只下载 Studio 就可以了，反正到时候还是会下载 SDK 的。
+我们接着运行 Studio 来完成 SDK 的安装，也可以顺便进行一些个性化设置：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ cd ~/Android/android-studio/bin
+$ ./studio.sh &amp; </code></pre></div>
+<p>在下载 SDK 的界面，我们把 SDK 路径设为 <code>~/Android/android-sdk</code> ，这里只是为了后面的讲述方便，也可以自行更改。
+Linux 也无法避免需要配置 SDK 环境变量的问题，打开 <code>~/.bashrc</code> ，在你喜欢的位置（推荐最后面）加入下面两行：</p>
+
+<pre><code>export ANDROID_HOME=~/Android/android-sdk
+export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
+</code></pre>
+
+<p>然后执行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ source ~/.bashrc</code></pre></div>
+<p>Android 开发环境也配置好了。至于 ReactNative 中文社区教程中说的要下载对应版本的 build-tools 啥的，我们先忽略，后面会提到。</p>
+
+<blockquote>
+<p>至于其他的工具或配置选项，有兴趣就看 中文社区 的教程。</p>
+</blockquote>
+
+<h2 id="测试">测试</h2>
+
+<p>随便找个没有超级用户权限的目录，执行下面的操作：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mkdir -p ~/Documents/AnroidProjects
+$ cd ~/Documents/AndroidProjects
+$ react-native init AwesomeRN
+$ cd AwesomeProject
+$ react-native run-android</code></pre></div>
+<p>我可能比较倒霉，第三条第五条命令报错，GitHub、SO 上逛了 n 圈，遇到类似或相同错误的人还不少，下面讲讲我遇到的错误表现和解决办法。</p>
+
+<h3 id="第三条-初始化项目">第三条：初始化项目</h3>
+
+<p>执行完第三条命令，最后 Terminal 输出了如下错误：
+&gt; this._nextStatusStr = util.format(format, &hellip;args)
+&gt;
+&gt; ​                                     ^^^
+&gt;
+&gt;
+&gt; SyntaxError: Unexpected token &hellip;
+&gt;    at exports.runInThisContext (vm.js:53:16)</p>
+
+<p>最终在 <a href="http://blog.csdn.net/xocom/article/details/76933996">这里</a> 找到了解决方案：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ sudo npm install -g npm
+$ sudo npm cache clean -f
+$ sudo npm install -g n
+$ sudo n stable</code></pre></div>
+<p>具体干了什么我也不清楚，大概是升了个级，反正问题解决了。所以在安装完 npm 之后执行上面的操作就可以避免这个错误了。
+再次执行第三条命令，成功后会得到下面的提示：</p>
+
+<pre><code>To run your app on iOS:
+   cd /media/xinliu/Files/Projects/Android/AwesomeRN
+   react-native run-ios
+   - or -
+   Open ios/AwesomeRN.xcodeproj in Xcode
+   Hit the Run button
+To run your app on Android:
+   cd /media/xinliu/Files/Projects/Android/AwesomeRN
+   Have an Android emulator running (quickest way to get started), or a device connected
+   react-native run-android
+</code></pre>
+
+<h3 id="第五条-运行">第五条：运行</h3>
+
+<p>真没想到在这里还会遇到坑，敲入命令， Enter 一扣，立马见到输出中有：</p>
+
+<pre><code>Starting JS server...
+Building and installing the app on the device (cd android &amp;&amp; ./gradlew installDebug)...
+</code></pre>
+
+<p>紧接着输出的就是执行 <code>./gradlew installDebug</code> 的输出（中间会下载gradle 和一些其他的模块），眼看进度在增长，最后跑出个异常：</p>
+
+<pre><code>* What went wrong:
+Execution failed for task ':app:mergeDebugResources'.
+&gt; Error: java.util.concurrent.ExecutionException: java.lang.RuntimeException: AAPT process not ready to receive commands
+
+* Try:
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.
+
+BUILD FAILED
+
+Total time: 7.096 secs
+Could not install the app on the device, read the error above for details.
+Make sure you have an Android emulator running or a device connected and have
+set up your Android development environment:
+https://facebook.github.io/react-native/docs/android-setup.html
+</code></pre>
+
+<p>然后各种搜索，见得最多的是执行 <code>cd android &amp;&amp; ./gradlew clean</code> ，这不就是 “clean project” 么，本以为有效，然并卵。
+后来还是在 <a href="https://stackoverflow.com/questions/40284811/run-react-native-app-in-device">SO</a> 上找到了答案，修改 &ldquo;android/app/build.gradle&rdquo;：</p>
+
+<pre><code>compileSdkVersion 26
+buildToolsVersion &quot;26.0.1&quot;
+
+minSdkVersion 21
+targetSdkVersion 26
+</code></pre>
+
+<p>我都给换成最新的，然后居然成功了。中文社区教程中还强调了只能 <strong>buildToolsVersion “23.0.1”</strong> ，特别是看到有些文章给出的答案是按照中文社区的教程重新来一遍，真的是坑。所以之前并按照教程中说的安装特定版本 build-tools 啥的。
+如果此时有模拟器正在运行，执行完第五条命令后就应该能够跑起来了。用真机测试的话，看 <a href="https://reactnative.cn/docs/0.47/running-on-device-android.html#content">这里</a>。</p>
+
+<blockquote>
+<p>其实也可以不修改 gradle 脚本，因为第五条命令的作用就是打包一个 js bundle ，然后在 8081 端口启动 nodejs 服务器，再使用 gradle 进行 apk 打包安装。所以我们可以使用 Android Studio 来打包安装，然后在 <code>AwesomeRN</code> 目录执行 <code>react-native start</code> 启动服务器，最终效果是“一样”的。</p>
+</blockquote>
+
+<h2 id="小测试">小测试</h2>
+
+<p>安装好应用之后，第一次打开应用会跳转到授权界面，然后再回到 app，这时可能会看见 app 顶部闪过的绿色提示：“loading from localhost：8081”，似乎有点动态从服务拉取界面的意思。我们进入 app 在系统内部位置：<code>/data/data/com.awesomern</code>，然后里面会有一个 <strong>files</strong> 文件夹，里面有个 <strong>ReactNativeDevBundle.js</strong> 文件，刚才加载的就是这个文件。干点坏事，把它删了，关闭应用之后重新进入，又有可能看见闪过的绿色提示，回到刚才的 “files” 目录，会发下刚删掉的文件又出现，仔细看还会发现时间戳也变了。</p>
+
+<p>还有一个问题就是这个 bundle 有点大，弱网环境的加载速度的肯定不能忍，配合上 <strong>rsync</strong> 或 <strong>bsdiff</strong> 等差量算法来拉去差量包会是一个比较好的选择。</p>
+
+<h2 id="总结">总结</h2>
+
+<p>成功跑起来很开心，ReactNative 的实时更新界面确实很棒，虽然一个空壳 App 打出来就 TM 10多M。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/react-native"><span class="tag">React Native</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/environment"><span class="tag">Environment</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>494</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

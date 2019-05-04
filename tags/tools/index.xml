@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tools on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/tools/</link>
+    <description>Recent content in Tools on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 31 Mar 2018 00:35:31 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/tools/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Git Flow（译）</title>
+      <link>https://clsrfish.github.io/Blog/post/2018-03-31-git-flow/</link>
+      <pubDate>Sat, 31 Mar 2018 00:35:31 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/2018-03-31-git-flow/</guid>
+      <description>&lt;p&gt;在这篇文章中，我将会向大家讲解我大约一年前引入一些项目（公司或者私有的）里并且被事实证明为非常成功的开发模式。我早就想写一些关于这方面的东西，但是直到现在才找到时间来完整地完成这些东西。这里我不会讨论任何项目细节方面的东西，仅仅讨论分支策略和发版管理。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

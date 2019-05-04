@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Android on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/android/</link>
+    <description>Recent content in Android on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 29 Sep 2018 10:52:51 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>[Android 踩坑] 明文传输</title>
+      <link>https://clsrfish.github.io/Blog/post/1e22c8b00480263c039de844c3ecef68/</link>
+      <pubDate>Sat, 29 Sep 2018 10:52:51 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/1e22c8b00480263c039de844c3ecef68/</guid>
+      <description>&lt;p&gt;昨天晚上 Glide 加载图片突然出现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Exception: IOException java.io.IOException: Cleartext HTTP traffic to * not permitted
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;明确指出不允许明文传输，测试机器是 Android P 的模拟器。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>创建带参的 ViewModel 实例</title>
+      <link>https://clsrfish.github.io/Blog/post/f808d7d1d85d91e1bafe989662831582/</link>
+      <pubDate>Sat, 18 Aug 2018 11:25:06 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/f808d7d1d85d91e1bafe989662831582/</guid>
+      <description>&lt;p&gt;Android Jet Pack 的 &lt;code&gt;ViewModel&lt;/code&gt; 为开发者在处理配置变更时数据保存带来了一定便捷性，但是如果定义的 &lt;code&gt;ViewModel&lt;/code&gt; 子类构造器有参数，那么还要提供一个对应的 &lt;code&gt;ViewModelProvider.Factory&lt;/code&gt; 实现。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Android 项目集成 React Native</title>
+      <link>https://clsrfish.github.io/Blog/post/dd31da67/</link>
+      <pubDate>Sat, 07 Apr 2018 16:28:41 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/dd31da67/</guid>
+      <description>&lt;p&gt;如果不是一个从零开始的项目，那么更多情况下是需要把 React Native 作为一个功能模块嵌入到现有应用中，这篇文章简单记录一下怎么集成 RN 到现有 Android 项目中，以及一些坑点。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>AOSP (Android 9.0.0)源码下载</title>
+      <link>https://clsrfish.github.io/Blog/post/df3a1293/</link>
+      <pubDate>Tue, 30 Jan 2018 12:44:34 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/df3a1293/</guid>
+      <description>&lt;p&gt;现在学习 Android 不像早些年，会写个 App 就能找到饭碗，如今不看看 Framework 源码有种分分钟掉队的感觉。虽然现在有一些比较优秀的站点提供源码阅读，但是毕竟在浏览器里面阅读，还是会遇到很多限制，最好还是自己下载一份。说道下载问题就来了，AOSP 的仓库被墙了，所以直接不能直接下载，或者说直接下载网速会很慢，还好国内有一些镜像服务可以避免这一问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Android SDK Manager 命令行工具使用</title>
+      <link>https://clsrfish.github.io/Blog/post/cffbd71/</link>
+      <pubDate>Tue, 16 Jan 2018 17:34:40 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/cffbd71/</guid>
+      <description>&lt;p&gt;一般情况下，我们都是通过 Android Studio 来进行 Android SDK 的管理的，更新啥的都是点点鼠标完成了，当然，我们知道 AS 只是做了一个封装。不过有时候，我们只是想安装更新，并不想启动 AS，那么这时候通过命令行就会轻量很多；在 CI 中，更加是没有 AS 的，那么这时候命令行操作成为了唯一的选择。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>撸个简单的 JSbridge</title>
+      <link>https://clsrfish.github.io/Blog/post/3f71fc1/</link>
+      <pubDate>Tue, 09 Jan 2018 21:59:21 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/3f71fc1/</guid>
+      <description>&lt;p&gt;这两年 Web 技术栈一直在努力地向移动端和后端延展（这里没有引战的意思），当然这也是技术发展所带来的必然结果。移动互联网早期主要以原生开发为主，但到现在，业务不断发展，版本也需要快速迭代，原生开发效率很明显难以跟上，这时候 Web 开发的优势就显现出来了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Activity 生命周期</title>
+      <link>https://clsrfish.github.io/Blog/post/fd703f93/</link>
+      <pubDate>Sat, 06 Jan 2018 02:04:02 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/fd703f93/</guid>
+      <description>&lt;p&gt;Activity 的生命周期是每位 Android 开发都必须掌握的基本知识，以致于几乎所有的 Android ，入门书籍在前几章就会开始讲生命周期。这篇文章大体上是官方文档的个人理解，内容上可能会有一些出入。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Picasso 加载流程</title>
+      <link>https://clsrfish.github.io/Blog/post/82cb002a/</link>
+      <pubDate>Sat, 30 Dec 2017 01:21:16 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/82cb002a/</guid>
+      <description>&lt;p&gt;自己第一次写比较完整 app 还是去年暑假，当时参加现在的团队夏令营，组长要求我们不能使用第三方库（亏得自己还苦哈哈地看了几天各种第三方库），所以就得自己手写图片加载逻辑，所以也就遇到很多问题，比如错位、加载慢等。不过使用第三方库的话，一行代码就能解决这些问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Butterknife 剖析</title>
+      <link>https://clsrfish.github.io/Blog/post/c350d50c/</link>
+      <pubDate>Sat, 30 Dec 2017 00:45:35 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/c350d50c/</guid>
+      <description>&lt;p&gt;在初学 Android 的时候，写一个 Activity，就要写好几句 &lt;code&gt;findViewById&lt;/code&gt; （现在 support 包使用泛型避免强转），慢地就变得厌倦这些模板代码，但是又不能不写。ButterKnife 使用注解的方式来避免这一类模板代码，比如事件监听器等。代码变得好看了，也就开始思考它内部的工作原理。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Android 磁盘目录</title>
+      <link>https://clsrfish.github.io/Blog/post/8a73e0d4/</link>
+      <pubDate>Tue, 26 Dec 2017 11:16:28 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/8a73e0d4/</guid>
+      <description>&lt;p&gt;每次遇到存储这一块的时候，都要去看 &lt;a href=&#34;https://developer.android.com/training/basics/data-storage/files.html&#34;&gt;官方文档&lt;/a&gt; ；但是这里有一个蛋疼的问题就是，官方文档中没有对特定方法返回的路径进行说明。所以每次都会在这个问题上耗费十多分钟来 &lt;strong&gt;看文档&lt;/strong&gt; 和 &lt;strong&gt;写 Demo&lt;/strong&gt; 来找到符合要求的方法，这次就做个笔记，以防不时之需。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>缓存之 MemoryLruCache</title>
+      <link>https://clsrfish.github.io/Blog/post/43a6778d/</link>
+      <pubDate>Tue, 26 Dec 2017 11:15:25 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/43a6778d/</guid>
+      <description>&lt;p&gt;在开发图片加载功能时，既要保证加载速度，又要避免 OOM，特别是在类似于图库这样的场景中，如何处理好这两者关系显得尤为重要。所以最简单的想法就是一共缓存，将那些暂时 “食之无味，弃之可惜”  的对象暂时缓存起来，以备不适之需。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>缓存之 DiskLruCache</title>
+      <link>https://clsrfish.github.io/Blog/post/404af482/</link>
+      <pubDate>Tue, 26 Dec 2017 11:15:05 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/404af482/</guid>
+      <description>&lt;p&gt;&lt;code&gt;DiskLruCache&lt;/code&gt; 在 Glide 、 OkHttp 中都有使用，不过这些第三方库有可能根据自己的需求进行了一定的修改，不过总体上的还是一样的。&lt;a href=&#34;https://developer.android.com/samples/DisplayingBitmaps/src/com.example.android.displayingbitmaps/util/DiskLruCache.html&#34;&gt;下载地址&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>AndroidArchitectureComponent 之 ViewModel</title>
+      <link>https://clsrfish.github.io/Blog/post/8c318638/</link>
+      <pubDate>Mon, 25 Dec 2017 15:54:54 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/8c318638/</guid>
+      <description>&lt;p&gt;在学习 Android 稍微深入一点，就知道 &lt;code&gt;Activity/Fragment&lt;/code&gt; 是受 Android 框架层控制的，具体表现在生命周期上面。系统会根据用户的操作或者设备状态来创建或销毁 &lt;code&gt;Activity/Fragment&lt;/code&gt;，这个时候会带来数据的 &lt;strong&gt;保存和恢复(包括视图状态)&lt;/strong&gt;  问题。一个典型场景就是表单页面，当用户旋转屏幕之后，系统会重建Activity/Fragment，如果什么数据的保存恢复工作都没有做，那么系统重建的 &lt;code&gt;Activity/Fragment&lt;/code&gt; 将失去用户已经输入的数据，丢失数据越多，用户体验越差。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Android Architecture Components 之 Lifecycle</title>
+      <link>https://clsrfish.github.io/Blog/post/61434b2a/</link>
+      <pubDate>Thu, 21 Dec 2017 23:53:58 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/61434b2a/</guid>
+      <description>&lt;p&gt;现在都流行 MVP + RxJava2 开发，然后 RxJava 带来的一个问题就是需要在适当的时候取消订阅关系以避免 &lt;strong&gt;内存泄露&lt;/strong&gt; ，最常见的做法就是在 &lt;code&gt;Activity/Fragment#onDestroy()&lt;/code&gt; 方法中调用 &lt;code&gt;disposable.dispose()&lt;/code&gt; 来解决。然后，官方文档中是用 &lt;code&gt;LocationManager&lt;/code&gt; 来举例，这种情况就比较典型，需要重写 Activity/Fragment 的每个生命周期方法来处理它的状态。官方文档中又单独封装了一个类来处理，保持生命周期方法中的代码不会太臃肿。但是这还是没有彻底解决问题，毕竟还是要重写方法，难免不会有一次忘记重写某个生命周期函数。最理想的情况就是，我们封装的类能够 &lt;strong&gt;自动察觉&lt;/strong&gt; 到生命周期的变化。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>AndroidArchitectureComponents 序言</title>
+      <link>https://clsrfish.github.io/Blog/post/eadd994e/</link>
+      <pubDate>Thu, 21 Dec 2017 15:26:23 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/eadd994e/</guid>
+      <description>&lt;p&gt;Google 在今年的 IO 大会上推出了一套新的 Android 应用开发框架————Android Architecture Components，从我个人的理解来看，它主要的功能还是帮你解决一些开发时一些比较琐碎的工作，比如 &lt;strong&gt;数据保存与恢复&lt;/strong&gt; ，一个突出的思想就是 &lt;strong&gt;数据视图分离&lt;/strong&gt; 、&lt;strong&gt;数据驱动视图&lt;/strong&gt; 。当然这些概念并不是这套框架所新诞生的，目前也有很多优秀的解决方案，所以 Google 也强调了，没有必要强行迁移现有的开发模式，&lt;strong&gt;新项目/模块&lt;/strong&gt; 可以试试。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

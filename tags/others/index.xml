@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>others on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/others/</link>
+    <description>Recent content in others on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Tue, 19 Dec 2017 14:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/others/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hello World</title>
+      <link>https://clsrfish.github.io/Blog/post/2017-12-19-helloworld/</link>
+      <pubDate>Tue, 19 Dec 2017 14:00:00 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/2017-12-19-helloworld/</guid>
+      <description>&lt;p&gt;最近刚刚重新打造了一下我的新博客（也就是你现在所看到的），免不了想要产出一点点文章来充实充实它。上一次的博客写完两篇博客的搭建笔记就没有然后了，希望这次的博客能够一直好好的经营下去，算是立了一个 Flag 吧。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

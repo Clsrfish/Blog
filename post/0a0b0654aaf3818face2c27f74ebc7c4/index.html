@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>[Flutter] Dart 面向对象</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="Dart 是一门纯粹的面向对象的语言，即任何变量或实例都是 Object 的实例。同时 Dart 不支持多继承，但是支持 Mixin 特性，即一个类的定义在 不被继承 的情况被其它类复用。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="[Flutter] Dart 面向对象" />
+    <meta name="twitter:description" content="Dart 是一门纯粹的面向对象的语言，即任何变量或实例都是 Object 的实例。同时 Dart 不支持多继承，但是支持 Mixin 特性，即一个类的定义在 不被继承 的情况被其它类复用。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="[Flutter] Dart 面向对象" />
+  <meta property="og:description" content="Dart 是一门纯粹的面向对象的语言，即任何变量或实例都是 Object 的实例。同时 Dart 不支持多继承，但是支持 Mixin 特性，即一个类的定义在 不被继承 的情况被其它类复用。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/0a0b0654aaf3818face2c27f74ebc7c4/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/0a0b0654aaf3818face2c27f74ebc7c4/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">[Flutter] Dart 面向对象</h1>
+      <p class="post-meta">@Clsrfish · Sep 25, 2018 · 3 min read</p>
+    </header>
+    <article class="post-content"><p>Dart 是一门纯粹的面向对象的语言，即任何变量或实例都是 <code>Object</code> 的实例。同时 Dart 不支持多继承，但是支持 <strong>Mixin</strong> 特性，即一个类的定义在 <strong>不被继承</strong> 的情况被其它类复用。</p>
+
+<blockquote>
+<p>在 Dart 2.X 中，<code>new</code> 关键字可以省略</p>
+</blockquote>
+
+<h2 id="运行时类型">运行时类型</h2>
+
+<p>很多时候都需要获取某个实例的类型，可以通过访问实例的 <code>runtimeType</code> 变量获取变量类型（<code>Type</code>）:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) {
+  <span style="color:#66d9ef">var</span> str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;this is a String&#34;</span>;
+  print(str.runtimeType);
+  print(str.runtimeType.runtimeType);
+}
+<span style="color:#75715e">/**
+</span><span style="color:#75715e"> * String
+</span><span style="color:#75715e"> * _Type
+</span><span style="color:#75715e"> */</span></code></pre></div>
+<blockquote>
+<p><code>Type</code> 是一个抽象类， <code>_Type</code> 应该是它的具体实现了</p>
+</blockquote>
+
+<h2 id="实例变量">实例变量</h2>
+
+<p>下面是实例变量的声明方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Point</span>{
+    [<span style="color:#66d9ef">final</span>] <span style="color:#66d9ef">var</span> value [ <span style="color:#f92672">=</span> <span style="color:#ae81ff">233</span>];
+}</code></pre></div>
+<p>实例变量可以手动设置默认值，如果没有设置则默认为 <code>null</code>。一般情况下会为每个实例变量添加 <code>setter</code> 和 <code>getter</code>；当有 <code>final</code> 修饰时，则没有 <code>setter</code>；当变量是私有的时候，则 <code>setter</code>、<code>getter</code> 都没有。</p>
+
+<p>通过 <code>static</code> 修饰的变量属于这个类，方法也是如此</p>
+
+<h2 id="构造器">构造器</h2>
+
+<p>和其它面向对象语言一样，Dart 也是通过声明一个以类名作为方法名，不设置返回值的方法作为一个构造器：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Point</span>{
+    <span style="color:#66d9ef">var</span> x;
+    <span style="color:#66d9ef">var</span> y;
+    Point(<span style="color:#66d9ef">int</span> x, <span style="color:#66d9ef">int</span> y){
+
+    }
+}</code></pre></div>
+<p>如果构造器参数用来对实例变量初始化，则可以直接使用构造器参数为实例变量赋值：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Point</span>{
+    <span style="color:#66d9ef">var</span> x;
+    <span style="color:#66d9ef">var</span> y;
+    Point(<span style="color:#66d9ef">this</span>.x, <span style="color:#66d9ef">this</span>.y){
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    }
+}</code></pre></div>
+<p>或者使用 <strong>初始化列表</strong> ：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Point</span>{
+    <span style="color:#66d9ef">var</span> x;
+    <span style="color:#66d9ef">var</span> y;
+    Point(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> coordinates)
+        <span style="color:#f92672">:</span> x <span style="color:#f92672">=</span> coordinates[<span style="color:#ae81ff">0</span>],
+          y <span style="color:#f92672">=</span> coordinates[<span style="color:#ae81ff">1</span>] {
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    }
+}</code></pre></div>
+<p>像在 C++ 中，实例变量的初始化是推荐在初始化列表中进行而不是在构造器方法体内进行赋值，列表初始化始终存在，没有显式声明则会赋值默认值，也即会多出一次赋值操作。不过 Dart 这边的情况怎么样，暂时还没做探索</p>
+
+<p>像 Java 一样，如果没有声明任何构造器，那么编译器会提供一个 <strong>无参构造器</strong></p>
+
+<p>这里要注意的是：
+- 普通构造器不能定义多个</p>
+
+<h3 id="命名构造器">命名构造器</h3>
+
+<p>命名构造器的声明形式如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Point</span>{
+    <span style="color:#66d9ef">num</span> x, y;
+    Point.orgin(){
+        x <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        y <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    }
+    Point.fromMap(Map<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span>,<span style="color:#66d9ef">num</span><span style="color:#f92672">&gt;</span> map){
+        x <span style="color:#f92672">=</span> map[<span style="color:#e6db74">&#34;x&#34;</span>];
+        y <span style="color:#f92672">=</span> map[<span style="color:#e6db74">&#34;y&#34;</span>];
+    }
+}
+
+<span style="color:#66d9ef">var</span>  p <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Point.origin();</code></pre></div>
+<p>命名构造器和普通构造器只是在类名后面加上了 “.name”。命名构造器主要作用有：
+- 让调用方更清楚这个构造器的作用/适用场景
+- 提供多构造器能力</p>
+
+<h3 id="重定向">重定向</h3>
+
+<p>和 Java 一样，有些构造器有时只是单纯的调用其他构造器，所以可以在初始化列表里面调用其他构造器：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Point</span>{
+    <span style="color:#66d9ef">num</span> x, y;
+    Point()<span style="color:#f92672">:</span><span style="color:#66d9ef">this</span>.origin();
+    Point.orgin(){
+        x <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+        y <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+    }
+}</code></pre></div>
+<p>有两点需要注意：
+- 重定向不能使用初始化列表进行参数初始化
+- 使用了重定向的构造器不能有方法体</p>
+
+<h3 id="常量构造器">常量构造器</h3>
+
+<p>有时候希望创建不可修改的实例，Dart 提供常量构造器来创建编译期不可修改的实例:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Point</span>{
+    <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">num</span> a;
+    <span style="color:#66d9ef">const</span> Point(<span style="color:#66d9ef">this</span>.a);
+}</code></pre></div>
+<p>如果在使用常量构造器的时候使用 <code>const</code> 修饰同时参数也一样，得到的实例会是一样的：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">var</span> a <span style="color:#f92672">=</span> <span style="color:#66d9ef">const</span> ConstPoint(<span style="color:#ae81ff">1</span>);
+<span style="color:#75715e">// const a = ConstPoint(1);
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> b <span style="color:#f92672">=</span> <span style="color:#66d9ef">const</span> ConstPoint(<span style="color:#ae81ff">1</span>);
+<span style="color:#75715e">// const a = ConstPoint(1);
+</span><span style="color:#75715e"></span>print(identical(a, b));<span style="color:#f92672">//</span> <span style="color:#66d9ef">true</span></code></pre></div>
+<p>这里需要注意几点：
+- 声明常量构造器的类，所有实例变量都必须适用 <code>final</code> 修饰
+- 常量构造器和普通构造器不能同时存在
+- 常量构造器不能重定向到非常量构造器（VSCode 没有错误提示，但是编译期报错）
+- 常量构造器不能有方法体</p>
+
+<h3 id="工厂构造器">工厂构造器</h3>
+
+<p>可以通过对象池来理解工厂构造器，也即工厂构造器不一定会创建新实例：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Point</span>{
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> _cache <span style="color:#f92672">=</span> Cache<span style="color:#f92672">&lt;</span>Point<span style="color:#f92672">&gt;</span>(); 
+
+    <span style="color:#66d9ef">var</span> _using <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+    <span style="color:#66d9ef">factory</span> Point(){
+        <span style="color:#66d9ef">var</span>  p <span style="color:#f92672">=</span> _cache.<span style="color:#66d9ef">get</span>();
+        <span style="color:#66d9ef">if</span> (p <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+            p <span style="color:#f92672">=</span> Point.origin();
+            _cache.add(p);
+        }
+        <span style="color:#66d9ef">return</span> p;
+    }
+    Point.origin(){
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    }
+    <span style="color:#66d9ef">void</span> recycle(){
+        _using <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+    }
+}</code></pre></div>
+<p>注意两点：
+- 工厂构造器不能和普通构造器同时存在
+- 工厂构造器无法访问 <code>this</code></p>
+
+<p>通过工厂构造器，我们可以实现 Dart 中的单例模式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Singleton</span>{
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> _instance <span style="color:#f92672">=</span> Singleton._internal();
+    Singleton._internal();
+    <span style="color:#66d9ef">factory</span> Singleton(){
+        <span style="color:#66d9ef">return</span> _instance;
+    }
+}</code></pre></div>
+<h2 id="抽象类">抽象类</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SuperClass</span> {
+  <span style="color:#66d9ef">var</span> a;
+  <span style="color:#66d9ef">final</span> b;
+  <span style="color:#66d9ef">var</span> _a;
+  SuperClass(<span style="color:#66d9ef">this</span>.b);
+  <span style="color:#66d9ef">void</span> method();
+}</code></pre></div>
+<p>通过 <code>abstract</code> 关键字声明一个抽象类，没有具体实现的方法都是抽象方法。
+子类中通过 <code>extends</code> 声明父类：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SubClass</span> <span style="color:#66d9ef">extends</span> SuperClass {
+  SubClass(b) <span style="color:#f92672">:</span> <span style="color:#66d9ef">super</span>(b) {}
+
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  <span style="color:#66d9ef">void</span> method() {
+    <span style="color:#66d9ef">this</span>.a <span style="color:#f92672">=</span> <span style="color:#ae81ff">12</span>;
+  }
+}</code></pre></div>
+<p>通过 <code>extends</code> 可以继承父类中的实现，同时要求实现抽象方法。
+这里在初始化列表中调用了父类构造器，如果不显式调用父类构造器，则会尝试隐式调用父类空构造器，但是这里的例子中父类并没有空构造器，编译期会报错。</p>
+
+<h2 id="接口">接口</h2>
+
+<p>Dart 没有将 <code>interface</code> 作为一个关键字使用，而是将接口含义隐藏在类里面：每个类都会隐式声明一个接口，这个接口包含该类和该类的父类、实现的接口的所有实例成员。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SubClass</span> <span style="color:#66d9ef">implements</span> SuperClass {
+  SubClass(b) {}
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  <span style="color:#66d9ef">var</span> a;
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  <span style="color:#66d9ef">get</span> b <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">null</span>;
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  <span style="color:#66d9ef">var</span> _a2;
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  <span style="color:#66d9ef">void</span> method() {}
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  <span style="color:#66d9ef">void</span> method2() {}
+}</code></pre></div>
+<h2 id="枚举类型">枚举类型</h2>
+
+<p>和其它语言一样，Dart 也原生提供枚举类型的支持：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">enum Color{ red, green, blue }</code></pre></div>
+<p>同时枚举类型会为枚举值提供一个 <strong>基于0</strong> 的索引。</p>
+
+<h2 id="mixins-找不到一个好的翻译">Mixins（找不到一个好的翻译</h2>
+
+<p>在文章的开头提到 Dart 提供在 <strong>不被继承</strong> 的情况下进行类定义的复用，也即 <strong>Mixins</strong>。还是具体看代码吧：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Pilot</span> {
+  <span style="color:#66d9ef">void</span> fly() {
+    print(<span style="color:#e6db74">&#34;fly&#34;</span>);
+  }
+  <span style="color:#66d9ef">void</span> play() {
+    print(<span style="color:#e6db74">&#34;I can not play&#34;</span>);
+  }
+}
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Musician</span> {
+  <span style="color:#66d9ef">void</span> fly() {
+    print(<span style="color:#e6db74">&#34;I can not fly&#34;</span>);
+  }
+  <span style="color:#66d9ef">void</span> play() {
+    print(<span style="color:#e6db74">&#34;play&#34;</span>);
+  }
+}
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">NiuBeePerson</span> <span style="color:#66d9ef">with</span> Musician, Pilot {
+}
+
+main(List<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">String</span><span style="color:#f92672">&gt;</span> args) {
+  NiuBeePerson().play();
+  NiuBeePerson().fly();
+  print(NiuBeePerson <span style="color:#66d9ef">is</span> Pilot);
+  print(NiuBeePerson <span style="color:#66d9ef">is</span> Musician);
+}</code></pre></div>
+<p>执行上述代码后可以得出一下结论：
+- 后声明的类可以覆盖前面的类的实例变量、函数
+- 被 mixin 的类中有命名相同、类型不同的实例变量/方法会导致编译错误
+- mixins 的类实际上被当成了被 mixin 的子类</p>
+
+<blockquote>
+<p>在写这篇文章的时候，对 Dart 访问控制理解不是很OK，如果看到有类似“私有”对字眼，可以忽略，不会影响</p>
+</blockquote>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://www.dartlang.org/guides/language/language-tour#classes">https://www.dartlang.org/guides/language/language-tour#classes</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/dart"><span class="tag">Dart</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/class"><span class="tag">Class</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/oop"><span class="tag">OOP</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/mixin"><span class="tag">Mixin</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>221</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>[Flutter] BLoC——Flutter 中的 MVP</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="写过 Android 的应该都会比较熟悉 MVP 模式，在 Flutter 框架下有着相似的 BLoC（Business Logic Component） 模式，不准确地说，BLoC 就是 MVP 在 Flutter 中的变种。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="[Flutter] BLoC——Flutter 中的 MVP" />
+    <meta name="twitter:description" content="写过 Android 的应该都会比较熟悉 MVP 模式，在 Flutter 框架下有着相似的 BLoC（Business Logic Component） 模式，不准确地说，BLoC 就是 MVP 在 Flutter 中的变种。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="[Flutter] BLoC——Flutter 中的 MVP" />
+  <meta property="og:description" content="写过 Android 的应该都会比较熟悉 MVP 模式，在 Flutter 框架下有着相似的 BLoC（Business Logic Component） 模式，不准确地说，BLoC 就是 MVP 在 Flutter 中的变种。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/db8412330a33102e25847a876fd66c62/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/db8412330a33102e25847a876fd66c62/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">[Flutter] BLoC——Flutter 中的 MVP</h1>
+      <p class="post-meta">@Clsrfish · Oct 31, 2018 · 4 min read</p>
+    </header>
+    <article class="post-content"><p>写过 Android 的应该都会比较熟悉 MVP 模式，在 Flutter 框架下有着相似的 BLoC（Business Logic Component） 模式，不准确地说，BLoC 就是 MVP 在 Flutter 中的变种。</p>
+
+<h2 id="statelesswidget-vs-statefulwidget">StatelessWidget vs StatefulWidget</h2>
+
+<p>在正式开始讲 BLoC 前，先在此回顾下 <a href="https://flutter.io/tutorials/interactive/#stateful-stateless">Widget</a>。</p>
+
+<p>Widget 在 Flutter 整个绘制过程中，只充当配置的角色，基本不会涉及到的绘制相关的 API，所以在应用运行过程中时刻有大量的 Widget 产生并销毁。但是很多情况下，我们并不想 Widget 的某些状态/数据也一并销毁，比如输入框中已经输入的文本，这时候就有了 Widget 的两个子类——StatelessWidget 和 StatefulWidget。</p>
+
+<p>所以如果我们想要保存一些状态或者实例变量的话，就需要使用 StatefulWidget。</p>
+
+<h2 id="stream-sink">Stream &amp; Sink</h2>
+
+<p>在 <a href="https://yahdude.github.io/Blog/post/c773f50199233831a2379fde98a7b3eb/">这篇文章</a> 中已经学习了如何通过 <code>async*</code> 和 <code>yield</code> 来创建一个 Stream，这种方式我们只能对 Stream  下游进行监听，也即上游数据源已经确定了，但是在实际应用中，上游数据应该可以来自程序的不同部分。</p>
+
+<p>Dart 提供了 <code>StreamController&lt;T&gt;</code> 这个模板类来帮助开发者创建 Stream 同时向里头添加数据的能力，可以简单理解为：</p>
+
+<p><img src="https://i.loli.net/2018/11/07/5be2945f8ffa3.png" alt="" /></p>
+
+<p>关于它的一些 API 就不多细说了，官方文档里讲得已经非常清楚。</p>
+
+<h2 id="bloc">BLoC</h2>
+
+<p>BLoC 的目的也是将视图和逻辑进行分离，让视图层专注于数据的展示，逻辑层管理状态并处理业务逻辑，这和 MVP 一毛一样。</p>
+
+<p>这里以 Flutter 新建工程为例进行 BLoC 的讲解，先看默认实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">_MyHomePageState</span> <span style="color:#66d9ef">extends</span> State<span style="color:#f92672">&lt;</span>MyHomePage<span style="color:#f92672">&gt;</span> {
+  <span style="color:#66d9ef">int</span> _counter <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+  <span style="color:#66d9ef">void</span> _incrementCounter() {
+    setState(() {
+      _counter<span style="color:#f92672">++</span>;
+    });
+  }
+
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  Widget build(BuildContext context) {
+    <span style="color:#66d9ef">return</span> Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <span style="color:#f92672">&lt;</span>Widget<span style="color:#f92672">&gt;</span>[
+            Text(<span style="color:#e6db74">&#39;You have pushed the button this many times:&#39;</span>),
+            Text(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">$</span>_counter<span style="color:#e6db74">&#39;</span>),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: <span style="color:#e6db74">&#39;Increment&#39;</span>,
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}</code></pre></div>
+<p>显示当前 FAB 点击次数，FAB 点击后会触发 <code>_incrementCounter</code> 进一步调用 <code>setState</code> 更新 UI，逻辑比较简单。</p>
+
+<p>再看看使用 BLoC 后的代码实现：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">_HomePageState</span> <span style="color:#66d9ef">extends</span> State<span style="color:#f92672">&lt;</span>MyHomePage<span style="color:#f92672">&gt;</span> {
+  _HomePageBLoC _bloc;
+  _HomePageState() <span style="color:#f92672">:</span> _bloc <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> _HomePageBLoC();
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  Widget build(BuildContext context) {
+    <span style="color:#66d9ef">return</span> Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <span style="color:#f92672">&lt;</span>Widget<span style="color:#f92672">&gt;</span>[
+            Text(<span style="color:#e6db74">&#39;You have pushed the button this many times:&#39;</span>),
+            <span style="color:#66d9ef">new</span> StreamBuilder<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>(
+              initialData: <span style="color:#ae81ff">0</span>,
+              stream: _bloc.count,
+              builder: (context, snapshot) {
+                <span style="color:#66d9ef">return</span> Text(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">${</span>snapshot.data<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>);
+              },
+            )
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _bloc.incrementCounter,
+        tooltip: <span style="color:#e6db74">&#39;Increment&#39;</span>,
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">_HomePageBLoC</span> {
+  <span style="color:#66d9ef">int</span> _count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+  StreamController<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> _countController <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StreamController<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>();
+
+  Stream<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">get</span> count <span style="color:#f92672">=&gt;</span> _countController.stream;
+  <span style="color:#66d9ef">void</span> incrementCounter() {
+    _countController.sink.add(<span style="color:#f92672">++</span>_count);
+  }
+}</code></pre></div>
+<p>这次添加了 <code>_HomePageBLoC</code> 作为逻辑层，实现中使用 <code>StreamController&lt;int&gt;</code> 来管理点击次数。视图层中，我们需要监听逻辑层中的数据并更新 UI，不过 Flutter 给我们提供了 <code>StreamBuilder&lt;T&gt;</code> 来简化操作。</p>
+
+<p>代码已经非常简单了，就不在赘述。不过要注意这里使用了 <code>StatefulWidget</code> ， 这是为了在 UI 重建的时候 bloc 实例不会丢失。</p>
+
+<h2 id="scoped-model">Scoped Model</h2>
+
+<p>有时候可能会有多个页面共享数据，Flutter 提供 <a href="https://docs.flutter.io/flutter/widgets/InheritedWidget-class.html"><code>InheritedWidget</code></a> 帮助我们实现这一目的。InheritedWidget 可以将状态/数据向它的子树，当 InheritedWidget 的状态/数据发生变化，<strong>依赖</strong>了这个 InheritedWidget 的子树会进行重建。</p>
+
+<p>我们对默认的 Flutter 初始工程进行改造，让两个页面都能显示点击次数，下面看下代码实现：</p>
+
+<h3 id="inhertiedwidget-实现">InhertiedWidget 实现</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CounterBLoC</span> {
+  <span style="color:#66d9ef">int</span> _count <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+  <span style="color:#75715e">// 因为有多个界面对 Stream 进行监听，所以需要使用多播流
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> _countController <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StreamController<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>.broadcast();
+
+  Stream<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">get</span> count <span style="color:#f92672">=&gt;</span> _countController.stream;
+  <span style="color:#75715e">// 第二个界面监听 Stream 时，Stream 里头是没有数据的，但是实际上点击次数是有的，所以需要提供一个方法来获取最近的一次数据
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">int</span> <span style="color:#66d9ef">get</span> lastCount <span style="color:#f92672">=&gt;</span> _count;
+  <span style="color:#66d9ef">void</span> incrementCounter() {
+    _countController.sink.add(<span style="color:#f92672">++</span>_count);
+  }
+}
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CounterHolder</span> <span style="color:#66d9ef">extends</span> InheritedWidget {
+  <span style="color:#75715e">// 需要向下传递的状态/数据
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">final</span> CounterBLoC bloc;
+
+  CounterHolder({<span style="color:#66d9ef">this</span>.bloc, Key key, Widget child})
+      <span style="color:#f92672">:</span> <span style="color:#66d9ef">super</span>(key: key, child: child);
+  <span style="color:#75715e">// 如果返回值为 true，则通知子树进行重建；返回 false 则不会重建
+</span><span style="color:#75715e"></span>  <span style="color:#960050;background-color:#1e0010">@</span>override
+  <span style="color:#66d9ef">bool</span> updateShouldNotify(CounterHolder oldWidget) {
+    <span style="color:#66d9ef">return</span> oldWidget.bloc <span style="color:#f92672">!=</span> <span style="color:#66d9ef">this</span>.bloc;
+  }
+  <span style="color:#75715e">// 这个方法有两点作用：
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// 1、简化获取 CounterHolder 的方式
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// 2、做更加精细的控制，比如异常等
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// 在实践中，更推荐的方式是通过这个方法将数据暴漏出去，在这个例子中就是 CounterBLoC 实例。Flutter 中已有的例子有 Theme，Theme.of(ctx) 的返回值是 ThemeData
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">static</span> CounterHolder of(BuildContext ctx) {
+    <span style="color:#66d9ef">return</span> ctx.inheritFromWidgetOfExactType(CounterHolder);
+  }
+}</code></pre></div>
+<p>需要注意的地方都在代码中注释了。</p>
+
+<h3 id="第一个页面实现">第一个页面实现</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">_HomePageState</span> <span style="color:#66d9ef">extends</span> State<span style="color:#f92672">&lt;</span>HomePage<span style="color:#f92672">&gt;</span> {
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  Widget build(BuildContext context) {
+    <span style="color:#75715e">// 向上查询 CounterHolder 然后拿到 bloc 实例，此时 HomePage 就显式依赖了 CounterHolder
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> bloc <span style="color:#f92672">=</span> CounterHolder.of(context).bloc;
+    <span style="color:#66d9ef">return</span> Scaffold(
+      <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>      body: <span style="color:#66d9ef">new</span> Center(
+        child: <span style="color:#66d9ef">new</span> Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <span style="color:#f92672">&lt;</span>Widget<span style="color:#f92672">&gt;</span>[
+            Text(<span style="color:#e6db74">&#39;You have pushed the button this many times:&#39;</span>),
+            <span style="color:#66d9ef">new</span> StreamBuilder<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>(
+              initialData: bloc.lastCount,
+              stream: bloc.count,
+              builder: (context, snapshot) <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">new</span> Text(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">${</span>snapshot.data<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>),
+            ),
+            <span style="color:#66d9ef">new</span> FlatButton(
+                onPressed: () {
+                  <span style="color:#75715e">// 跳转到第二个页面
+</span><span style="color:#75715e"></span>                  Navigator.of(context)
+                      .push(<span style="color:#66d9ef">new</span> MaterialPageRoute(builder: (ctx) {
+                    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> SecondPage();
+                  }));
+                },
+                child: <span style="color:#66d9ef">new</span> Text(<span style="color:#e6db74">&#39;Go second&#39;</span>))
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: bloc.incrementCounter, <span style="color:#75715e">// 点击次数增加
+</span><span style="color:#75715e"></span>        child: <span style="color:#66d9ef">new</span> Icon(Icons.add),
+      ),
+    );
+  }
+}</code></pre></div>
+<h3 id="第二个页面实现">第二个页面实现</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SecondPageState</span> <span style="color:#66d9ef">extends</span> State<span style="color:#f92672">&lt;</span>SecondPage<span style="color:#f92672">&gt;</span> {
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  Widget build(BuildContext context) {
+    <span style="color:#75715e">// 向上查询 CounterHolder 然后拿到 bloc 实例，此时 HomePage 就显式依赖了 CounterHolder
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> bloc <span style="color:#f92672">=</span> CounterHolder.of(context).bloc;
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Scaffold(
+      <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>      body: <span style="color:#66d9ef">new</span> Center(
+        child: <span style="color:#66d9ef">new</span> StreamBuilder<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span>(
+          initialData: bloc.lastCount,  <span style="color:#75715e">// 拿到最近一次数据
+</span><span style="color:#75715e"></span>          stream: bloc.count,
+          builder: (ctx, snapshot) <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">new</span> Text(<span style="color:#e6db74">&#39;</span><span style="color:#e6db74">${</span>snapshot.data<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>),
+        ),
+      ),
+      floatingActionButton: <span style="color:#66d9ef">new</span> FloatingActionButton(
+        onPressed: bloc.incrementCounter, <span style="color:#75715e">// 点击次数增加
+</span><span style="color:#75715e"></span>        child: <span style="color:#66d9ef">new</span> Icon(Icons.add),
+      ),
+    );
+  }
+}</code></pre></div>
+<h3 id="使用-counterholder-包裹">使用 CounterHolder 包裹</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MyApp</span> <span style="color:#66d9ef">extends</span> StatelessWidget {
+  <span style="color:#960050;background-color:#1e0010">@</span>override
+  Widget build(BuildContext context) {
+    <span style="color:#66d9ef">return</span> CounterHolder(
+        bloc: <span style="color:#66d9ef">new</span> CounterBLoC(),
+        child: <span style="color:#66d9ef">new</span> MaterialApp(
+          title: <span style="color:#e6db74">&#39;Flutter Demo&#39;</span>,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: HomePage(title: <span style="color:#e6db74">&#39;Flutter Demo Home Page&#39;</span>),
+        ));
+  }
+}</code></pre></div>
+<p>这里整个将 MaterialApp 包裹住，那么 CounterHolder 可以向应用里任何地方传递数据。</p>
+
+<h3 id="从-inheritedwidget-源码">从 InheritedWidget 源码</h3>
+
+<p>要理解 InheredWidget 的实现原理得先理解 Flutter Framework 层的中 Widget、Element 和 RenderObject 的联系与区别，如果不知道可以先看看<a href="https://yahdude.github.io/Blog/post/964b4fb995963e7c4ea05b6fee8e0627">这篇文章</a>。
+先看看 InhertiedWidget 源码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">InheritedWidget</span> <span style="color:#66d9ef">extends</span> ProxyWidget {
+  <span style="color:#66d9ef">const</span> InheritedWidget({ Key key, Widget child })
+    <span style="color:#f92672">:</span> <span style="color:#66d9ef">super</span>(key: key, child: child);
+  <span style="color:#75715e">// 划重点
+</span><span style="color:#75715e"></span>  <span style="color:#960050;background-color:#1e0010">@</span>override
+  InheritedElement createElement() <span style="color:#f92672">=&gt;</span> InheritedElement(<span style="color:#66d9ef">this</span>);
+  <span style="color:#960050;background-color:#1e0010">@</span>protected
+  <span style="color:#66d9ef">bool</span> updateShouldNotify(covariant InheritedWidget oldWidget);
+}
+<span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ProxyWidget</span> <span style="color:#66d9ef">extends</span> Widget {
+  <span style="color:#66d9ef">const</span> ProxyWidget({ Key key, <span style="color:#960050;background-color:#1e0010">@</span>required <span style="color:#66d9ef">this</span>.child }) <span style="color:#f92672">:</span> <span style="color:#66d9ef">super</span>(key: key);
+  <span style="color:#66d9ef">final</span> Widget child;
+}
+<span style="color:#960050;background-color:#1e0010">@</span>immutable
+<span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Widget</span> <span style="color:#66d9ef">extends</span> DiagnosticableTree {
+  <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>}</code></pre></div>
+<p>上面代码唯一有用的就是注释的那个函数，我们知道 Widget 在 Flutter 只是充当着一个配置的角色，最后会 Widget 会转化成 Element，同时 Element 会持 Widget 实例。但是知道这个事实似乎还是没什么用，我们暂且将目光先转向 BuildContext，也就是我们调用 <code>inheritFromWidgetOfExactType</code> 方法的对象。BuildContext 是一个抽象类/接口，但巧的是 Element 实现了这个接口，所以看代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#960050;background-color:#1e0010">@</span>override
+InheritedWidget inheritFromWidgetOfExactType(Type targetType, { <span style="color:#66d9ef">Object</span> aspect }) {
+  <span style="color:#66d9ef">assert</span>(_debugCheckStateIsActiveForAncestorLookup());
+  <span style="color:#66d9ef">final</span> InheritedElement ancestor <span style="color:#f92672">=</span> _inheritedWidgets <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">?</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">:</span> _inheritedWidgets[targetType];
+  <span style="color:#66d9ef">if</span> (ancestor <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+    <span style="color:#66d9ef">assert</span>(ancestor <span style="color:#66d9ef">is</span> InheritedElement);
+    <span style="color:#66d9ef">return</span> inheritFromElement(ancestor, aspect: aspect);
+  }
+  _hadUnsatisfiedDependencies <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>;
+  <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+}
+
+<span style="color:#960050;background-color:#1e0010">@</span>override
+InheritedWidget inheritFromElement(InheritedElement ancestor, { <span style="color:#66d9ef">Object</span> aspect }) {
+  <span style="color:#66d9ef">assert</span>(ancestor <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>);
+  _dependencies <span style="color:#f92672">??=</span> HashSet<span style="color:#f92672">&lt;</span>InheritedElement<span style="color:#f92672">&gt;</span>();
+  _dependencies.add(ancestor);
+  ancestor.updateDependencies(<span style="color:#66d9ef">this</span>, aspect);
+  <span style="color:#66d9ef">return</span> ancestor.widget;
+}</code></pre></div>
+<p>首先看到 <code>_inheritedWidgets</code> 这个成员变量，它的类型是 <code>Map&lt;Type, InheritedElement&gt;</code>，<code>Element</code> 对它的赋值操作在 <code>_updateInheritance</code> 方法里：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">void</span> _updateInheritance() {
+  <span style="color:#66d9ef">assert</span>(_active);
+  _inheritedWidgets <span style="color:#f92672">=</span> _parent<span style="color:#f92672">?</span>._inheritedWidgets;
+}</code></pre></div>
+<p>直接拿来主义，<code>InheritedElement</code> 对这个方法进行了重写：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#960050;background-color:#1e0010">@</span>override
+<span style="color:#66d9ef">void</span> _updateInheritance() {
+  <span style="color:#66d9ef">assert</span>(_active);
+  <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>Type, InheritedElement<span style="color:#f92672">&gt;</span> incomingWidgets <span style="color:#f92672">=</span> _parent<span style="color:#f92672">?</span>._inheritedWidgets;
+  <span style="color:#66d9ef">if</span> (incomingWidgets <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>)
+    _inheritedWidgets <span style="color:#f92672">=</span> HashMap<span style="color:#f92672">&lt;</span>Type, InheritedElement<span style="color:#f92672">&gt;</span>.from(incomingWidgets);
+  <span style="color:#66d9ef">else</span>
+    _inheritedWidgets <span style="color:#f92672">=</span> HashMap<span style="color:#f92672">&lt;</span>Type, InheritedElement<span style="color:#f92672">&gt;</span>();
+  _inheritedWidgets[widget.runtimeType] <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>;
+}</code></pre></div>
+<p>看到重点了，这里的 <code>_inheritedWidgets</code> 除了从父节点取值外，还把自己放进去了。所以子节点访问父节点并不是往上递归，而是直接保存下来，空间换时间。
+还能得到一个结论：<code>BuildContext#inheritFromWidgetOfExactType</code> 只能访问最近的一个目标节点，因为 <code>_inheritedWidgets</code> 是一个字典。
+子节点访问父节点的原理就清楚了，还有一个问题就是如何做到通知子节点重建？
+注意最开始 <code>Element#inheritFromElement</code> 方法的这行代码： <code>ancestor.updateDependencies(this, aspect)</code>，这个时候已经知道了 <code>ancestor</code> 的类型是 <code>InheritedElement</code> ，那么看代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#960050;background-color:#1e0010">@</span>protected
+<span style="color:#66d9ef">void</span> updateDependencies(Element dependent, <span style="color:#66d9ef">Object</span> aspect) {
+  setDependencies(dependent, <span style="color:#66d9ef">null</span>);
+}
+<span style="color:#960050;background-color:#1e0010">@</span>protected
+<span style="color:#66d9ef">void</span> setDependencies(Element dependent, <span style="color:#66d9ef">Object</span> value) {
+  _dependents[dependent] <span style="color:#f92672">=</span> value;
+}</code></pre></div>
+<p><code>InheritedElement</code> 把依赖它的节点给保存下来了，即简单的监听者模式，所以在后续状态/数据更新的时候就遍历 <code>_dependents</code> 进行通知。</p>
+
+<h2 id="关于-redux">关于 Redux</h2>
+
+<p>因为 Flutter 从 React 中借鉴了非常多，所以 React 中 redux 在 Flutter 中也有相应的实现，不过使用上会比 BLoC 繁琐一些，相比之下也不够直观。所以在非必要的情况下，首选 BLoC 吧。</p>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://medium.com/flutter-io/build-reactive-mobile-apps-in-flutter-companion-article-13950959e381">build reactive mobile apps in flutter</a></p>
+
+<p><a href="https://www.dartlang.org/articles/libraries/creating-streams#using-a-streamcontroller">using a streamcontroller</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/flutter"><span class="tag">Flutter</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/bloc"><span class="tag">BLoC</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>185</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

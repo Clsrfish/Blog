@@ -1,0 +1,486 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>小站</title>
+    <link>https://clsrfish.github.io/Blog/</link>
+    <description>Recent content on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Fri, 11 Jan 2019 01:03:43 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Tags</title>
+      <link>https://clsrfish.github.io/Blog/tags/</link>
+      <pubDate>Sat, 05 May 2018 16:47:26 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/tags/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Links</title>
+      <link>https://clsrfish.github.io/Blog/links/</link>
+      <pubDate>Sat, 05 May 2018 13:40:59 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/links/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://clsrfish.github.io/Blog/about/</link>
+      <pubDate>Sat, 05 May 2018 13:39:16 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/about/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hadoop 集群配置</title>
+      <link>https://clsrfish.github.io/Blog/post/ad17de716cda5955d954080c19ba4af7/</link>
+      <pubDate>Fri, 11 Jan 2019 01:03:43 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/ad17de716cda5955d954080c19ba4af7/</guid>
+      <description>&lt;p&gt;下半学期开了“大数据与云计算”的课程，一次实验课要求配置 Hadoop 分布式集群。配环境这东西真的不好说，运气好一气呵成，运气不好，真的要杠上两三天。所以这篇就给踩的坑做一个笔记。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Git] 实用操作</title>
+      <link>https://clsrfish.github.io/Blog/post/1c1807b38fe877462f697ffc00897c25/</link>
+      <pubDate>Sun, 16 Dec 2018 16:29:01 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/1c1807b38fe877462f697ffc00897c25/</guid>
+      <description>&lt;p&gt;平常用 Git 就 add、commit、push，遇到一些少用的就很麻烦，不是查文档就是搜 Google。简单记下，未雨绸缪。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] UI 刷新</title>
+      <link>https://clsrfish.github.io/Blog/post/975a96b8a4ec2c8a773c4705a43f95dd/</link>
+      <pubDate>Sun, 02 Dec 2018 15:09:37 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/975a96b8a4ec2c8a773c4705a43f95dd/</guid>
+      <description>&lt;p&gt;Flutter 在 Framework 上打设计大量借鉴 React，做到通过声明的方式编写 UI 代码，让开发者围绕 Widget 进行开发。但仅仅这样是不够的，我们知道 Flutter 相比于 React 还多了关于测量、布局以及绘制的逻辑，而这些都是在前端开发中很难触碰到的，既然 Flutter 提供了这样的机会，理解其中的原理就显得尤为必要了。
+这篇文章主要分析 Flutter UI 更新背后的逻辑。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] runApp 流程</title>
+      <link>https://clsrfish.github.io/Blog/post/c988c12393bdb4dc3972fbc32ca87cf6/</link>
+      <pubDate>Fri, 30 Nov 2018 22:34:25 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/c988c12393bdb4dc3972fbc32ca87cf6/</guid>
+      <description>&lt;p&gt;不管是使用 Flutter 开发完整应用还是作为区块嵌入某个页面，都需要调用 &lt;code&gt;runApp&lt;/code&gt; ，而我们需要做的只是传入一个 Widget 实例，那么 &lt;code&gt;runApp&lt;/code&gt; 背后所做的工作就很有趣了，比如触发视图的构建、更新以及绘制等，下面我们就粗略地看一下这个函数到底做了啥。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Dart] 什么是 Mixins</title>
+      <link>https://clsrfish.github.io/Blog/post/1e4790f7473c20aa35d72cf542d39ab4/</link>
+      <pubDate>Sat, 17 Nov 2018 18:39:09 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/1e4790f7473c20aa35d72cf542d39ab4/</guid>
+      <description>&lt;p&gt;Dart 中提供 mixin 来完成 &lt;strong&gt;代码的复用&lt;/strong&gt;，比如我们可以将某种行为封装成一个 mixin，然后添加到需要该项行为的类中。但是似乎抽象类/接口也能完成，它们面向的场景还是有些许差别的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] Widget、Element、RenderObject 理解</title>
+      <link>https://clsrfish.github.io/Blog/post/964b4fb995963e7c4ea05b6fee8e0627/</link>
+      <pubDate>Tue, 06 Nov 2018 19:57:06 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/964b4fb995963e7c4ea05b6fee8e0627/</guid>
+      <description>&lt;p&gt;使用 Flutter 开发时，接触最多的就是 Widget，但是 Widget 并不会最终显示在屏幕上。Flutter 大量借鉴 React ，React 中有 Component、Virtual DOM 和 tag，Flutter 中对应地有 Widget、Element 以及 RenderObject，所以这篇文章就简单理解下这三者在视图渲染中的作用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] BLoC——Flutter 中的 MVP</title>
+      <link>https://clsrfish.github.io/Blog/post/db8412330a33102e25847a876fd66c62/</link>
+      <pubDate>Wed, 31 Oct 2018 13:11:09 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/db8412330a33102e25847a876fd66c62/</guid>
+      <description>&lt;p&gt;写过 Android 的应该都会比较熟悉 MVP 模式，在 Flutter 框架下有着相似的 BLoC（Business Logic Component） 模式，不准确地说，BLoC 就是 MVP 在 Flutter 中的变种。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[概念理解] 并行VS并发、同步VS异步、阻塞VS非阻塞</title>
+      <link>https://clsrfish.github.io/Blog/post/4500cc4305de1f0d880a025686ecb9e7/</link>
+      <pubDate>Sun, 30 Sep 2018 15:19:09 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/4500cc4305de1f0d880a025686ecb9e7/</guid>
+      <description>&lt;p&gt;之前老是遇到并行并发、同步异步、阻塞非阻塞等概念的困扰，特别是在学 Nginx 的时候，异步非阻塞，迷。。。。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Android 踩坑] 明文传输</title>
+      <link>https://clsrfish.github.io/Blog/post/1e22c8b00480263c039de844c3ecef68/</link>
+      <pubDate>Sat, 29 Sep 2018 10:52:51 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/1e22c8b00480263c039de844c3ecef68/</guid>
+      <description>&lt;p&gt;昨天晚上 Glide 加载图片突然出现：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Exception: IOException java.io.IOException: Cleartext HTTP traffic to * not permitted
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;明确指出不允许明文传输，测试机器是 Android P 的模拟器。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] Dart 面向对象</title>
+      <link>https://clsrfish.github.io/Blog/post/0a0b0654aaf3818face2c27f74ebc7c4/</link>
+      <pubDate>Tue, 25 Sep 2018 18:29:15 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/0a0b0654aaf3818face2c27f74ebc7c4/</guid>
+      <description>&lt;p&gt;Dart 是一门纯粹的面向对象的语言，即任何变量或实例都是 &lt;code&gt;Object&lt;/code&gt; 的实例。同时 Dart 不支持多继承，但是支持 &lt;strong&gt;Mixin&lt;/strong&gt; 特性，即一个类的定义在 &lt;strong&gt;不被继承&lt;/strong&gt; 的情况被其它类复用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] Dart 事件循环</title>
+      <link>https://clsrfish.github.io/Blog/post/2bf9fab5a6014d420cb749b2c418538d/</link>
+      <pubDate>Mon, 24 Sep 2018 18:37:58 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/2bf9fab5a6014d420cb749b2c418538d/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;基于 Dart VM version: 2.1.0-dev.4.0.flutter-4eb879133a (Tue Sep 18 19:20:33 2018 +0000) on &amp;ldquo;macos_x64&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Dart 和 JS 类似，也是单线程的设计，所以内部存在一个&lt;strong&gt;事件循环&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;基于单线程，我们可以得出这样的结论：&lt;strong&gt;Dart 的函数一旦执行，便不会被打断，直到函数执行完成才会执行其他 Dart 代码&lt;/strong&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] Dart 异步编程</title>
+      <link>https://clsrfish.github.io/Blog/post/c773f50199233831a2379fde98a7b3eb/</link>
+      <pubDate>Mon, 24 Sep 2018 18:37:43 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/c773f50199233831a2379fde98a7b3eb/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;基于 Dart VM version: 2.1.0-dev.4.0.flutter-4eb879133a (Tue Sep 18 19:20:33 2018 +0000) on &amp;ldquo;macos_x64&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Dart 基础库提供了大量返回值类型为 &lt;code&gt;Future&lt;/code&gt;  和 &lt;code&gt;Stream&lt;/code&gt; 的函数，这些函数都是异步函数，当调用这些函数的时候，函数在完成一些“基础配置“后就会立马返回，而不是等待函数执行完成。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>[Flutter] Dart 函数</title>
+      <link>https://clsrfish.github.io/Blog/post/f771688d7a818ec0f62cd215500af480/</link>
+      <pubDate>Mon, 24 Sep 2018 18:36:10 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/f771688d7a818ec0f62cd215500af480/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;基于 Dart VM version: 2.1.0-dev.4.0.flutter-4eb879133a (Tue Sep 18 19:20:33 2018 +0000) on &amp;ldquo;macos_x64&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;函数在 Dart 中有专门的 &lt;code&gt;Function&lt;/code&gt; 对应，也就是说定义一个函数其实是定义了一个变量，而这个变量类型是 &lt;code&gt;Function&lt;/code&gt; ，需要执行这个函数时就和普通的函数调用一样。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;当然这个变量不可写&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+    </item>
+    
+    <item>
+      <title>创建带参的 ViewModel 实例</title>
+      <link>https://clsrfish.github.io/Blog/post/f808d7d1d85d91e1bafe989662831582/</link>
+      <pubDate>Sat, 18 Aug 2018 11:25:06 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/f808d7d1d85d91e1bafe989662831582/</guid>
+      <description>&lt;p&gt;Android Jet Pack 的 &lt;code&gt;ViewModel&lt;/code&gt; 为开发者在处理配置变更时数据保存带来了一定便捷性，但是如果定义的 &lt;code&gt;ViewModel&lt;/code&gt; 子类构造器有参数，那么还要提供一个对应的 &lt;code&gt;ViewModelProvider.Factory&lt;/code&gt; 实现。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>TypeScript 实现 Java 匿名内部类</title>
+      <link>https://clsrfish.github.io/Blog/post/72c38d2bfe6031c01a67381b1225f007/</link>
+      <pubDate>Sat, 18 Aug 2018 10:56:52 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/72c38d2bfe6031c01a67381b1225f007/</guid>
+      <description>&lt;p&gt;突然想对之前写的 JSBridge 用 TS 重构一下，顺便简化一下整体结构。TS 的强类型是有了，但是还是存在着不足，导致相比其他强类型语言，稍微显得有点蹩脚。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Android 项目集成 React Native</title>
+      <link>https://clsrfish.github.io/Blog/post/dd31da67/</link>
+      <pubDate>Sat, 07 Apr 2018 16:28:41 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/dd31da67/</guid>
+      <description>&lt;p&gt;如果不是一个从零开始的项目，那么更多情况下是需要把 React Native 作为一个功能模块嵌入到现有应用中，这篇文章简单记录一下怎么集成 RN 到现有 Android 项目中，以及一些坑点。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>GitLab Flow</title>
+      <link>https://clsrfish.github.io/Blog/post/10f1b717/</link>
+      <pubDate>Sat, 31 Mar 2018 09:44:27 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/10f1b717/</guid>
+      <description>&lt;p&gt;GitLab Flow 在 Git Flow 和 GitHub Flow 中进行了一个折衷，避免了 Git Flow 的复杂性，又使得 GitHub Flow 不便于发版审核的问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>GitHub Flow</title>
+      <link>https://clsrfish.github.io/Blog/post/72a0130/</link>
+      <pubDate>Sat, 31 Mar 2018 09:44:20 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/72a0130/</guid>
+      <description>&lt;p&gt;在 &lt;a href=&#34;http://xinsbackyard.tech/posts/9144d7b5.html&#34;&gt;这篇&lt;/a&gt; 文章中，Git Flow 整体管理看起来非常规范，但是一个很明显的问题就是太复杂并需要长期维护两个分支，分支太多，导致需要频繁的进行分支切换，这些过程中难免不会出问题；特别是现在的大型工程都采用持续集成/交付进行管理，这样就需要有一个分支能够保证上面的代码都是随时都可以发布的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Git Flow（译）</title>
+      <link>https://clsrfish.github.io/Blog/post/2018-03-31-git-flow/</link>
+      <pubDate>Sat, 31 Mar 2018 00:35:31 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/2018-03-31-git-flow/</guid>
+      <description>&lt;p&gt;在这篇文章中，我将会向大家讲解我大约一年前引入一些项目（公司或者私有的）里并且被事实证明为非常成功的开发模式。我早就想写一些关于这方面的东西，但是直到现在才找到时间来完整地完成这些东西。这里我不会讨论任何项目细节方面的东西，仅仅讨论分支策略和发版管理。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Jenkins-持续集成搭建</title>
+      <link>https://clsrfish.github.io/Blog/post/69ecbc09/</link>
+      <pubDate>Thu, 15 Feb 2018 09:26:33 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/69ecbc09/</guid>
+      <description>&lt;p&gt;平时做开发，关注得比较多的是具体的开发工作，等开发完成进行部署的时候，需要做一系列繁琐的工作，例如上传到测试平台等，这些事情的价值实在是没有多少，而且保不准哪时候就会出叉子；而且这次发版的一些信息也是相对闭塞的，基本上只有参与开发的人员可以得知。所以这些工作的自动化显得尤为必要，而 Jenkins 就是这样的一种工具，当然还有很多其他的，不过它比较流行且开源免费，非常适合团队自建。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>AOSP (Android 9.0.0)源码下载</title>
+      <link>https://clsrfish.github.io/Blog/post/df3a1293/</link>
+      <pubDate>Tue, 30 Jan 2018 12:44:34 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/df3a1293/</guid>
+      <description>&lt;p&gt;现在学习 Android 不像早些年，会写个 App 就能找到饭碗，如今不看看 Framework 源码有种分分钟掉队的感觉。虽然现在有一些比较优秀的站点提供源码阅读，但是毕竟在浏览器里面阅读，还是会遇到很多限制，最好还是自己下载一份。说道下载问题就来了，AOSP 的仓库被墙了，所以直接不能直接下载，或者说直接下载网速会很慢，还好国内有一些镜像服务可以避免这一问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SSH 免密登录</title>
+      <link>https://clsrfish.github.io/Blog/post/1d2298d7/</link>
+      <pubDate>Sat, 27 Jan 2018 01:49:51 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/1d2298d7/</guid>
+      <description>&lt;p&gt;今天重装 CentOS 后发现按照之前的步骤来配置 SSH 后一直提示 &lt;code&gt;Permission denied&lt;/code&gt; ，第一反应反应就是 &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt; 配置出错，但是仔细检查一遍之后并没有发现什么错误。后来网上找到原因是权限问题，赶快记笔记，防止以后再遇上这个坑而不知道。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Mac 下 Terminal &#43; zsh 配置</title>
+      <link>https://clsrfish.github.io/Blog/post/ed90638e/</link>
+      <pubDate>Thu, 25 Jan 2018 17:48:13 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/ed90638e/</guid>
+      <description>&lt;p&gt;之前一直用 Ubuntu 自带的 Bash，没有去配置什么插件，感觉用着也还行，现在换到 MacOS 的 Terminal 下，发现它默认配置真的没有 Ubuntu 的好看，为了能更加快乐的使用终端，还是决定去捣鼓一番。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Android SDK Manager 命令行工具使用</title>
+      <link>https://clsrfish.github.io/Blog/post/cffbd71/</link>
+      <pubDate>Tue, 16 Jan 2018 17:34:40 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/cffbd71/</guid>
+      <description>&lt;p&gt;一般情况下，我们都是通过 Android Studio 来进行 Android SDK 的管理的，更新啥的都是点点鼠标完成了，当然，我们知道 AS 只是做了一个封装。不过有时候，我们只是想安装更新，并不想启动 AS，那么这时候通过命令行就会轻量很多；在 CI 中，更加是没有 AS 的，那么这时候命令行操作成为了唯一的选择。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>撸个简单的 JSbridge</title>
+      <link>https://clsrfish.github.io/Blog/post/3f71fc1/</link>
+      <pubDate>Tue, 09 Jan 2018 21:59:21 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/3f71fc1/</guid>
+      <description>&lt;p&gt;这两年 Web 技术栈一直在努力地向移动端和后端延展（这里没有引战的意思），当然这也是技术发展所带来的必然结果。移动互联网早期主要以原生开发为主，但到现在，业务不断发展，版本也需要快速迭代，原生开发效率很明显难以跟上，这时候 Web 开发的优势就显现出来了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Docker 安装</title>
+      <link>https://clsrfish.github.io/Blog/post/ed49b344/</link>
+      <pubDate>Mon, 08 Jan 2018 22:24:32 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/ed49b344/</guid>
+      <description>&lt;p&gt;这篇文章真不知道怎么写描述，很尴尬的开头。
+只是简单的记录一下 Docker 的安装和常用的操作命令。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Activity 生命周期</title>
+      <link>https://clsrfish.github.io/Blog/post/fd703f93/</link>
+      <pubDate>Sat, 06 Jan 2018 02:04:02 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/fd703f93/</guid>
+      <description>&lt;p&gt;Activity 的生命周期是每位 Android 开发都必须掌握的基本知识，以致于几乎所有的 Android ，入门书籍在前几章就会开始讲生命周期。这篇文章大体上是官方文档的个人理解，内容上可能会有一些出入。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Retrofit 拆轮子之构建流程分析</title>
+      <link>https://clsrfish.github.io/Blog/post/56a1ff9/</link>
+      <pubDate>Sat, 06 Jan 2018 01:49:39 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/56a1ff9/</guid>
+      <description>&lt;p&gt;在使用 OkHttp 的时候，还是要自己构建 Request 的，我们的目的是请求一个 url 并拿到数据，构建流程不利于逻辑清晰，特别是当需要 Post 上传数据的时候。Square 显然是看到了这个问题，便推出了 Retrofit 来解决这个问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>再见，2017！！！</title>
+      <link>https://clsrfish.github.io/Blog/post/e863b57a/</link>
+      <pubDate>Mon, 01 Jan 2018 21:07:05 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/e863b57a/</guid>
+      <description>&lt;p&gt;今天元旦，2018 年的第一天，也琢磨着是不是该写写什么，就这么过去似乎太平淡了。思前想后，留有印象的事情好像就那么几件，似乎每天都是差不多的生活——看文章、写代码。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Dagger2 上手指南</title>
+      <link>https://clsrfish.github.io/Blog/post/d267ecb2/</link>
+      <pubDate>Sun, 31 Dec 2017 19:03:38 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/d267ecb2/</guid>
+      <description>&lt;p&gt;在 Java 的开发中，怎么利用各种设计模式和架构设计来解耦、提高拓展性，似乎已经成了一名 Java 开发人员的必修课。在一些大型系统中，还会有各种听起来高大上的名词，如 IOC、OSGI、CGLIB 等。所以这里我们就来讲讲 IOC 的一个实现框架——Dagger2。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hexo 搭建静态博客</title>
+      <link>https://clsrfish.github.io/Blog/post/dfcd98a4/</link>
+      <pubDate>Sat, 30 Dec 2017 22:34:10 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/dfcd98a4/</guid>
+      <description>&lt;p&gt;上次搭的博客写了两篇 Hexo 的配置后就凉了，所以这次刚刚搭好的时候就没想做个记录，怕和上次一样，把写博客的热情全花在了搭建博客上。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Annotation 基础</title>
+      <link>https://clsrfish.github.io/Blog/post/5ccb233a/</link>
+      <pubDate>Sat, 30 Dec 2017 22:32:32 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/5ccb233a/</guid>
+      <description>&lt;p&gt;注解是一种元数据（metadata），它在虽然能提供关于程序的一些信息，但并不是程序本身的一部分。注解对被其标注的对象没有任何副作用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>OkHttp 拆轮子之连接池</title>
+      <link>https://clsrfish.github.io/Blog/post/f4a6041/</link>
+      <pubDate>Sat, 30 Dec 2017 22:25:36 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/f4a6041/</guid>
+      <description>&lt;p&gt;OkHttp 内部还维护了一个连接池，用于缓存一定数量的连接，以减少与服务器建立连接时的资源开销。同时，为了保证缓存的连接数在一个合理的水平，连接池有一个最多闲置连接数量和最长连接闲置时长。这里我们还是通过分析一些关键方法来分析它的连接池机制：&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ThreadLocal</title>
+      <link>https://clsrfish.github.io/Blog/post/151f44ae/</link>
+      <pubDate>Sat, 30 Dec 2017 21:53:30 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/151f44ae/</guid>
+      <description>&lt;p&gt;在并发编程的时候，常常会遇到共享变量，通常为了保证数据的 &lt;strong&gt;一致性&lt;/strong&gt; ，需要对变量加锁，这就导致了执行效率的降低。如果仅仅在线程内部访问，就不需要进行加锁，这时候就体现出了数据的 &lt;strong&gt;独立性&lt;/strong&gt; （这两个名词是随手造的，知道意思就好了）。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>OkHttp 请求流程简析</title>
+      <link>https://clsrfish.github.io/Blog/post/3249374e/</link>
+      <pubDate>Sat, 30 Dec 2017 18:36:53 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/3249374e/</guid>
+      <description>&lt;p&gt;从 Android 4.4 开始，&lt;code&gt;HttpURLConnection&lt;/code&gt;  底层使用 OkHttp 实现，所以阅读并学习它的源码就显得更加地理所应当。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Picasso 加载流程</title>
+      <link>https://clsrfish.github.io/Blog/post/82cb002a/</link>
+      <pubDate>Sat, 30 Dec 2017 01:21:16 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/82cb002a/</guid>
+      <description>&lt;p&gt;自己第一次写比较完整 app 还是去年暑假，当时参加现在的团队夏令营，组长要求我们不能使用第三方库（亏得自己还苦哈哈地看了几天各种第三方库），所以就得自己手写图片加载逻辑，所以也就遇到很多问题，比如错位、加载慢等。不过使用第三方库的话，一行代码就能解决这些问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Butterknife 剖析</title>
+      <link>https://clsrfish.github.io/Blog/post/c350d50c/</link>
+      <pubDate>Sat, 30 Dec 2017 00:45:35 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/c350d50c/</guid>
+      <description>&lt;p&gt;在初学 Android 的时候，写一个 Activity，就要写好几句 &lt;code&gt;findViewById&lt;/code&gt; （现在 support 包使用泛型避免强转），慢地就变得厌倦这些模板代码，但是又不能不写。ButterKnife 使用注解的方式来避免这一类模板代码，比如事件监听器等。代码变得好看了，也就开始思考它内部的工作原理。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Shell 学习 curl</title>
+      <link>https://clsrfish.github.io/Blog/post/38ed841b/</link>
+      <pubDate>Thu, 28 Dec 2017 09:24:08 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/38ed841b/</guid>
+      <description>&lt;p&gt;最近有个作业需要自己写个服务器，接口写完了还得测试，虽然使用 postman 等工具很便捷，但是感觉不够装逼（嗯，就是不够装逼），所以 curl 成了不二之选。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Android 磁盘目录</title>
+      <link>https://clsrfish.github.io/Blog/post/8a73e0d4/</link>
+      <pubDate>Tue, 26 Dec 2017 11:16:28 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/8a73e0d4/</guid>
+      <description>&lt;p&gt;每次遇到存储这一块的时候，都要去看 &lt;a href=&#34;https://developer.android.com/training/basics/data-storage/files.html&#34;&gt;官方文档&lt;/a&gt; ；但是这里有一个蛋疼的问题就是，官方文档中没有对特定方法返回的路径进行说明。所以每次都会在这个问题上耗费十多分钟来 &lt;strong&gt;看文档&lt;/strong&gt; 和 &lt;strong&gt;写 Demo&lt;/strong&gt; 来找到符合要求的方法，这次就做个笔记，以防不时之需。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>缓存之 MemoryLruCache</title>
+      <link>https://clsrfish.github.io/Blog/post/43a6778d/</link>
+      <pubDate>Tue, 26 Dec 2017 11:15:25 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/43a6778d/</guid>
+      <description>&lt;p&gt;在开发图片加载功能时，既要保证加载速度，又要避免 OOM，特别是在类似于图库这样的场景中，如何处理好这两者关系显得尤为重要。所以最简单的想法就是一共缓存，将那些暂时 “食之无味，弃之可惜”  的对象暂时缓存起来，以备不适之需。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>缓存之 DiskLruCache</title>
+      <link>https://clsrfish.github.io/Blog/post/404af482/</link>
+      <pubDate>Tue, 26 Dec 2017 11:15:05 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/404af482/</guid>
+      <description>&lt;p&gt;&lt;code&gt;DiskLruCache&lt;/code&gt; 在 Glide 、 OkHttp 中都有使用，不过这些第三方库有可能根据自己的需求进行了一定的修改，不过总体上的还是一样的。&lt;a href=&#34;https://developer.android.com/samples/DisplayingBitmaps/src/com.example.android.displayingbitmaps/util/DiskLruCache.html&#34;&gt;下载地址&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>React Native 之环境搭建</title>
+      <link>https://clsrfish.github.io/Blog/post/2e90c800/</link>
+      <pubDate>Tue, 26 Dec 2017 11:01:59 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/2e90c800/</guid>
+      <description>&lt;blockquote&gt;
+&lt;p&gt;来自 GitBook，完成第一篇迁移&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;最近 React Native、weex 等跨平台框架都好火的样子，要是再不看看，可能就要听不懂他们前端的话了。万事开头难，搭环境、跑 Demo 啥的基本上没有不遇坑，当然解决之后也是蛮开心的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>AndroidArchitectureComponent 之 ViewModel</title>
+      <link>https://clsrfish.github.io/Blog/post/8c318638/</link>
+      <pubDate>Mon, 25 Dec 2017 15:54:54 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/8c318638/</guid>
+      <description>&lt;p&gt;在学习 Android 稍微深入一点，就知道 &lt;code&gt;Activity/Fragment&lt;/code&gt; 是受 Android 框架层控制的，具体表现在生命周期上面。系统会根据用户的操作或者设备状态来创建或销毁 &lt;code&gt;Activity/Fragment&lt;/code&gt;，这个时候会带来数据的 &lt;strong&gt;保存和恢复(包括视图状态)&lt;/strong&gt;  问题。一个典型场景就是表单页面，当用户旋转屏幕之后，系统会重建Activity/Fragment，如果什么数据的保存恢复工作都没有做，那么系统重建的 &lt;code&gt;Activity/Fragment&lt;/code&gt; 将失去用户已经输入的数据，丢失数据越多，用户体验越差。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Android Architecture Components 之 Lifecycle</title>
+      <link>https://clsrfish.github.io/Blog/post/61434b2a/</link>
+      <pubDate>Thu, 21 Dec 2017 23:53:58 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/61434b2a/</guid>
+      <description>&lt;p&gt;现在都流行 MVP + RxJava2 开发，然后 RxJava 带来的一个问题就是需要在适当的时候取消订阅关系以避免 &lt;strong&gt;内存泄露&lt;/strong&gt; ，最常见的做法就是在 &lt;code&gt;Activity/Fragment#onDestroy()&lt;/code&gt; 方法中调用 &lt;code&gt;disposable.dispose()&lt;/code&gt; 来解决。然后，官方文档中是用 &lt;code&gt;LocationManager&lt;/code&gt; 来举例，这种情况就比较典型，需要重写 Activity/Fragment 的每个生命周期方法来处理它的状态。官方文档中又单独封装了一个类来处理，保持生命周期方法中的代码不会太臃肿。但是这还是没有彻底解决问题，毕竟还是要重写方法，难免不会有一次忘记重写某个生命周期函数。最理想的情况就是，我们封装的类能够 &lt;strong&gt;自动察觉&lt;/strong&gt; 到生命周期的变化。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>AndroidArchitectureComponents 序言</title>
+      <link>https://clsrfish.github.io/Blog/post/eadd994e/</link>
+      <pubDate>Thu, 21 Dec 2017 15:26:23 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/eadd994e/</guid>
+      <description>&lt;p&gt;Google 在今年的 IO 大会上推出了一套新的 Android 应用开发框架————Android Architecture Components，从我个人的理解来看，它主要的功能还是帮你解决一些开发时一些比较琐碎的工作，比如 &lt;strong&gt;数据保存与恢复&lt;/strong&gt; ，一个突出的思想就是 &lt;strong&gt;数据视图分离&lt;/strong&gt; 、&lt;strong&gt;数据驱动视图&lt;/strong&gt; 。当然这些概念并不是这套框架所新诞生的，目前也有很多优秀的解决方案，所以 Google 也强调了，没有必要强行迁移现有的开发模式，&lt;strong&gt;新项目/模块&lt;/strong&gt; 可以试试。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hello World</title>
+      <link>https://clsrfish.github.io/Blog/post/2017-12-19-helloworld/</link>
+      <pubDate>Tue, 19 Dec 2017 14:00:00 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/2017-12-19-helloworld/</guid>
+      <description>&lt;p&gt;最近刚刚重新打造了一下我的新博客（也就是你现在所看到的），免不了想要产出一点点文章来充实充实它。上一次的博客写完两篇博客的搭建笔记就没有然后了，希望这次的博客能够一直好好的经营下去，算是立了一个 Flag 吧。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

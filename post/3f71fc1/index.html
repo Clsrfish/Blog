@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>撸个简单的 JSbridge</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="这两年 Web 技术栈一直在努力地向移动端和后端延展（这里没有引战的意思），当然这也是技术发展所带来的必然结果。移动互联网早期主要以原生开发为主，但到现在，业务不断发展，版本也需要快速迭代，原生开发效率很明显难以跟上，这时候 Web 开发的优势就显现出来了。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="撸个简单的 JSbridge" />
+    <meta name="twitter:description" content="这两年 Web 技术栈一直在努力地向移动端和后端延展（这里没有引战的意思），当然这也是技术发展所带来的必然结果。移动互联网早期主要以原生开发为主，但到现在，业务不断发展，版本也需要快速迭代，原生开发效率很明显难以跟上，这时候 Web 开发的优势就显现出来了。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="撸个简单的 JSbridge" />
+  <meta property="og:description" content="这两年 Web 技术栈一直在努力地向移动端和后端延展（这里没有引战的意思），当然这也是技术发展所带来的必然结果。移动互联网早期主要以原生开发为主，但到现在，业务不断发展，版本也需要快速迭代，原生开发效率很明显难以跟上，这时候 Web 开发的优势就显现出来了。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/3f71fc1/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/3f71fc1/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">撸个简单的 JSbridge</h1>
+      <p class="post-meta">@Clsrfish · Jan 9, 2018 · 5 min read</p>
+    </header>
+    <article class="post-content"><p>这两年 Web 技术栈一直在努力地向移动端和后端延展（这里没有引战的意思），当然这也是技术发展所带来的必然结果。移动互联网早期主要以原生开发为主，但到现在，业务不断发展，版本也需要快速迭代，原生开发效率很明显难以跟上，这时候 Web 开发的优势就显现出来了。</p>
+
+<p>（废话讲的差不多了）</p>
+
+<h2 id="hybrid">Hybrid</h2>
+
+<p>Hybrid App 中文名叫：混合App，即原生应用和 WebApp 的结合体，它兼顾了 <strong>原生应用</strong> 的体验和 <strong>WebApp</strong> 的开发效率（这里定义应该是狭义的）。
+最常见的 Hybrid 的实现方式是通过 JSBridge 来打通 Native Code 和 JavaScript 之间的隔阂。
+这篇文章中我们一起来简单实现一个 JSBridge。</p>
+
+<h2 id="背景知识">背景知识</h2>
+
+<p>在 Android 上实现 Hybrid 是通过 Webview 来实现的，所以下面再简单过一下 Webview 的一些基本知识。</p>
+
+<h3 id="webview">Webview</h3>
+
+<p>通常我们会使用 <code>webview.loadUrl(url)</code> 来加载一个页面，这个方法还可以用来执行 JS 代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">webview<span style="color:#f92672">.</span><span style="color:#a6e22e">loadUrl</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;javascript:console.log\(called by Native\)&#34;</span><span style="color:#f92672">);</span></code></pre></div>
+<p>这里通过 <code>javascript</code> 这个伪协议来调用或执行 JS 代码。</p>
+
+<h3 id="websettings">WebSettings</h3>
+
+<p>这个类主要是完成 Webview 的一些配置工作，比如允许执行 JS。要实现 JSBridge ，就必须允许执行 JS。</p>
+
+<h3 id="webviewclient">WebviewClient</h3>
+
+<p>这个类会收到 JS 环境中的各种事件，比如资源请求、页面加载完成、点击了一个链接等。</p>
+
+<h3 id="webchromeclient">WebChromeClient</h3>
+
+<p>这个类主要用来辅助 WebView 进行一些界面上的工作，比如弹出对话框等。</p>
+
+<h2 id="通信方式">通信方式</h2>
+
+<p>要实现 JSBridge ，还得提供一条合适的通信通道，目前主要方式有三种：</p>
+
+<ul>
+<li>webViewClient.shouldOverrideUrlLoading(WebView,WebResourceRequest)
+当需要加载一个新的 url 的时候，WebView 会先询问 WebViewClient 是否需要进行拦截。利用这个回调，可以构造自己的 schema ，在 url 中携带各种动作信息和参数等。这种方式一般是在 JS 中创建一个不可见的 iframe，然后改变 iframe 的 src 属性就可以了（微信就是这么实现的）。</li>
+<li>webChromeClient.onJSPrompt(wv,url,message,defaultValue,callback)
+还有另外两个类似的回调方法，不过因为使用频率都比这个方法高，一般都不会去占用。这里主要用到第三个参数： message ，通过它传递 Json 字符串，可以方便拿到各种信息，比上面的方式略简单一些（不是很喜欢这种方式）。</li>
+<li>webView.addJavascriptInterface(object,name)
+这种方式应该是效率最高、调用最自然的一种，不过在 Android 4.2 之前有安全问题，如果不需要兼容4.2 及以下版本，应该是比较推荐使用这个种方式。这种方式将 Native 中的一个对象挂载到 JS 的window 上，并命名为 name，然后 JS 中就能够通过 <code>window.name.funname(params)</code> 的方式来调用 Native 中被 JavascriptInterface 注解所标记的方法了（这里可以实现 JS 同步调用 Native ）</li>
+</ul>
+
+<p>上面的只是完成了 JS 发消息到 Native ，Native 通知 JS 可以通过 <code>webview.loadUrl(url)</code> 来实现。</p>
+
+<h2 id="需要考虑的问题">需要考虑的问题</h2>
+
+<ul>
+<li>通信协议
+需要制定统一的消息格式，这个还算比较简单</li>
+<li>回调
+Webview 渲染线程和一般的 UI 线程不是同一线程，所以需要通过回调在子线程拿到返回值</li>
+<li>传递信息长度
+如果通过 <code>webViewClient.shouldOverrideUrlLoading</code> 还要注意 url 的长度，不过一般情况下是不会有这种问题的</li>
+<li>线程
+Native 只能在主线程调用 JS，接收到的 JS 调用在子线程</li>
+</ul>
+
+<h2 id="动手">动手</h2>
+
+<p>撸 JSbrdige 所需要的基本知识也就这些了，还有一些小坑点在实现的过程中来说明。
+这里以我已经完成的 <a href="https://github.com/dashMrl/JStraw">JSBridge</a> 为例来进行说明。
+&gt; 因为 JavaScript 实现比较简单，所以主要讲 Native（kotlin） 的实现，</p>
+
+<h3 id="核心类说明">核心类说明</h3>
+
+<p>JSBridge 核心还是一个通信协议，所以需要一些规范化的抽象。</p>
+
+<h4 id="request-response">Request/Response</h4>
+
+<p>仿照 HTTP 协议，定义出请求响应类，这里就直接看源码就 OK 了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">/**
+</span><span style="color:#75715e">* Native 调用 JS 或者 JS 调用 Native 的请求封装
+</span><span style="color:#75715e">*/</span>
+<span style="color:#66d9ef">data</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Request</span>&lt;T&gt;(
+        @SerializedName(<span style="color:#e6db74">&#34;handler_name&#34;</span>)<span style="color:#75715e">//对于不同功能，我们提供不同的 Handler 处理
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> handlerName: String,
+        @SerializedName(<span style="color:#e6db74">&#34;callback_id&#34;</span>)<span style="color:#75715e">//在另外一段完成操作后进行回调用的
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> callbackId: Int,
+        @SerializedName(<span style="color:#e6db74">&#34;params&#34;</span>)<span style="color:#75715e">// Handler 处理所需要的数据
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> params: T
+) {
+    <span style="color:#66d9ef">companion</span> <span style="color:#66d9ef">object</span> {
+        <span style="color:#66d9ef">fun</span> &lt;T&gt; <span style="color:#a6e22e">create</span>(callId: String, callbackId: Int, params: T): Request&lt;T&gt; {
+            <span style="color:#66d9ef">return</span> Request(callId, callbackId, params)
+        }
+    }
+}
+
+
+<span style="color:#75715e">/**
+</span><span style="color:#75715e">* Native 对 JS 或者 JS 对 Native 的响应的封装
+</span><span style="color:#75715e">*/</span>
+<span style="color:#66d9ef">data</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Response</span>&lt;<span style="color:#66d9ef">out</span> T&gt;(
+        @SerializedName(<span style="color:#e6db74">&#34;status&#34;</span>)<span style="color:#75715e">//状态，成功、失败或取消
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> status: Int,
+        @SerializedName(<span style="color:#e6db74">&#34;msg&#34;</span>)<span style="color:#75715e">//状态的简单解释
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> msg: String,
+        @SerializedName(<span style="color:#e6db74">&#34;body&#34;</span>)<span style="color:#75715e">//响应数据
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> data: T
+) {
+    <span style="color:#66d9ef">companion</span> <span style="color:#66d9ef">object</span> {
+        <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">val</span> STATUS_OK = <span style="color:#ae81ff">0</span>
+        <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">val</span> STATUS_FAILED = <span style="color:#ae81ff">1</span>
+        <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">val</span> STATUS_CANCEL = <span style="color:#ae81ff">2</span>
+        <span style="color:#66d9ef">fun</span> &lt;T&gt; <span style="color:#a6e22e">success</span>(msg: String = <span style="color:#e6db74">&#34;success&#34;</span>, <span style="color:#66d9ef">data</span>: T): Response&lt;T&gt; = Response(STATUS_OK, msg, <span style="color:#66d9ef">data</span>)
+        <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">cancel</span>(msg: String = <span style="color:#e6db74">&#34;canceled&#34;</span>): Response&lt;Unit&gt; = Response(STATUS_CANCEL, msg, Unit)
+        <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">failed</span>(msg: String = <span style="color:#e6db74">&#34;failed&#34;</span>): Response&lt;Unit&gt; = Response(STATUS_FAILED, msg, Unit)
+    }
+}</code></pre></div>
+<h4 id="nativehandler-in-t-out-r">NativeHandler<in T, out R></h4>
+
+<p>对于 JS 的请求，需要有特定的类来进行处理，这里还是直接看源码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">NativeHandler</span>&lt;<span style="color:#66d9ef">in</span> T, <span style="color:#66d9ef">out</span> R&gt; {<span style="color:#75715e">// T 表示接收请求参数类型，R 表示响应参数类型
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">name</span>(): String
+    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">handleJSCall</span>(requestStr: String, wv: WebView) {<span style="color:#75715e">//kotlin 接口可以有方法实现
+</span><span style="color:#75715e"></span>        Log.d(<span style="color:#e6db74">&#34;NativeHandler&#34;</span>,requestStr)
+        <span style="color:#66d9ef">val</span> request = JsonUtil.json2Obj&lt;Request&lt;T&gt;&gt;(requestStr)
+        handle(request.params, JSCallback(wv, request.callbackId))
+    }
+
+    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">handle</span>(<span style="color:#66d9ef">data</span>: T, callback: JSCallback&lt;R&gt;)
+}</code></pre></div>
+<p>应对不同类型的请求，可以通过实现不同的 NativeHandler 来实现，其中 <code>name()</code> 应该返回一个全局唯一的、易于识别的字符串用于标识这个 Handler，重写 <code>handle()</code> 来处理请求并响应。要注意的是，<code>handle()</code> 方法默认运行在子线程，所以如果想操作 UI ，还要进行线程切换（JSCallback 内部进行了线程切换）。
+&gt; 最好是做到每个请求都响应一些状态，让另外一端知道请求是失败还是成功又或者取消了等</p>
+
+<h4 id="pivot">Pivot</h4>
+
+<p>这个类是通信的枢纽，对 JS 的调用与接受 JS 的请求都是在这里。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">IPivot</span> {
+    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">callJS</span>(handlerName: String, params: String, callback: NativeCallback&lt;*&gt;)
+  
+    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">callFromJS</span>(handlerName: String, request: String)
+  
+    <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">responseFromJS</span>(callbackId: Int, <span style="color:#66d9ef">data</span>: String)
+}</code></pre></div>
+<h4 id="jstraw">JStraw</h4>
+
+<p>这个类用于对外暴露 API 接口，有些接口需要隐藏，所以使用 <code>internal</code> 进行修饰：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">IJStraw</span> {<span style="color:#75715e">//interface 不能使用 internal 所以改成 abstract class
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">abstract</span>  <span style="color:#66d9ef">fun</span> &lt;T&gt; <span style="color:#a6e22e">callJS</span>(handlerName: String, <span style="color:#66d9ef">data</span>: String = <span style="color:#e6db74">&#34;&#34;</span>): NativeCallback&lt;T&gt;
+
+    <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">registerNativeHandler</span>(handler: NativeHandler&lt;*, *&gt;)
+    <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">findNativeHandler</span>(handlerName: String): NativeHandler&lt;*, *&gt;?
+
+    <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">addCallback</span>(callbackId: Int, callback: NativeCallback&lt;*&gt;)
+    <span style="color:#66d9ef">abstract</span> <span style="color:#66d9ef">internal</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">removeCallback</span>(callbackId: Int): NativeCallback&lt;*&gt;?
+}</code></pre></div>
+<p>这样，通过几行代码就可以完成 Native 调用 JS：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">jstraw.callJS&lt;String&gt;(<span style="color:#e6db74">&#34;js_handler&#34;</span>,<span style="color:#e6db74">&#34;json data&#34;</span>)
+    .success { result: String -&gt; toast(result) }
+	.failed { msg -&gt; toast(msg) }
+	.canceled { toast(<span style="color:#e6db74">&#34;canceled&#34;</span>) }
+	.error { e -&gt; toast(e.message.toString()) }
+	.exec()</code></pre></div>
+<blockquote>
+<p>到这里，Native 端的大概轮廓就出来了，剩下的只剩下一些细节方面的东西了</p>
+</blockquote>
+
+<h4 id="js-实现">JS 实现</h4>
+
+<p>因为 JS 实现真的是容易，所以下面直接贴代码（凑字数）：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">uniqueId</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#75715e">//用于回调标示
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">callbacks</span> <span style="color:#f92672">=</span> {};<span style="color:#75715e">//保存 回调
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">handlers</span> <span style="color:#f92672">=</span> {};<span style="color:#75715e">//Native 调用的处理集合
+</span><span style="color:#75715e">// 注册 handler ,需要一个 handlerName 进行标识
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">registerJSHandler</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">handlerName</span>, <span style="color:#a6e22e">handler</span>) =&gt; {
+    <span style="color:#a6e22e">handlers</span>[<span style="color:#a6e22e">handlerName</span>] <span style="color:#f92672">=</span> {
+        <span style="color:#a6e22e">handleNativeCall</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">request</span>) =&gt; {
+            <span style="color:#a6e22e">handler</span>.<span style="color:#a6e22e">handle</span>(<span style="color:#a6e22e">request</span>, {
+                <span style="color:#a6e22e">success</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">body</span> <span style="color:#f92672">=</span> {}) =&gt; {
+                    <span style="color:#a6e22e">pivot</span>.<span style="color:#a6e22e">responseFromJS</span>(<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">callback_id</span>, <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>({
+                        <span style="color:#a6e22e">status</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>,
+                        <span style="color:#a6e22e">msg</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;success&#39;</span>,
+                        <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">body</span>
+                    }));
+                },
+                <span style="color:#a6e22e">failed</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">msg</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;failed&#34;</span>) =&gt; {
+                    <span style="color:#a6e22e">pivot</span>.<span style="color:#a6e22e">responseFromJS</span>(<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">callback_id</span>, <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>({
+                        <span style="color:#a6e22e">status</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+                        <span style="color:#a6e22e">msg</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">msg</span>,
+                        <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> {}
+                    }));
+                },
+                <span style="color:#a6e22e">cancel</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">reason</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;canceled&#39;</span>) =&gt; {
+                    <span style="color:#a6e22e">pivot</span>.<span style="color:#a6e22e">responseFromJS</span>(<span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">callback_id</span>, <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>({
+                        <span style="color:#a6e22e">status</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2</span>,
+                        <span style="color:#a6e22e">msg</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">reason</span>,
+                        <span style="color:#a6e22e">body</span><span style="color:#f92672">:</span> {}
+                    }))
+                }
+            })
+        }
+    };
+};
+<span style="color:#75715e">//调用 Native 功能的方法，需要 Native 端的 handler标识 和 参数
+</span><span style="color:#75715e">//这里使用 Promise 来使得调用流程更加方便
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">callNative</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">handlerName</span>, <span style="color:#a6e22e">params</span> <span style="color:#f92672">=</span> {}) =&gt; {
+    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">callbackId</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">uniqueId</span><span style="color:#f92672">++</span>;
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">request</span> <span style="color:#f92672">=</span> {
+        <span style="color:#a6e22e">handler_name</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">handlerName</span>,
+        <span style="color:#a6e22e">callback_id</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">callbackId</span>,
+        <span style="color:#a6e22e">params</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">params</span>
+    };
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> Promise((<span style="color:#a6e22e">resolve</span>, <span style="color:#a6e22e">reject</span>) =&gt; {
+        <span style="color:#66d9ef">try</span> {
+            <span style="color:#a6e22e">callbacks</span>[<span style="color:#a6e22e">callbackId</span>] <span style="color:#f92672">=</span> {
+                <span style="color:#a6e22e">onResponse</span><span style="color:#f92672">:</span> (<span style="color:#a6e22e">response</span>) =&gt; {
+                    <span style="color:#a6e22e">resolve</span>(<span style="color:#a6e22e">response</span>);
+                }
+            };
+            <span style="color:#a6e22e">pivot</span>.<span style="color:#a6e22e">callFromJS</span>(<span style="color:#a6e22e">handlerName</span>, <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">stringify</span>(<span style="color:#a6e22e">request</span>));
+        } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">e</span>) {
+            <span style="color:#a6e22e">reject</span>(<span style="color:#a6e22e">e</span>);
+            <span style="color:#66d9ef">delete</span> <span style="color:#a6e22e">callbacks</span>[<span style="color:#a6e22e">callbackId</span>];
+        }
+    });
+};
+<span style="color:#75715e">//通过定义 straw 来将模块中的函数暴露出去
+</span><span style="color:#75715e"></span>window.<span style="color:#a6e22e">straw</span> <span style="color:#f92672">=</span> {
+    <span style="color:#a6e22e">callNative</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">callNative</span>,
+    <span style="color:#a6e22e">registerJSHandler</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">registerJSHandler</span>
+};
+
+<span style="color:#75715e">//called by native code
+</span><span style="color:#75715e"></span>window.<span style="color:#a6e22e">callFromNative</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">request</span>) =&gt; {
+    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">handlerName</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">request</span>.<span style="color:#a6e22e">handler_name</span>;
+    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">handlers</span>[<span style="color:#a6e22e">handlerName</span>]) {
+        <span style="color:#a6e22e">handlers</span>[<span style="color:#a6e22e">handlerName</span>].<span style="color:#a6e22e">handleNativeCall</span>(<span style="color:#a6e22e">request</span>);
+    } <span style="color:#66d9ef">else</span> {
+        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;undefined handler&#39;</span>);
+    }
+
+};
+<span style="color:#75715e">//called by native code
+</span><span style="color:#75715e"></span>window.<span style="color:#a6e22e">responseFromNative</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">callbackId</span>, <span style="color:#a6e22e">response</span>) =&gt; {
+    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">callbacks</span>[<span style="color:#a6e22e">callbackId</span>]) {
+        <span style="color:#a6e22e">callbacks</span>[<span style="color:#a6e22e">callbackId</span>].<span style="color:#a6e22e">onResponse</span>(<span style="color:#a6e22e">response</span>);
+        <span style="color:#66d9ef">delete</span> <span style="color:#a6e22e">callbacks</span>[<span style="color:#a6e22e">callbackId</span>];
+    }
+};
+<span style="color:#75715e">// 因为这段 JS 代码是在页面加载完成之后才进行注入的，JS 端使用时需要监听这个事件的完成
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">event</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Event</span>(<span style="color:#e6db74">&#39;onStrawInit&#39;</span>);
+document.<span style="color:#a6e22e">dispatchEvent</span>(<span style="color:#a6e22e">event</span>);
+</code></pre></div>
+<p>另外，通过 JS 对象的特性，我们可以非常方便的向 Native 端暴露接口，具体代码如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">//定义 Native 端接口集合
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">nativeApiList</span> <span style="color:#f92672">=</span> [{
+    <span style="color:#e6db74">&#34;funName&#34;</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#34;isLogin&#34;</span>,
+    <span style="color:#e6db74">&#34;handlerName&#34;</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;loginHandler&#34;</span>,
+    <span style="color:#e6db74">&#34;needParams&#34;</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">false</span>
+}];
+
+<span style="color:#66d9ef">let</span> <span style="color:#a6e22e">apiGenerator</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">nativeApi</span>) =&gt; {
+    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">nativeApi</span>.<span style="color:#a6e22e">needParams</span>) {
+        <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">params</span>) =&gt; {
+            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">straw</span>.<span style="color:#a6e22e">callNative</span>(<span style="color:#a6e22e">nativeApi</span>.<span style="color:#a6e22e">handlerName</span>, <span style="color:#a6e22e">params</span>);
+        };
+    } <span style="color:#66d9ef">else</span> {
+        <span style="color:#66d9ef">return</span> () =&gt; {
+            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">straw</span>.<span style="color:#a6e22e">callNative</span>(<span style="color:#a6e22e">nativeApi</span>.<span style="color:#a6e22e">handlerName</span>);
+        };
+    }
+};
+<span style="color:#75715e">//利用 JS 对象类似于键值对的特性动态绑定函数
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">apiFactory</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">list</span>) =&gt; {
+    <span style="color:#a6e22e">list</span>.<span style="color:#a6e22e">forEach</span>((<span style="color:#a6e22e">nativeApi</span>) =&gt; {
+        <span style="color:#a6e22e">straw</span>[<span style="color:#e6db74">`</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">nativeApi</span>.<span style="color:#a6e22e">funName</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">apiGenerator</span>(<span style="color:#a6e22e">nativeApi</span>);
+    });
+};
+<span style="color:#75715e">//function apiFactory() below should be called after straw.bundle-x.x.x.js is injected
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (window.<span style="color:#a6e22e">straw</span>) {
+    <span style="color:#a6e22e">apiFactory</span>(<span style="color:#a6e22e">nativeApiList</span>);
+} <span style="color:#66d9ef">else</span> {
+    document.<span style="color:#a6e22e">addEventListener</span>(<span style="color:#e6db74">&#39;onStrawInit&#39;</span>, (<span style="color:#a6e22e">event</span>) =&gt; {
+        <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;Straw inited&#39;</span>);
+        <span style="color:#a6e22e">apiFactory</span>(<span style="color:#a6e22e">nativeApiList</span>);
+    });
+}
+</code></pre></div>
+<p>Native 要是实现上面的功能就比较蛋疼了！！！</p>
+
+<h2 id="坑点">坑点</h2>
+
+<p>上面大概就是实现 JSBridge 的思路，在这之外还有一些问题需要注意。</p>
+
+<h3 id="注入时机">注入时机</h3>
+
+<p>刚刚也说了，JSbridge JS 端代码一般是在客户端本地的，并没直接添加到网页里，所以我们需要将这段 JS 注入网页，最容易想到的就是在页面加载完成的时候进行注入。 <code>webViewClient.onPageFinished()</code>  能够完成网页加载完成的事件，那就继承一个呗。但是考虑到开发者可能还想在这方法里面进行一些其他操作，为了不起冲突，包装一下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">JStrawWebViewClient</span>(
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">val</span> puppetWVC: WebViewClient?, <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">var</span> jsUrl: String) 
+: WebViewClient() {
+    <span style="color:#66d9ef">override</span> <span style="color:#66d9ef">fun</span> <span style="color:#a6e22e">onPageFinished</span>(view: WebView?, url: String?) {
+        InjectUtil.injectJS(view, jsUrl)
+        puppetWVC<span style="color:#f92672">?.</span>onPageFinished(view, url)
+    }
+}</code></pre></div>
+<p>puppetWVC 就是用户自己的 WebViewClient 实例。</p>
+
+<h3 id="注入安全性">注入安全性</h3>
+
+<p>注入非常简单，定义一个 <code>script</code> 节点，将这个节点插入网页就好了：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">script</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">createElement</span>(<span style="color:#e6db74">&#39;script&#39;</span>);
+<span style="color:#a6e22e">script</span>.<span style="color:#a6e22e">src</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;$jsUrl&#39;</span>;
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">firstScript</span> <span style="color:#f92672">=</span> document.<span style="color:#a6e22e">scripts</span>[<span style="color:#ae81ff">0</span>];
+<span style="color:#a6e22e">firstScript</span>.<span style="color:#a6e22e">parentNode</span>.<span style="color:#a6e22e">insertBefore</span>(<span style="color:#a6e22e">script</span>,<span style="color:#a6e22e">firstScript</span>);
+</code></pre></div>
+<p>一看没毛病，觉得完全OK。但是如果这个 jsUrl 是 <code>file:///android_asset/jstraw.js</code> ，并且你加载的网页不是应用内置的，那么 WebView 内核是不会去加载的，因为它会认为是 <strong>网页主动</strong> 想要拿到本地的资源（事实上是被我们注入的）。但是如果 jsUrl 是 <code>https://host/path/jstraw.js</code> 类型，那么 WebView 是会去尝试加载的。</p>
+
+<p>知道了这些，我们再考虑这些情况，加载一个非本地网页，理想情况是应用内部、SD 卡和网络上的 JS 文件 都能注入。那么怎么才能使得 这三种情况都被满足呢？</p>
+
+<p>又要用到 WebViewClient 了，这次需要重写的是 <code>shouldInterceptRequest</code> 这个方法，这个方法会在 WebView 请求每一个资源之前调用一次，如果返回 null 那么，WebView 就自己去加载，如果返回 nonnull ，那么WebView 就会使用我们的提供的资源。</p>
+
+<p>那么，考虑的安全性限制，我们对 jsUrl 来进行一个转换，如果是来自 应用内部 或者 SD 卡，那就对它改造下，改成 WebView 认可的格式，然后我们再在  <code>shouldInterceptRequest</code>  中来解析并返回资源就OK 了。</p>
+
+<blockquote>
+<p>也可以利用这个方法来接管 WebView 的缓存，使得整个应用的网络请求都能被监控到。</p>
+</blockquote>
+
+<p><a href="https://github.com/dashMrl/JStraw">完整代码</a></p>
+
+<h2 id="参考文章">参考文章</h2>
+
+<p><a href="https://juejin.im/entry/577a6f41128fe10056539e03">android 中的 Hybrid 开发</a></p>
+
+<p><a href="https://quanru.github.io/2016/10/02/%E8%AE%B0%E4%B8%80%E6%AC%A1%20Webview%20Jsbridge%20%E6%8E%A5%E5%8F%A3%E5%B0%81%E8%A3%85/">记一次 Webview Jsbridge 接口封装</a></p>
+
+<p><a href="https://github.com/lzyzsd/JsBridge">JSBridge</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/hybrid"><span class="tag">Hybrid</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/jsbridge"><span class="tag">JSBridge</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/webview"><span class="tag">Webview</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>479</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

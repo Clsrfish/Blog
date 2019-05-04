@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Next on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/next/</link>
+    <description>Recent content in Next on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 30 Dec 2017 22:34:10 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/next/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hexo 搭建静态博客</title>
+      <link>https://clsrfish.github.io/Blog/post/dfcd98a4/</link>
+      <pubDate>Sat, 30 Dec 2017 22:34:10 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/dfcd98a4/</guid>
+      <description>&lt;p&gt;上次搭的博客写了两篇 Hexo 的配置后就凉了，所以这次刚刚搭好的时候就没想做个记录，怕和上次一样，把写博客的热情全花在了搭建博客上。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

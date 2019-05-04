@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Webview on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/webview/</link>
+    <description>Recent content in Webview on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Tue, 09 Jan 2018 21:59:21 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/webview/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>撸个简单的 JSbridge</title>
+      <link>https://clsrfish.github.io/Blog/post/3f71fc1/</link>
+      <pubDate>Tue, 09 Jan 2018 21:59:21 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/3f71fc1/</guid>
+      <description>&lt;p&gt;这两年 Web 技术栈一直在努力地向移动端和后端延展（这里没有引战的意思），当然这也是技术发展所带来的必然结果。移动互联网早期主要以原生开发为主，但到现在，业务不断发展，版本也需要快速迭代，原生开发效率很明显难以跟上，这时候 Web 开发的优势就显现出来了。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

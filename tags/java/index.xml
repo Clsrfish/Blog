@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/java/</link>
+    <description>Recent content in Java on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 06 Jan 2018 01:49:39 +0000</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Retrofit 拆轮子之构建流程分析</title>
+      <link>https://clsrfish.github.io/Blog/post/56a1ff9/</link>
+      <pubDate>Sat, 06 Jan 2018 01:49:39 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/56a1ff9/</guid>
+      <description>&lt;p&gt;在使用 OkHttp 的时候，还是要自己构建 Request 的，我们的目的是请求一个 url 并拿到数据，构建流程不利于逻辑清晰，特别是当需要 Post 上传数据的时候。Square 显然是看到了这个问题，便推出了 Retrofit 来解决这个问题。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Dagger2 上手指南</title>
+      <link>https://clsrfish.github.io/Blog/post/d267ecb2/</link>
+      <pubDate>Sun, 31 Dec 2017 19:03:38 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/d267ecb2/</guid>
+      <description>&lt;p&gt;在 Java 的开发中，怎么利用各种设计模式和架构设计来解耦、提高拓展性，似乎已经成了一名 Java 开发人员的必修课。在一些大型系统中，还会有各种听起来高大上的名词，如 IOC、OSGI、CGLIB 等。所以这里我们就来讲讲 IOC 的一个实现框架——Dagger2。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Annotation 基础</title>
+      <link>https://clsrfish.github.io/Blog/post/5ccb233a/</link>
+      <pubDate>Sat, 30 Dec 2017 22:32:32 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/5ccb233a/</guid>
+      <description>&lt;p&gt;注解是一种元数据（metadata），它在虽然能提供关于程序的一些信息，但并不是程序本身的一部分。注解对被其标注的对象没有任何副作用。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>OkHttp 拆轮子之连接池</title>
+      <link>https://clsrfish.github.io/Blog/post/f4a6041/</link>
+      <pubDate>Sat, 30 Dec 2017 22:25:36 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/f4a6041/</guid>
+      <description>&lt;p&gt;OkHttp 内部还维护了一个连接池，用于缓存一定数量的连接，以减少与服务器建立连接时的资源开销。同时，为了保证缓存的连接数在一个合理的水平，连接池有一个最多闲置连接数量和最长连接闲置时长。这里我们还是通过分析一些关键方法来分析它的连接池机制：&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>ThreadLocal</title>
+      <link>https://clsrfish.github.io/Blog/post/151f44ae/</link>
+      <pubDate>Sat, 30 Dec 2017 21:53:30 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/151f44ae/</guid>
+      <description>&lt;p&gt;在并发编程的时候，常常会遇到共享变量，通常为了保证数据的 &lt;strong&gt;一致性&lt;/strong&gt; ，需要对变量加锁，这就导致了执行效率的降低。如果仅仅在线程内部访问，就不需要进行加锁，这时候就体现出了数据的 &lt;strong&gt;独立性&lt;/strong&gt; （这两个名词是随手造的，知道意思就好了）。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>OkHttp 请求流程简析</title>
+      <link>https://clsrfish.github.io/Blog/post/3249374e/</link>
+      <pubDate>Sat, 30 Dec 2017 18:36:53 +0000</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/3249374e/</guid>
+      <description>&lt;p&gt;从 Android 4.4 开始，&lt;code&gt;HttpURLConnection&lt;/code&gt;  底层使用 OkHttp 实现，所以阅读并学习它的源码就显得更加地理所应当。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

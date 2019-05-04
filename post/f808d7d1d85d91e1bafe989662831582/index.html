@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>创建带参的 ViewModel 实例</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="Android Jet Pack 的 ViewModel 为开发者在处理配置变更时数据保存带来了一定便捷性，但是如果定义的 ViewModel 子类构造器有参数，那么还要提供一个对应的 ViewModelProvider.Factory 实现。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="创建带参的 ViewModel 实例" />
+    <meta name="twitter:description" content="Android Jet Pack 的 ViewModel 为开发者在处理配置变更时数据保存带来了一定便捷性，但是如果定义的 ViewModel 子类构造器有参数，那么还要提供一个对应的 ViewModelProvider.Factory 实现。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="创建带参的 ViewModel 实例" />
+  <meta property="og:description" content="Android Jet Pack 的 ViewModel 为开发者在处理配置变更时数据保存带来了一定便捷性，但是如果定义的 ViewModel 子类构造器有参数，那么还要提供一个对应的 ViewModelProvider.Factory 实现。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/f808d7d1d85d91e1bafe989662831582/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/f808d7d1d85d91e1bafe989662831582/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">创建带参的 ViewModel 实例</h1>
+      <p class="post-meta">@Clsrfish · Aug 18, 2018 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>Android Jet Pack 的 <code>ViewModel</code> 为开发者在处理配置变更时数据保存带来了一定便捷性，但是如果定义的 <code>ViewModel</code> 子类构造器有参数，那么还要提供一个对应的 <code>ViewModelProvider.Factory</code> 实现。</p>
+
+<p>那么问题来了，这都是一些样板代码，枯燥无意义，所以更加优雅的方式还是通过工具自动创建。</p>
+
+<h2 id="工具实现">工具实现</h2>
+
+<p>不废话了，直接上代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VMFactory</span> <span style="color:#f92672">{</span>
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">,</span> Constructor<span style="color:#f92672">&lt;?&gt;&gt;</span> cacheMap <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> WeakHashMap<span style="color:#f92672">&lt;&gt;();</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T <span style="color:#66d9ef">extends</span> ViewModel<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">viewModel</span><span style="color:#f92672">(</span>Fragment frag<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> vmClazz<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> Object<span style="color:#f92672">...</span> params<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> ViewModelProviders<span style="color:#f92672">.</span><span style="color:#a6e22e">of</span><span style="color:#f92672">(</span>frag<span style="color:#f92672">,</span> factory<span style="color:#f92672">(</span>vmClazz<span style="color:#f92672">,</span> params<span style="color:#f92672">)).</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>vmClazz<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T <span style="color:#66d9ef">extends</span> ViewModel<span style="color:#f92672">&gt;</span> T <span style="color:#a6e22e">viewModel</span><span style="color:#f92672">(</span>FragmentActivity activity<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> vmClazz<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> Object<span style="color:#f92672">...</span> params<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">return</span> ViewModelProviders<span style="color:#f92672">.</span><span style="color:#a6e22e">of</span><span style="color:#f92672">(</span>activity<span style="color:#f92672">,</span> factory<span style="color:#f92672">(</span>vmClazz<span style="color:#f92672">,</span> params<span style="color:#f92672">)).</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>vmClazz<span style="color:#f92672">);</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#f92672">&lt;</span>T <span style="color:#66d9ef">extends</span> ViewModel<span style="color:#f92672">&gt;</span> ViewModelProvider<span style="color:#f92672">.</span><span style="color:#a6e22e">Factory</span> <span style="color:#a6e22e">factory</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> vmClazz<span style="color:#f92672">,</span> <span style="color:#66d9ef">final</span> Object<span style="color:#f92672">...</span> params<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>params <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">||</span> params<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ViewModelProvider<span style="color:#f92672">.</span><span style="color:#a6e22e">NewInstanceFactory</span><span style="color:#f92672">();</span>
+        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span>ViewModelProvider<span style="color:#f92672">.</span><span style="color:#a6e22e">Factory</span><span style="color:#f92672">)</span> Proxy<span style="color:#f92672">.</span><span style="color:#a6e22e">newProxyInstance</span><span style="color:#f92672">(</span>vmClazz<span style="color:#f92672">.</span><span style="color:#a6e22e">getClassLoader</span><span style="color:#f92672">(),</span> <span style="color:#66d9ef">new</span> Class<span style="color:#f92672">[]{</span>ViewModelProvider<span style="color:#f92672">.</span><span style="color:#a6e22e">Factory</span><span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">},</span> <span style="color:#f92672">(</span>obj<span style="color:#f92672">,</span> method<span style="color:#f92672">,</span> objs<span style="color:#f92672">)</span> <span style="color:#f92672">-&gt;</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>method<span style="color:#f92672">.</span><span style="color:#a6e22e">getDeclaringClass</span><span style="color:#f92672">()</span> <span style="color:#f92672">==</span> Object<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span>
+                        <span style="color:#f92672">||</span> Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION</span><span style="color:#f92672">.</span><span style="color:#a6e22e">SDK_INT</span> <span style="color:#f92672">&gt;=</span> Build<span style="color:#f92672">.</span><span style="color:#a6e22e">VERSION_CODES</span><span style="color:#f92672">.</span><span style="color:#a6e22e">N</span> <span style="color:#f92672">&amp;&amp;</span> method<span style="color:#f92672">.</span><span style="color:#a6e22e">isDefault</span><span style="color:#f92672">()</span>
+                        <span style="color:#f92672">||</span> <span style="color:#f92672">!</span>method<span style="color:#f92672">.</span><span style="color:#a6e22e">getName</span><span style="color:#f92672">().</span><span style="color:#a6e22e">equals</span><span style="color:#f92672">(</span><span style="color:#e6db74">&#34;create&#34;</span><span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">return</span> method<span style="color:#f92672">.</span><span style="color:#a6e22e">invoke</span><span style="color:#f92672">(</span>obj<span style="color:#f92672">,</span> objs<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+                StringBuilder keyBuilder <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> StringBuilder<span style="color:#f92672">(</span>objs<span style="color:#f92672">[</span>0<span style="color:#f92672">].</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">().</span><span style="color:#a6e22e">getCanonicalName</span><span style="color:#f92672">());</span>
+                Class<span style="color:#f92672">&lt;?&gt;[]</span> paramTypes <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Class<span style="color:#f92672">[</span>params<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">];</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> params<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                    paramTypes<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> params<span style="color:#f92672">[</span>i<span style="color:#f92672">].</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">();</span>
+                    keyBuilder<span style="color:#f92672">.</span><span style="color:#a6e22e">append</span><span style="color:#f92672">(</span>paramTypes<span style="color:#f92672">[</span>i<span style="color:#f92672">].</span><span style="color:#a6e22e">getCanonicalName</span><span style="color:#f92672">());</span>
+                <span style="color:#f92672">}</span>
+                <span style="color:#66d9ef">final</span> String key <span style="color:#f92672">=</span> keyBuilder<span style="color:#f92672">.</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">();</span>
+                Constructor<span style="color:#f92672">&lt;?&gt;</span> constructor <span style="color:#f92672">=</span> cacheMap<span style="color:#f92672">.</span><span style="color:#a6e22e">get</span><span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>constructor <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">return</span> constructor<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>params<span style="color:#f92672">);</span>
+                <span style="color:#f92672">}</span>
+                <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>Constructor<span style="color:#f92672">&lt;?&gt;</span> declaredConstructor: vmClazz<span style="color:#f92672">.</span><span style="color:#a6e22e">getDeclaredConstructors</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>areAssignableFrom<span style="color:#f92672">(</span>declaredConstructor<span style="color:#f92672">.</span><span style="color:#a6e22e">getParameterTypes</span><span style="color:#f92672">(),</span> paramTypes<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+                        cacheMap<span style="color:#f92672">.</span><span style="color:#a6e22e">put</span><span style="color:#f92672">(</span>key<span style="color:#f92672">,</span> declaredConstructor<span style="color:#f92672">);</span>
+                        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>declaredConstructor<span style="color:#f92672">.</span><span style="color:#a6e22e">isAccessible</span><span style="color:#f92672">())</span> <span style="color:#f92672">{</span>
+                            declaredConstructor<span style="color:#f92672">.</span><span style="color:#a6e22e">setAccessible</span><span style="color:#f92672">(</span><span style="color:#66d9ef">true</span><span style="color:#f92672">);</span>
+                            Object instance <span style="color:#f92672">=</span> declaredConstructor<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>params<span style="color:#f92672">);</span>
+                            declaredConstructor<span style="color:#f92672">.</span><span style="color:#a6e22e">setAccessible</span><span style="color:#f92672">(</span><span style="color:#66d9ef">false</span><span style="color:#f92672">);</span>
+                            <span style="color:#66d9ef">return</span> instance<span style="color:#f92672">;</span>
+                        <span style="color:#f92672">}</span>
+                        <span style="color:#66d9ef">return</span> declaredConstructor<span style="color:#f92672">.</span><span style="color:#a6e22e">newInstance</span><span style="color:#f92672">(</span>params<span style="color:#f92672">);</span>
+                    <span style="color:#f92672">}</span>
+                <span style="color:#f92672">}</span>
+                cacheMap<span style="color:#f92672">.</span><span style="color:#a6e22e">remove</span><span style="color:#f92672">(</span>key<span style="color:#f92672">);</span>
+                <span style="color:#66d9ef">throw</span> <span style="color:#66d9ef">new</span> RuntimeException<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;cannot create an instance of &#34;</span> <span style="color:#f92672">+</span> vmClazz<span style="color:#f92672">.</span><span style="color:#a6e22e">getCanonicalName</span><span style="color:#f92672">()</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; with params: &#34;</span> <span style="color:#f92672">+</span> Arrays<span style="color:#f92672">.</span><span style="color:#a6e22e">asList</span><span style="color:#f92672">(</span>paramTypes<span style="color:#f92672">).</span><span style="color:#a6e22e">toString</span><span style="color:#f92672">());</span>
+            <span style="color:#f92672">});</span>
+        <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">areAssignableFrom</span><span style="color:#f92672">(</span>Class<span style="color:#f92672">&lt;?&gt;[]</span> constructorParameterTypes<span style="color:#f92672">,</span> Class<span style="color:#f92672">&lt;?&gt;[]</span> paramTypes<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>constructorParameterTypes<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span> <span style="color:#f92672">==</span> paramTypes<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span><span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> 0<span style="color:#f92672">;</span> i <span style="color:#f92672">&lt;</span> paramTypes<span style="color:#f92672">.</span><span style="color:#a6e22e">length</span><span style="color:#f92672">;</span> i<span style="color:#f92672">++)</span> <span style="color:#f92672">{</span>
+                <span style="color:#66d9ef">if</span> <span style="color:#f92672">(!</span>constructorParameterTypes<span style="color:#f92672">[</span>i<span style="color:#f92672">].</span><span style="color:#a6e22e">isAssignableFrom</span><span style="color:#f92672">(</span>paramTypes<span style="color:#f92672">[</span>i<span style="color:#f92672">]))</span> <span style="color:#f92672">{</span>
+                    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+                <span style="color:#f92672">}</span>
+            <span style="color:#f92672">}</span>
+            <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">true</span><span style="color:#f92672">;</span>
+        <span style="color:#f92672">}</span>
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">false</span><span style="color:#f92672">;</span>
+    <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>再简单 BB 几句。</p>
+
+<p>可以看到 <code>factory</code> 方法里主要用到了 <strong>动态代理</strong>，其实也可以直接创建匿名内部类，我们不纠结这个问题。</p>
+
+<p>通过 <code>vmClazz.getDeclaredConstructors()</code> 拿到所有构造器，然后通过传入的参数逐个进行匹配直到找到目标构造器。然后将目标构造器丢到缓存里，毕竟找到一个构造器执行了挺多的反射操作。</p>
+
+<p>通过构造器匹配的方式，调用 <code>ViewModel</code> 哪个构造器完全取决于你传什么参数。即使构造器是 <code>private</code> 修饰，也能完成实例创建，其实如果了解 <code>ViewModel</code> 创建及保存原理，用 <code>private</code> 修饰其实应该是一个最佳实践。</p>
+
+<h2 id="性能问题">性能问题</h2>
+
+<p>移动设备上的 <strong>反射</strong> 还是挺扎眼的，始终逃不过性能这道坎，所以也做了一个简单的性能测试。
+在我的 一加3 Android 8.1.0 上对比通过 <code>ViewModelProvider.Factory</code> 实例和动态代理对象的创建 <code>ViewModel</code> 耗时，后者耗时大概是前者的 <strong>2.5</strong> 倍，当然这只是 <strong>初次执行</strong> 的情况，当动态代理方式有缓存之后，两者耗时基本一致了。</p>
+
+<h2 id="后话">后话</h2>
+
+<p>不管怎么样，实例创建还是通过反射来完成的（虽然 <code>ViewModelProvider.NewInstanceFactory</code> 也是通过反射），肯定存在性能损耗，所以后续优化可以从访问修饰符上入手，目前的想法是通过 <strong>注解处理器</strong> 创建一个辅助类，收集所有 <code>ViewModel</code>，在编译时根据访问修饰符选择 <code>new</code> 还是 <code>Constrctor#newInstance</code>。</p>
+
+<p>完整代码在 <a href="https://github.com/dashMrl/AutoVM">这里</a>，里面也有之前实践过程中写的编译时创建 <code>ViewModelProvider.Factory</code> 实现类的注解处理器。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/android"><span class="tag">Android</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/viewmodel"><span class="tag">ViewModel</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>259</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

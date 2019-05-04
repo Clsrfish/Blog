@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>[Flutter] runApp 流程</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="不管是使用 Flutter 开发完整应用还是作为区块嵌入某个页面，都需要调用 runApp ，而我们需要做的只是传入一个 Widget 实例，那么 runApp 背后所做的工作就很有趣了，比如触发视图的构建、更新以及绘制等，下面我们就粗略地看一下这个函数到底做了啥。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="[Flutter] runApp 流程" />
+    <meta name="twitter:description" content="不管是使用 Flutter 开发完整应用还是作为区块嵌入某个页面，都需要调用 runApp ，而我们需要做的只是传入一个 Widget 实例，那么 runApp 背后所做的工作就很有趣了，比如触发视图的构建、更新以及绘制等，下面我们就粗略地看一下这个函数到底做了啥。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="[Flutter] runApp 流程" />
+  <meta property="og:description" content="不管是使用 Flutter 开发完整应用还是作为区块嵌入某个页面，都需要调用 runApp ，而我们需要做的只是传入一个 Widget 实例，那么 runApp 背后所做的工作就很有趣了，比如触发视图的构建、更新以及绘制等，下面我们就粗略地看一下这个函数到底做了啥。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/c988c12393bdb4dc3972fbc32ca87cf6/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/c988c12393bdb4dc3972fbc32ca87cf6/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">[Flutter] runApp 流程</h1>
+      <p class="post-meta">@Clsrfish · Nov 30, 2018 · 3 min read</p>
+    </header>
+    <article class="post-content"><p>不管是使用 Flutter 开发完整应用还是作为区块嵌入某个页面，都需要调用 <code>runApp</code> ，而我们需要做的只是传入一个 Widget 实例，那么 <code>runApp</code> 背后所做的工作就很有趣了，比如触发视图的构建、更新以及绘制等，下面我们就粗略地看一下这个函数到底做了啥。</p>
+
+<h2 id="runapp-声明">🧐 runApp 声明</h2>
+
+<p>先看一下 <code>runApp</code> 的函数声明：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">void</span> runApp(Widget app) {
+    WidgetsFlutterBinding.ensureInitialized()
+        ..attachRootWidget(app)
+        ..scheduleWarmUpFrame();
+}</code></pre></div>
+<p><code>WidgetsFlutterBinding</code> 使用了 <a href="https://yahdude.github.io/Blog/post/1e4790f7473c20aa35d72cf542d39ab4">mixin</a>，将负责点击事件、绘制的 <strong>XXXBinding</strong> 组合起来，这个类也使用了单例模式，即 <code>ensureInitialized</code>。</p>
+
+<p>调用 <code>attachRootWidget</code> 将会触发 Widget、Element、RenderObject 的构建
+调用 <code>scheduleWarmUpFrame</code> 会触发视图的第一帧上屏，同时因为是第一帧，也会伴随着一些初始化操作，所以这个函数相对一般的绘制耗时较长</p>
+
+<h2 id="attachrootwidget">🤓 attachRootWidget</h2>
+
+<p>从 <code>runApp</code> 声明了解到 <code>WidgetFlutterBinding</code> 真正启动 Flutter 应用的入口，接着看 <code>attachRootWidget</code> 函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">void</span> attachRootWidget(Widget rootWidget) {
+    _renderViewElement <span style="color:#f92672">=</span> RenderObjectToWidgetAdapter<span style="color:#f92672">&lt;</span>RenderBox<span style="color:#f92672">&gt;</span>(
+        container: renderView,
+        debugShortDescription: <span style="color:#e6db74">&#39;[root]&#39;</span>,
+        child: rootWidget
+    ).attachToRenderTree(buildOwner, renderViewElement);
+}</code></pre></div>
+<p><code>RenderObjectToWidgetAdapter</code> 继承于 <code>RenderObjectWidget</code> ，只是起到一个 <strong>桥接</strong> 的作用，正如它的类名一样，而起到桥接作用的正是 <code>attachToRenderTree</code> 函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">RenderObjectToWidgetElement<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> attachToRenderTree(BuildOwner owner, [RenderObjectToWidgetElement<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> element]) {
+    <span style="color:#66d9ef">if</span> (element <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+        owner.lockState(() {
+            element <span style="color:#f92672">=</span> createElement();
+            <span style="color:#66d9ef">assert</span>(element <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>);
+            element.assignOwner(owner);
+        });
+        owner.buildScope(element, () {    <span style="color:#75715e">// 刚刚初始化
+</span><span style="color:#75715e"></span>            element.mount(<span style="color:#66d9ef">null</span>, <span style="color:#66d9ef">null</span>);
+        });
+    } <span style="color:#66d9ef">else</span> {
+        element._newWidget <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>;
+        element.markNeedsBuild();
+    }
+    <span style="color:#66d9ef">return</span> element;
+}</code></pre></div>
+<p>应用第一次启动时，传入的 <code>element</code> 为 <code>null</code> ，所以这里分析的是第一个分支。首先会创建 <code>RenderObjectToWidgetElement</code> 实例，然后调用 <code>assignOwner</code> 进行赋值（这个 buildOwner 非常重要，整个 Widget 树中的节点都会持有同一个实例），最后会调用 <code>mount</code> 挂载成为 ElementTree 的根结点。</p>
+
+<p>在看 <code>RenderObjectToWidgetElement#mount</code> 之前，先看下它的继承链：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">Element
+<span style="color:#960050;background-color:#1e0010">└──</span> RenderObjectElement
+    <span style="color:#960050;background-color:#1e0010">└──</span> RootRenderObjectElement
+        <span style="color:#960050;background-color:#1e0010">└──</span> RenderObjectToWidgetElement</code></pre></div>
+<p>先看 <code>RenderObjectToWidgetElement.mount</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">void</span> mount(Element parent, <span style="color:#66d9ef">dynamic</span> newSlot) {
+    <span style="color:#66d9ef">assert</span>(parent <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>);
+    <span style="color:#66d9ef">super</span>.mount(parent, newSlot);
+    _rebuild();
+}
+<span style="color:#66d9ef">void</span> _rebuild() {
+    <span style="color:#66d9ef">try</span> {
+        _child <span style="color:#f92672">=</span> updateChild(_child, widget.child, _rootChildSlot);
+    } <span style="color:#66d9ef">catch</span> (exception, stack) {
+        <span style="color:#66d9ef">final</span> Widget error <span style="color:#f92672">=</span> ErrorWidget.builder(details);
+        _child <span style="color:#f92672">=</span> updateChild(<span style="color:#66d9ef">null</span>, error, _rootChildSlot);  <span style="color:#75715e">// 这个就是运行异常时看到的 error 屏
+</span><span style="color:#75715e"></span>    }
+}</code></pre></div>
+<p>这里通过<code>updateChild</code>方法创建 child，这里会进行一个 <strong>递归调用</strong> 完成整个树构建/更新。</p>
+
+<p>然后是 <code>RootRenderObjectElement.mount</code> 方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">void</span> mount(Element parent, <span style="color:#66d9ef">dynamic</span> newSlot) {
+    <span style="color:#75715e">// Root elements should never have parents.
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">assert</span>(parent <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>);
+    <span style="color:#66d9ef">assert</span>(newSlot <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>);
+    <span style="color:#66d9ef">super</span>.mount(parent, newSlot);
+}</code></pre></div>
+<p>这里只是做了简单的参数检查。</p>
+
+<blockquote>
+<p>有些文章把 <code>assert</code>  语句去掉了，其实有一些是不能省略的，使用 <code>assert</code> 做一些工作是为了提升性能，因为在开发阶段完成检查后，生产环境就可以避免这些操作而提高性能了</p>
+</blockquote>
+
+<p>接着看 <code>RenderObjectElement.mount</code>：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">void</span> mount(Element parent, <span style="color:#66d9ef">dynamic</span> newSlot) {
+    <span style="color:#66d9ef">super</span>.mount(parent, newSlot);
+    _renderObject <span style="color:#f92672">=</span> widget.createRenderObject(<span style="color:#66d9ef">this</span>);
+    attachRenderObject(newSlot);    <span style="color:#75715e">// 挂载 RenderObject 节点到🌲上
+</span><span style="color:#75715e"></span>    _dirty <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+}</code></pre></div>
+<p>这个类类名有 <strong>RenderObject</strong> 字眼，恰好 <code>mount</code> 方法里创建了 <code>RenderObject</code> 实例。</p>
+
+<p>最后就是 <code>Element</code> 基类了，这个类的 <code>mount</code> 方法很简单，就是针对树这种数据结构完成子节点的挂载。</p>
+
+<p>所以，<code>attachRootWidget</code> 会完成 Widget、Element、RenderObject 树🌲的创建，这里要注意的是只是完成的和创建，并没有的进行测量、布局等，这些都是在下一个函数调用中进行的。</p>
+
+<h2 id="schedulewarmupframe">😎 scheduleWarmUpFrame</h2>
+
+<p>完成了三颗🌲的构建，接下里的就是的完成 Flutter 的上屏，即绘制、渲染。</p>
+
+<p>直接看 <code>scheduleWarmFrame</code> 的函数定义：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">void</span> scheduleWarmUpFrame() {
+    <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    handleBeginFrame(<span style="color:#66d9ef">null</span>);
+    handleDrawFrame();
+    <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    lockEvents(() <span style="color:#66d9ef">async</span> {   <span style="color:#75715e">// 在第一帧渲染完成之前，所有的事件，如点击事件都不会进行分发
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    });
+}</code></pre></div>
+<p>上面代码做了一定程度精简。</p>
+
+<p>在开始分析这个函数之前，先了解下一些 <strong>Callbacks</strong> ，上面函数声明在 <code>SchedulerBinding</code> 里，这个 mixin 主要负责一些任务调度，这些任务都以 <strong>Callback</strong> 的形式存在，有四种任务类型：
+- Transient callbacks： 由 <code>Window.onBeginFrame</code> 触发，目的是同步应用状态和显示，比如动画
+- Persistent callbacks： 由 <code>Window.onDrawFrame</code> 触发，更新显示，渲染任务
+- Post-frame callbacks： 在 Persistent callbacks 执行完后执行，有且只执行一次
+- Non-rendering tasks： 普通任务，它们会在两帧之间按照优先级顺序被执行</p>
+
+<p>那么 <code>Window.onXXXFrame</code> 又是什么？</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">mixin SchedulerBinding{
+    <span style="color:#960050;background-color:#1e0010">@</span>override
+    <span style="color:#66d9ef">void</span> initInstances() {
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>        ui.window.onBeginFrame <span style="color:#f92672">=</span> _handleBeginFrame;
+        ui.window.onDrawFrame <span style="color:#f92672">=</span> _handleDrawFrame;
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    }
+    <span style="color:#66d9ef">void</span> _handleBeginFrame(Duration rawTimeStamp) {
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>        handleBeginFrame(rawTimeStamp);
+    }
+
+    <span style="color:#66d9ef">void</span> _handleDrawFrame() {
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>        handleDrawFrame();
+    }
+}</code></pre></div>
+<p>其实就是 <code>ScheduleBinding</code> 的方法，知道这些了我们接着前面继续分析：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart"><span style="color:#66d9ef">void</span> handleBeginFrame(Duration rawTimeStamp) {
+    <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">try</span> {
+        <span style="color:#66d9ef">final</span> Map<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>, _FrameCallbackEntry<span style="color:#f92672">&gt;</span> callbacks <span style="color:#f92672">=</span> _transientCallbacks;
+        _transientCallbacks <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span><span style="color:#66d9ef">int</span>, _FrameCallbackEntry<span style="color:#f92672">&gt;</span>{};
+        callbacks.forEach((<span style="color:#66d9ef">int</span> id, _FrameCallbackEntry callbackEntry) {
+            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>_removedIds.contains(id))
+                _invokeFrameCallback(callbackEntry.callback, _currentFrameTimeStamp, callbackEntry.debugStack);
+        });
+        _removedIds.clear();
+    } <span style="color:#66d9ef">finally</span> {
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    }
+}
+
+<span style="color:#66d9ef">void</span> handleDrawFrame() {
+    <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">try</span> {
+        <span style="color:#66d9ef">for</span> (FrameCallback callback <span style="color:#66d9ef">in</span> _persistentCallbacks)
+            _invokeFrameCallback(callback, _currentFrameTimeStamp);
+
+        <span style="color:#66d9ef">final</span> List<span style="color:#f92672">&lt;</span>FrameCallback<span style="color:#f92672">&gt;</span> localPostFrameCallbacks <span style="color:#f92672">=</span> List<span style="color:#f92672">&lt;</span>FrameCallback<span style="color:#f92672">&gt;</span>.from(_postFrameCallbacks);
+        _postFrameCallbacks.clear();
+        <span style="color:#66d9ef">for</span> (FrameCallback callback <span style="color:#66d9ef">in</span> localPostFrameCallbacks)
+            _invokeFrameCallback(callback, _currentFrameTimeStamp);
+    } <span style="color:#66d9ef">finally</span> {
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>    }
+}</code></pre></div>
+<p>所以 <code>scheduleWramUpFrame</code> 最终会执行这些回调，渲染、绘制将由这些回调/任务来完成，那么这些回调又是在哪里注册的呢？</p>
+
+<p>因为负责渲染的回调/任务属于 <strong>persistent callback</strong> ，所以可以到 <code>RendererBinding</code> 中找下 <code>addPersistentFrameCallback</code> 的调用，果然在初始化的时候进行了注册：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-dart" data-lang="dart">mixin RendererBinding on BindingBase, SchedulerBinding,... {
+    <span style="color:#960050;background-color:#1e0010">@</span>override
+    <span style="color:#66d9ef">void</span> initInstances() {
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>        initRenderView();
+        <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span>        addPersistentFrameCallback(_handlePersistentFrameCallback);
+    }
+    <span style="color:#66d9ef">void</span> _handlePersistentFrameCallback(Duration timeStamp) {
+        drawFrame();
+    }
+    <span style="color:#960050;background-color:#1e0010">@</span>protected
+    <span style="color:#66d9ef">void</span> drawFrame() {
+        <span style="color:#66d9ef">assert</span>(renderView <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>); <span style="color:#75715e">// renderView 是整个 RenderObject 树的根节点
+</span><span style="color:#75715e"></span>        pipelineOwner.flushLayout();   <span style="color:#75715e">//  布局
+</span><span style="color:#75715e"></span>        pipelineOwner.flushCompositingBits();   <span style="color:#75715e">// 更新状态，是否需要重绘等
+</span><span style="color:#75715e"></span>        pipelineOwner.flushPaint(); <span style="color:#75715e">// 对需要绘制的节点进行绘制
+</span><span style="color:#75715e"></span>        renderView.compositeFrame(); <span style="color:#75715e">// this sends the bits to the GPU
+</span><span style="color:#75715e"></span>        pipelineOwner.flushSemantics(); <span style="color:#75715e">// this also sends the semantics to the OS.
+</span><span style="color:#75715e"></span>  }
+}</code></pre></div>
+<h2 id="recap">Recap</h2>
+
+<p>到这里，从启动到第一帧上屏就算是完了，整个流程非常清晰。在分析的过程中，我们忽略了 <code>BuildOwner</code> 和 <code>PipelineOwner</code> ，这两个类贯穿树的构建和绘制，不过这篇文章对它们进行深入分析并不合适，之后会通过分析界面更新来分析它们的作用。</p>
+
+<p>还有一点值得提起的是，除了 Widget、Element、RenderObject 树🌲之后，还有一颗 Layer 🌲。Flutter 会根据这颗树构建一个 <code>Scene</code>，最后渲染并上屏。</p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/flutter"><span class="tag">Flutter</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>155</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8" />
+
+  
+  <title>Annotation 基础</title>
+
+  
+  
+
+
+
+
+
+  
+  <meta name="author" content="Clsrfish" />
+  <meta name="description" content="注解是一种元数据（metadata），它在虽然能提供关于程序的一些信息，但并不是程序本身的一部分。注解对被其标注的对象没有任何副作用。
+" />
+
+  
+  
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gohugoio" />
+    <meta name="twitter:title" content="Annotation 基础" />
+    <meta name="twitter:description" content="注解是一种元数据（metadata），它在虽然能提供关于程序的一些信息，但并不是程序本身的一部分。注解对被其标注的对象没有任何副作用。
+" />
+    <meta name="twitter:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+  
+
+  
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Annotation 基础" />
+  <meta property="og:description" content="注解是一种元数据（metadata），它在虽然能提供关于程序的一些信息，但并不是程序本身的一部分。注解对被其标注的对象没有任何副作用。
+" />
+  <meta property="og:url" content="https://clsrfish.github.io/Blog/post/5ccb233a/" />
+  <meta property="og:image" content="https://clsrfish.github.io/img/avatar.jpg" />
+
+
+
+
+<meta name="generator" content="Hugo 0.56.0-DEV" />
+
+
+<link rel="canonical" href="https://clsrfish.github.io/Blog/post/5ccb233a/" />
+<link rel="alternative" href="https://clsrfish.github.io/Blog/index.xml" title="小站" type="application/atom+xml" />
+
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="format-detection" content="telephone=no,email=no,adress=no" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+
+
+<meta name="robots" content="index,follow" />
+<meta name="referrer" content="origin-when-cross-origin" />
+<meta name="google-site-verification" content="_moDmnnBNVLBN1rzNxyGUGdPHE20YgbmrtzLIbxaWFc" />
+<meta name="msvalidate.01" content="22596E34341DD1D17D6022C44647E587" />
+
+
+
+
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="小站" />
+<meta name="msapplication-tooltip" content="小站" />
+<meta name='msapplication-navbutton-color' content="#5fbf5e" />
+<meta name="msapplication-TileColor" content="#5fbf5e" />
+<meta name="msapplication-TileImage" content="/img/tile-image-windows.png" />
+<link rel="icon" href="https://clsrfish.github.io/Blog/img/favicon.ico" />
+<link rel="icon" type="image/png" sizes="16x16" href="https://clsrfish.github.io/Blog/img/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="https://clsrfish.github.io/Blog/img/favicon-32x32.png" />
+<link rel="icon" sizes="192x192" href="https://clsrfish.github.io/Blog/img/touch-icon-android.png" />
+<link rel="apple-touch-icon" href="https://clsrfish.github.io/Blog/img/touch-icon-apple.png" />
+<link rel="mask-icon" href="https://clsrfish.github.io/Blog/img/safari-pinned-tab.svg" color="#5fbf5e" />
+
+
+
+<link rel="stylesheet" href="//cdn.bootcss.com/video.js/6.2.8/alt/video-js-cdn.min.css" />
+
+<link rel="stylesheet" href="https://clsrfish.github.io/Blog/css/bundle.css" />
+
+
+  
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/video.js/6.2.8/ie8/videojs-ie8.min.js"></script>
+  <![endif]-->
+
+<!--[if lte IE 11]>
+    <script src="//cdn.bootcss.com/classlist/1.1.20170427/classList.min.js"></script>
+  <![endif]-->
+
+
+<script src="//cdn.bootcss.com/object-fit-images/3.2.3/ofi.min.js"></script>
+
+
+<script src="//cdn.bootcss.com/smooth-scroll/12.1.4/js/smooth-scroll.polyfills.min.js"></script>
+
+
+</head>
+  <body>
+    
+    <div class="suspension">
+      <a title="Go to top" class="to-top is-hide"><span class="icon icon-up"></span></a>
+      
+        
+        <a title="Go to comments" class="to-comment" href="#disqus_thread"><span class="icon icon-comment"></span></a>
+        
+      
+    </div>
+    
+    
+  <header class="site-header">
+  <img class="avatar" src="https://clsrfish.github.io/Blog/img/avatar.jpg" alt="Avatar">
+  
+  <h2 class="title">小站</h2>
+  
+  <p class="subtitle">~ Keep It Simple &amp; Stupid ~</p>
+  <button class="menu-toggle" type="button">
+    <span class="icon icon-menu"></span>
+  </button>
+  <nav class="site-menu collapsed">
+    <h2 class="offscreen">Main Menu</h2>
+    <ul class="menu-list">
+      
+      
+      
+      
+        <li class="menu-item
+            
+            
+            
+              is-active
+            ">
+            <a href="https://clsrfish.github.io/Blog/">Home</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/tags/">Tags</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/links/">Links</a>
+          </li>
+      
+        <li class="menu-item
+            
+            
+            ">
+            <a href="https://clsrfish.github.io/Blog/about/">About</a>
+          </li>
+      
+    </ul>
+  </nav>
+  <nav class="social-menu collapsed">
+    <h2 class="offscreen">Social Networks</h2>
+    <ul class="social-list">
+
+      
+      <li class="social-item">
+        <a href="mailto:xinliugm@gmail.com" title="Email"><span class="icon icon-email"></span></a>
+      </li>
+
+      
+      <li class="social-item">
+        <a href="//github.com/dashMrl" title="GitHub"><span class="icon icon-github"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/img/qrcode.png" title="Wechat"><span class="icon icon-wechat"></span></a>
+      </li>
+
+      
+
+      
+
+      
+
+      
+
+      <li class="social-item">
+        <a href="https://clsrfish.github.io/Blog/index.xml"><span class="icon icon-rss" title="RSS"></span></a>
+      </li>
+
+    </ul>
+  </nav>
+</header>
+
+  <section class="main post-detail">
+    <header class="post-header">
+      <h1 class="post-title">Annotation 基础</h1>
+      <p class="post-meta">@Clsrfish · Dec 30, 2017 · 2 min read</p>
+    </header>
+    <article class="post-content"><p>注解是一种元数据（metadata），它在虽然能提供关于程序的一些信息，但并不是程序本身的一部分。注解对被其标注的对象没有任何副作用。</p>
+
+<p>关于注解的作用，主要有以下三点：
+- 为编译器提供信息：比如语法检查等
+- 在编译或部署时进行一些处理：比如生成一些报表信息
+- 运行时：主要通过反射来操作</p>
+
+<blockquote>
+<p>这里假设读者对注解有一定的了解</p>
+</blockquote>
+
+<h2 id="表现形似">表现形似</h2>
+
+<p><code>@Override</code> 应该最常见的注解之一，比如一些注解可能还会有参数，那么就有点像 Java 的构造函数，不过参数位置没有固定，所以也就需要显示指定参数的名称和值。</p>
+
+<h2 id="分类">分类</h2>
+
+<ul>
+<li>元注解（meta-annotation）： 用来自定义注解时使用</li>
+<li>标注注解： 即 JDK 自带的，有 <code>Override</code>，<code>Deprecated</code> 等</li>
+<li>自定义注解： 即我们为满足某种需求而自定义的注解</li>
+</ul>
+
+<h2 id="自定义注解">自定义注解</h2>
+
+<p>最快学习 Annotation 的方式还是自定义注解，下面我们就来定义一个 <code>Message</code> 注解：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Documented</span>
+<span style="color:#a6e22e">@Inherited</span>
+<span style="color:#a6e22e">@Retention</span><span style="color:#f92672">(</span>RetentionPolicy<span style="color:#f92672">.</span><span style="color:#a6e22e">RUNTIME</span><span style="color:#f92672">)</span>
+<span style="color:#a6e22e">@Target</span><span style="color:#f92672">(</span>ElementType<span style="color:#f92672">.</span><span style="color:#a6e22e">CLASS</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#a6e22e">@interface</span> Message<span style="color:#f92672">{</span>
+  String content <span style="color:#66d9ef">default</span> <span style="color:#e6db74">&#34;hello&#34;</span><span style="color:#f92672">;</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这里可以划分为 5 个部分，我们都过一遍：</p>
+
+<h3 id="documented">Documented</h3>
+
+<p>根据名字可以判断，它和代码文档有关。我们的 <code>Message</code> 被它标注了，那么当对一个 <code>A</code> 类使用 <code>Message</code> 注解时，文档生成工具（如 javadoc）会将 <code>Message</code> 的信息也输出；反之，当 <code>Message</code> 没有被 <code>@Documented</code> 标记的时候，那么文档生成工具的输出中将不会保留 <code>Message</code> 相关的信息</p>
+
+<h3 id="inherited">Inherited</h3>
+
+<p>表示这个注解可以被继承，具体表现是：父类 <code>A</code> 被 <code>Message</code> 标注，通过 <code>A</code> 的子类 <code>B</code> 也能直接拿到 <code>Message</code> 相关信息。内部的逻辑是：当在子类 <code>B</code> 上查询 <code>Message</code> 的时候，如果 <code>B</code> 没有被标注，那么就接着查询父类 <code>A</code>，如此直到找到或者查询到 Object。</p>
+
+<h3 id="retention">Retention</h3>
+
+<p>表明注解信息将会被保留到什么时候，这里的例子表明会保存到运行时，如果不使用这个元注解或者不指定保存时期，默认是留到字节码中（即  RetentionPolicy.CLASS）。
+关于 RetentionPolicy，可以简单的记一张表格：</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">RetentionPolicy</th>
+<th align="left">Effects</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">SOURCE</td>
+<td align="left">注解只会存在于源码中，编译时将会被编译器去除</td>
+</tr>
+
+<tr>
+<td align="left">CLASS</td>
+<td align="left">存在于源码和字节码中，但是不会被 VM 载入到运行时</td>
+</tr>
+
+<tr>
+<td align="left">RUNTIME</td>
+<td align="left">存在于源码和字节码中，并且会被 VM 载入，这时可以通过反射读取</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="target">Target</h3>
+
+<p>表示哪些元素可以被这个注解标记，这里的例子中表示只能使用在 <strong>类</strong> 上面。我们还是用一张表格来说明：</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">ElementType</th>
+<th align="left">Effects</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">ANNOTATION_TYPE</td>
+<td align="left">用于注解，类似元注解</td>
+</tr>
+
+<tr>
+<td align="left">TYPE_USE</td>
+<td align="left">用在泛型上，比如 &lt;@Message T&gt;</td>
+</tr>
+
+<tr>
+<td align="left">PACKAGE</td>
+<td align="left">用在包上</td>
+</tr>
+
+<tr>
+<td align="left">TYPE</td>
+<td align="left">用在类、接口、枚举类以及注解上</td>
+</tr>
+
+<tr>
+<td align="left">FIELD</td>
+<td align="left">用在成员变量上</td>
+</tr>
+
+<tr>
+<td align="left">CONSTRUCTOR</td>
+<td align="left">用在构造器上</td>
+</tr>
+
+<tr>
+<td align="left">METHOD</td>
+<td align="left">用在方法上</td>
+</tr>
+
+<tr>
+<td align="left">PARAMETER</td>
+<td align="left">用在构造器、方法的参数上</td>
+</tr>
+
+<tr>
+<td align="left">TYPE_PARAMETER</td>
+<td align="left">用在构造器、方法的泛型参数上，比如 @Message T t</td>
+</tr>
+
+<tr>
+<td align="left">LOCAL_VARIABLE</td>
+<td align="left">用在本地变量上</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>当没有指定 Target 的时候，可以用在任何元素上</p>
+</blockquote>
+
+<h3 id="参数">参数</h3>
+
+<p>最后，我们看到 <code>Message</code> 内部还声明了一个类似成员变量的属性—— content，它的一般格式为： <code>&lt;Type&gt; &lt;name&gt;() [ default value ]</code> ，它的作用就是携带信息。
+它支持如下的数据类型：
+- 基本类型（Primary Type）：byte、char、short、int、long、float、double
+- String
+- Class
+- Enum
+- Annotation
+- 以上的数组形式</p>
+
+<blockquote>
+<p>当参数名为 <code>value</code> 的时候，使用的时候可以不指定参数名，像这样：@Message(&ldquo;2333&rdquo;)</p>
+</blockquote>
+
+<h2 id="使用">使用</h2>
+
+<p>使用注解进行标注并携带信息，如果没有读取注解及携带信息的方法，那么注解就完全没有意义了。
+我们前面提过，注解一般在编译时或运行时起作用，这里就看看怎么在运行时使用。
+首先定义一个 <code>Messenger</code>，表示信使：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#a6e22e">@Message</span><span style="color:#f92672">(</span>content<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;hello world!!&#34;</span><span style="color:#f92672">)</span>
+<span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Messenger</span><span style="color:#f92672">{</span>
+  <span style="color:#75715e">// ...
+</span><span style="color:#75715e"></span><span style="color:#f92672">}</span></code></pre></div>
+<p>信使携带了一份消息，我们现在的问题就是怎么从他身上获取这消息。一开始也提到过，我们主要通过反射来进行操作，看我们的 main 函数：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Hello</span><span style="color:#f92672">{</span>
+  <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span><span style="color:#f92672">(</span>String<span style="color:#f92672">[]</span> args<span style="color:#f92672">){</span>
+    Messenger messenger <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Messenger<span style="color:#f92672">();</span>
+    Class<span style="color:#f92672">&lt;?</span> <span style="color:#66d9ef">extends</span> Messenger<span style="color:#f92672">&gt;</span> clazz <span style="color:#f92672">=</span> messenger<span style="color:#f92672">.</span><span style="color:#a6e22e">getClass</span><span style="color:#f92672">();</span>
+<span style="color:#75715e">//    Class&lt;Messenger&gt; clazz = Messenger.class;
+</span><span style="color:#75715e"></span>    Message message <span style="color:#f92672">=</span> clazz<span style="color:#f92672">.</span><span style="color:#a6e22e">getAnnotation</span><span style="color:#f92672">(</span>Message<span style="color:#f92672">.</span><span style="color:#a6e22e">class</span><span style="color:#f92672">);</span>
+    System<span style="color:#f92672">.</span><span style="color:#a6e22e">out</span><span style="color:#f92672">.</span><span style="color:#a6e22e">println</span><span style="color:#f92672">(</span>message<span style="color:#f92672">.</span><span style="color:#a6e22e">content</span><span style="color:#f92672">());</span><span style="color:#75715e">//输出: hello world!!
+</span><span style="color:#75715e"></span>  <span style="color:#f92672">}</span>
+<span style="color:#f92672">}</span></code></pre></div>
+<p>这样就能在运行获取到数据了，据此，我们也可以把一些配置信息写到注解里来减少编码。
+不过需要注意的是，反射调用时会在虚拟机内存里遍历查找这个类的信息，这样的是比较低效的，所以这种方式不能滥用，而且有必要做好缓存。所以这种方式就不太适合性能敏感的场景，比如手机。</p>
+
+<h2 id="注解处理器-annotation-processor">注解处理器（Annotation Processor）</h2>
+
+<p>我们现在已经能够在运行时获取到注解里面的信息，但是性能上的问题还是不能够忽视。文章开头也说过注解能够为编译器提供信息，所以我们可以在编译的时候做些手脚，以避免反射的开销。Java 提供了注解处理器来帮助开发者来在编译时期完成某些操作，关于它更多的信息，请看 <a href="https://clsrfish.github.io/Blog/posts/ec0bc8d.html">下一篇文章</a>。</p>
+
+<h2 id="reference">Reference</h2>
+
+<p><a href="https://docs.oracle.com/javase/8/docs/api/">https://docs.oracle.com/javase/8/docs/api/</a></p></article>
+    <footer class="post-footer">
+      
+      <ul class="post-tags">
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/annotation"><span class="tag">Annotation</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/annotation-processor"><span class="tag">Annotation Processor</span></a></li>
+        
+          <li><a href="https://clsrfish.github.io/Blog/tags/java"><span class="tag">Java</span></a></li>
+        
+      </ul>
+      
+      <p class="post-copyright">
+        207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.This post was published <strong>489</strong> days ago, content in the post may be inaccurate, even wrong now, please take risk yourself.
+      </p>
+    </footer>
+    
+      <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "disqus_shortname" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+      
+    
+  </section>
+  <footer class="site-footer">
+  <p>© 2017-2019 小站</p>
+  <p>Powered by <a href="https://gohugo.io/" target="_blank">Hugo</a> with theme <a href="https://github.com/laozhu/hugo-nuo" target="_blank">Nuo</a>.</p>
+  
+</footer>
+
+
+
+<script async src="//cdn.bootcss.com/video.js/6.2.8/alt/video.novtt.min.js"></script>
+<script async src="//cdn.bootcss.com/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      displayMath: [['$$','$$'], ['\\[','\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+      TeX: { equationNumbers: { autoNumber: "AMS" },
+      extensions: ["AMSmath.js", "AMSsymbols.js"] }
+    }
+  });
+</script>
+<script type="text/x-mathjax-config">
+  // Fix <code> tags after MathJax finishes running. This is a
+  // hack to overcome a shortcoming of Markdown. Discussion at
+  // https://github.com/mojombo/jekyll/issues/199
+  MathJax.Hub.Queue(() => {
+    MathJax.Hub.getAllJax().map(v => v.SourceElement().parentNode.className += ' has-jax');
+  });
+</script>
+
+<script src="https://clsrfish.github.io/Blog/js/bundle.js"></script>
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>TypeScript on 小站</title>
+    <link>https://clsrfish.github.io/Blog/tags/typescript/</link>
+    <description>Recent content in TypeScript on 小站</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>207-2018 © This post is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License，please give source if you wish to quote or reproduce.</copyright>
+    <lastBuildDate>Sat, 18 Aug 2018 10:56:52 +0800</lastBuildDate>
+    
+	<atom:link href="https://clsrfish.github.io/Blog/tags/typescript/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>TypeScript 实现 Java 匿名内部类</title>
+      <link>https://clsrfish.github.io/Blog/post/72c38d2bfe6031c01a67381b1225f007/</link>
+      <pubDate>Sat, 18 Aug 2018 10:56:52 +0800</pubDate>
+      
+      <guid>https://clsrfish.github.io/Blog/post/72c38d2bfe6031c01a67381b1225f007/</guid>
+      <description>&lt;p&gt;突然想对之前写的 JSBridge 用 TS 重构一下，顺便简化一下整体结构。TS 的强类型是有了，但是还是存在着不足，导致相比其他强类型语言，稍微显得有点蹩脚。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
