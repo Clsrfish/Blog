@@ -29,5 +29,5 @@ fi
 
 echo "Updating gh-pages branch"
 cd public && git add --all && git commit -m "`date`" && cd ..
-git push origin gh-pages
+git push origin gh-pages -f
 rm -rf public
